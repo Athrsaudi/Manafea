@@ -1,0 +1,22 @@
+.container {
+    width: 100%;
+    height: calc(100vh - 60px); /* افترضنا أن ارتفاع الهيدر 60px، قم بتعديله حسب الحاجة */
+  }
+  
+  .pdf-embed {
+    border: none;
+  }
+  
+  /* للأجهزة المحمولة */
+  @media (max-width: 768px) {
+    .pdf-container {
+      height: calc(100vh - 50px); /* قم بتعديل القيمة حسب ارتفاع الهيدر على الأجهزة المحمولة */
+    }
+  }
+  
+  /* للأجهزة اللوحية */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .pdf-container {
+      height: calc(100vh - 55px); /* قم بتعديل القيمة حسب الحاجة */
+    }
+}

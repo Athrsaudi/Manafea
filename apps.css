@@ -1,0 +1,134 @@
+.apps-categories {
+    background-color: var(--light-bg);
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.apps-categories ul {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.apps-categories ul li {
+    margin: 5px 10px;
+}
+
+.apps-categories ul li a {
+    display: block;
+    padding: 8px 15px;
+    background-color: #d8d6d6ab;
+    color: var(--dark-blue);
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.apps-categories ul li a:hover,
+.apps-categories ul li a.active {
+    background-color: var(--main-blue);
+    color: var(--white);
+}
+.apps-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .apps-categories {
+    margin-bottom: 20px;
+  }
+  
+  .apps-categories ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .apps-categories li {
+    margin: 0 10px;
+  }
+  
+  .apps-categories a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .apps-categories a.active {
+    color: #007bff;
+  }
+  
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .app-item {
+    text-align: center;
+  }
+  
+  .app-item a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .app-item img {
+    margin-top: 70px;
+    max-width: 65%; /* تعديل حجم الصورة إلى 65% من الحجم الأصلي */
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    user-select: none;
+  }
+  
+  .app-item img:hover {
+    transform: scale(1.05);
+  }
+  
+  .app-item p {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .content-wrap {
+    flex: 1;
+  }
+
+  .apps-header {
+    background-color: var(--third-color);
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--white);
+}
+
+.apps-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.apps-header p {
+    margin: 0 auto;
+    line-height: 1.6;
+}
+  
+  /* ... الأنماط الأخرى تبقى كما هي ... */
+  
+  @media (max-width: 768px) {
+    .app-item img {
+      max-width: 100%;
+    }
+  }

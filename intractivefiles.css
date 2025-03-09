@@ -1,0 +1,95 @@
+.interactive-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .book-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .book-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .book-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .book-info {
+    padding: 15px;
+  }
+  
+  .book-title {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .book-description {
+    margin: 0 0 15px;
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .view-book-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-book-btn:hover {
+    background-color: #0056b3;
+  }
+  .content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px); 
+  }
+  .videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .pdf-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .pdf-card .video-thumbnail {
+    position: relative;
+    width: 100%;
+    padding-top: 150%; /* هذا يعطي نسبة 2:3 */
+    overflow: hidden;
+  }
+  
+  .video-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .book-image {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+  }
