@@ -203,12 +203,12 @@ export default function ManafaaHomepage() {
     <div dir={dir} className="min-h-screen" style={{fontFamily:"'Tajawal','Segoe UI',sans-serif",background:'#FAFBFC'}}>
       <style>{CSS}</style>
 
-      <Navbar lang={lang} setLang={setLang} />
-
-      {/* Bismillah */}
+      {/* Bismillah — أعلى شيء في الصفحة */}
       <div className="w-full py-2 text-center text-sm" style={{background:'var(--pd)',color:'var(--g)'}}>
         {t("bismillah")}
       </div>
+
+      <Navbar lang={lang} setLang={setLang} />
 
 
       {/* Hero */}

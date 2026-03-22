@@ -12,13 +12,25 @@ export const langs = [
   { code: "hi", name: "हिन्दी", dir: "ltr" },
 ]
 
+const VALID = langs.map(l => l.code)
+
 const LangContext = createContext(null)
 
 export function LangProvider({ children }) {
-  const [lang, setLang] = useState('ar')
+  const saved = localStorage.getItem('manafea_lang')
+  const initial = VALID.includes(saved) ? saved : 'ar'
+  const [lang, setLang] = useState(initial)
+
+  const handleSetLang = (code) => {
+    if (VALID.includes(code)) {
+      localStorage.setItem('manafea_lang', code)
+      setLang(code)
+    }
+  }
+
   const dir = langs.find(l => l.code === lang)?.dir || 'rtl'
   return (
-    <LangContext.Provider value={{ lang, setLang, dir, langs }}>
+    <LangContext.Provider value={{ lang, setLang: handleSetLang, dir, langs }}>
       {children}
     </LangContext.Provider>
   )
