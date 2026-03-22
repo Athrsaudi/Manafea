@@ -66,7 +66,7 @@ export default function ManafaaLibraryPage() {
   useEffect(() => { const h = () => setScrolled(window.scrollY > 50); window.addEventListener("scroll", h); return () => window.removeEventListener("scroll", h); }, []);
   useEffect(() => { setSearch(""); setActiveBook(null); setReadingPdf(null); }, [lang]);
 
-  const nav = [{k:"n_home",h:"/"},{k:"n_vid",h:"/videos"},{k:"n_quran",h:"/quran"},{k:"n_lib",h:"/library"},{k:"n_hajj",h:"/hajj"},{k:"n_umrah",h:"/umrah"},{k:"n_contest",h:"/contest"}];
+  const nav = [{k:"n_home"},{k:"n_vid"},{k:"n_quran"},{k:"n_lib"},{k:"n_hajj"},{k:"n_umrah"},{k:"n_contest"}];
 
   return (
     <div dir={dir} className="min-h-screen bg-[#FAFBFC]" style={{ fontFamily:"'Tajawal','Segoe UI',sans-serif" }}>
