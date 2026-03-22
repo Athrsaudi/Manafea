@@ -363,6 +363,17 @@ function BooksSection({ lang }) {
   const save = async () => {
     setSaving(true);
     try {
+      // رفع غلاف الكتاب إن وجد
+      let coverUrl = form.cover_url || "";
+      if (form.coverFile) {
+        const covName = `${Date.now()}_${form.coverFile.name.replace(/\s/g,"_")}`;
+        const { error: covErr } = await sb.storage.from("covers").upload(`books/${lang}/${covName}`, form.coverFile, {upsert:true});
+        if (!covErr) {
+          const { data: { publicUrl } } = sb.storage.from("covers").getPublicUrl(`books/${lang}/${covName}`);
+          coverUrl = publicUrl;
+        }
+      }
+
       // رفع ملف PDF إن وجد
       let pdfUrl = form.pdf_url || "";
       if (form.pdfFile) {
@@ -377,10 +388,10 @@ function BooksSection({ lang }) {
       if (!pdfUrl) { alert("يجب إضافة ملف PDF أو رابط"); setSaving(false); return; }
 
       if (modal==="add") {
-        const {data:bk} = await sb.from("books").insert({pdf_url:pdfUrl,cover_url:form.cover_url||null,pages:form.pages||0,sort_order:form.sort_order,lang}).select().single();
+        const {data:bk} = await sb.from("books").insert({pdf_url:pdfUrl,cover_url:coverUrl||null,pages:form.pages||0,sort_order:form.sort_order,lang}).select().single();
         await sb.from("book_translations").insert({book_id:bk.id,lang,title:form.title,author:form.author,description:form.description});
       } else {
-        await sb.from("books").update({pdf_url:pdfUrl,cover_url:form.cover_url||null,pages:form.pages||0,sort_order:form.sort_order}).eq("id",form.id);
+        await sb.from("books").update({pdf_url:pdfUrl,cover_url:coverUrl||null,pages:form.pages||0,sort_order:form.sort_order}).eq("id",form.id);
         if(form.trans_id) await sb.from("book_translations").update({title:form.title,author:form.author,description:form.description}).eq("id",form.trans_id);
         else await sb.from("book_translations").insert({book_id:form.id,lang,title:form.title,author:form.author,description:form.description});
       }
@@ -443,18 +454,64 @@ function BooksSection({ lang }) {
               <div className="form-group">
                 <label className="form-label">ملف PDF — ارفع من جهازك</label>
                 <input type="file" accept="application/pdf" className="form-input" style={{padding:"8px"}}
-                  onChange={e=>setForm({...form,pdfFile:e.target.files[0],pdfName:e.target.files[0]?.name})} />
+                  onChange={async e=>{
+                    const file = e.target.files[0];
+                    if(!file) return;
+                    setForm(f=>({...f, pdfFile:file, pdfName:file.name}));
+                    // استخراج الغلاف تلقائياً من الصفحة الأولى
+                    try {
+                      const pdfjsLib = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.min.mjs");
+                      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs";
+                      const arrayBuffer = await file.arrayBuffer();
+                      const pdf = await pdfjsLib.getDocument({data:arrayBuffer}).promise;
+                      const page = await pdf.getPage(1);
+                      const viewport = page.getViewport({scale:1.5});
+                      const canvas = document.createElement("canvas");
+                      canvas.width = viewport.width;
+                      canvas.height = viewport.height;
+                      const ctx = canvas.getContext("2d");
+                      await page.render({canvasContext:ctx, viewport}).promise;
+                      const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+                      // Convert to blob for upload
+                      const res = await fetch(dataUrl);
+                      const blob = await res.blob();
+                      const coverFile = new File([blob], file.name.replace(".pdf",".jpg"), {type:"image/jpeg"});
+                      setForm(f=>({...f, coverFile, coverPreview:dataUrl}));
+                    } catch(err) {
+                      console.warn("PDF cover extraction failed:", err);
+                    }
+                  }} />
                 {form.pdfName && <p style={{fontSize:".78rem",color:"var(--g)",marginTop:4}}>📄 {form.pdfName}</p>}
               </div>
               <div className="form-group">
                 <label className="form-label">أو رابط PDF مباشر (اختياري)</label>
                 <input className="form-input" placeholder="https://..." value={form.pdf_url||""} onChange={e=>setForm({...form,pdf_url:e.target.value})} />
               </div>
-              <div className="form-row">
-                <div className="form-group"><label className="form-label">رابط الغلاف (اختياري)</label><input className="form-input" placeholder="https://..." value={form.cover_url||""} onChange={e=>setForm({...form,cover_url:e.target.value})} /></div>
-                <div className="form-group"><label className="form-label">عدد الصفحات</label><input className="form-input" type="number" min="0" placeholder="0" value={form.pages||""} onChange={e=>setForm({...form,pages:+e.target.value})} /></div>
+              {/* غلاف الكتاب — يُستخرج تلقائياً من PDF أو يُرفع يدوياً */}
+              {form.coverPreview && (
+                <div style={{marginBottom:14}}>
+                  <p style={{fontSize:".78rem",color:"var(--g)",marginBottom:6}}>✅ غلاف مُستخرج تلقائياً من الصفحة الأولى</p>
+                  <img src={form.coverPreview} style={{width:"100%",maxHeight:200,objectFit:"contain",borderRadius:8,background:"#f8f8f8"}} />
+                </div>
+              )}
+              <div className="form-group">
+                <label className="form-label">غلاف مخصص — ارفع صورة (اختياري، يستبدل التلقائي)</label>
+                <input type="file" accept="image/*" className="form-input" style={{padding:"8px"}}
+                  onChange={e=>{
+                    const file = e.target.files[0];
+                    if(file) {
+                      setForm({...form, coverFile:file, coverPreview:URL.createObjectURL(file)});
+                    }
+                  }} />
               </div>
-              <div className="form-group"><label className="form-label">الترتيب</label><input className="form-input" type="number" value={form.sort_order||1} onChange={e=>setForm({...form,sort_order:+e.target.value})} /></div>
+              <div className="form-group">
+                <label className="form-label">أو رابط الغلاف مباشر</label>
+                <input className="form-input" placeholder="https://..." value={form.cover_url||""} onChange={e=>setForm({...form,cover_url:e.target.value,coverPreview:e.target.value})} />
+              </div>
+              <div className="form-row">
+                <div className="form-group"><label className="form-label">عدد الصفحات</label><input className="form-input" type="number" min="0" placeholder="0" value={form.pages||""} onChange={e=>setForm({...form,pages:+e.target.value})} /></div>
+                <div className="form-group"><label className="form-label">الترتيب</label><input className="form-input" type="number" value={form.sort_order||1} onChange={e=>setForm({...form,sort_order:+e.target.value})} /></div>
+              </div>
             </div>
             <div className="modal-footer">
               <button className="btn btn-primary" onClick={save} disabled={saving}>{saving?"جارٍ الحفظ...":"حفظ"}</button>
