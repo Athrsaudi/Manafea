@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
+import * as pdfjsLib from "pdfjs-dist";
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
 
 const sb = createClient(
   "https://pxacnzpundghlojfldif.supabase.co",
@@ -488,11 +490,32 @@ function BooksSection({ lang }) {
               <div className="form-group">
                 <label className="form-label">📄 ملف PDF — ارفع من جهازك</label>
                 <input type="file" accept="application/pdf" className="form-input" style={{padding:"8px"}}
-                  onChange={e=>{
-                    const f=e.target.files[0];
-                    if(f) setForm(prev=>({...prev,pdfFile:f,pdfName:f.name}));
+                  onChange={async e=>{
+                    const file = e.target.files[0];
+                    if(!file) return;
+                    setForm(prev=>({...prev, pdfFile:file, pdfName:file.name, coverLoading:true}));
+                    // استخراج الغلاف من الصفحة الأولى
+                    try {
+                      const arrayBuffer = await file.arrayBuffer();
+                      const pdf = await pdfjsLib.getDocument({data:arrayBuffer}).promise;
+                      const page = await pdf.getPage(1);
+                      const viewport = page.getViewport({scale:2});
+                      const canvas = document.createElement("canvas");
+                      canvas.width = viewport.width;
+                      canvas.height = viewport.height;
+                      await page.render({canvasContext:canvas.getContext("2d"), viewport}).promise;
+                      canvas.toBlob(blob => {
+                        const coverFile = new File([blob], "cover.jpg", {type:"image/jpeg"});
+                        const coverPreview = URL.createObjectURL(blob);
+                        setForm(prev=>({...prev, coverFile, coverPreview, cover_url:"", coverLoading:false}));
+                      }, "image/jpeg", 0.85);
+                    } catch(err) {
+                      console.warn("PDF cover failed:", err);
+                      setForm(prev=>({...prev, coverLoading:false}));
+                    }
                   }} />
                 {form.pdfName && <p style={{fontSize:".75rem",color:"var(--g)",marginTop:4}}>📄 {form.pdfName}</p>}
+                {form.coverLoading && <p style={{fontSize:".75rem",color:"var(--tl)",marginTop:4}}>⏳ جارٍ استخراج الغلاف...</p>}
               </div>
               <div className="form-group">
                 <label className="form-label">أو رابط PDF مباشر</label>
@@ -500,22 +523,37 @@ function BooksSection({ lang }) {
               </div>
 
               {/* ── غلاف الكتاب ── */}
-              <div className="form-group">
-                <label className="form-label">🖼️ صورة الغلاف — ارفع من جهازك</label>
-                <input type="file" accept="image/*" className="form-input" style={{padding:"8px"}}
-                  onChange={e=>{
-                    const f=e.target.files[0];
-                    if(f) setForm(prev=>({...prev,coverFile:f,coverPreview:URL.createObjectURL(f)}));
-                  }} />
-                {form.coverPreview && (
-                  <img src={form.coverPreview} style={{marginTop:8,width:"100%",maxHeight:180,objectFit:"cover",borderRadius:8}} />
-                )}
-              </div>
-              <div className="form-group">
-                <label className="form-label">أو رابط صورة الغلاف</label>
-                <input className="form-input" placeholder="https://..." value={form.cover_url||""}
-                  onChange={e=>setForm({...form,cover_url:e.target.value,coverPreview:e.target.value})} />
-              </div>
+              {form.coverPreview && (
+                <div className="form-group">
+                  <label className="form-label">🖼️ الغلاف</label>
+                  <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
+                    <img src={form.coverPreview} style={{width:80,height:110,objectFit:"cover",borderRadius:8,border:"2px solid var(--g)",flexShrink:0}} />
+                    <div>
+                      <p style={{fontSize:".78rem",color:"var(--g)",fontWeight:"bold",marginBottom:6}}>✅ مُستخرج تلقائياً من PDF</p>
+                      <label className="form-label" style={{marginBottom:4}}>استبدله بصورة مخصصة:</label>
+                      <input type="file" accept="image/*" className="form-input" style={{padding:"6px",fontSize:".78rem"}}
+                        onChange={e=>{
+                          const f=e.target.files[0];
+                          if(f) setForm(prev=>({...prev,coverFile:f,coverPreview:URL.createObjectURL(f)}));
+                        }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+              {!form.coverPreview && (
+                <div className="form-group">
+                  <label className="form-label">🖼️ غلاف مخصص (اختياري — يُستخرج تلقائياً من PDF)</label>
+                  <input type="file" accept="image/*" className="form-input" style={{padding:"8px"}}
+                    onChange={e=>{
+                      const f=e.target.files[0];
+                      if(f) setForm(prev=>({...prev,coverFile:f,coverPreview:URL.createObjectURL(f)}));
+                    }} />
+                  <div className="form-group" style={{marginTop:8,marginBottom:0}}>
+                    <input className="form-input" placeholder="أو رابط صورة الغلاف https://..." value={form.cover_url||""}
+                      onChange={e=>setForm({...form,cover_url:e.target.value,coverPreview:e.target.value})} />
+                  </div>
+                </div>
+              )}
 
               <div className="form-row">
                 <div className="form-group"><label className="form-label">عدد الصفحات</label><input className="form-input" type="number" min="0" placeholder="0" value={form.pages||""} onChange={e=>setForm({...form,pages:+e.target.value})} /></div>
