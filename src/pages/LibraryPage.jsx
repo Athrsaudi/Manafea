@@ -28,7 +28,7 @@ const T = {
 // Each language has its own set of books with its own PDF URLs
 const BOOKS_BY_LANG = {
   ar: [
-    { id:1, title:"الدين الصحيح", author:"د. أبو أمينة بلال فيلبس", desc:"كتاب يعرض حقيقة الإسلام ومبادئه الأساسية بأسلوب ميسر وواضح", pdf:"https://manafea.com/books/ar/true-religion.pdf", pages:120, color:"#1B3A4B" },
+    { id:1, title:"الدين الصحيح", author:"د. أبو أمينة بلال فيلبس", desc:"كتاب يعرض حقيقة الإسلام ومبادئه الأساسية بأسلوب ميسر وواضح", pdf:"https://manafea.com/books/ar/true-religion.pdf", pages:120, cover:"", color:"#1B3A4B" },
     { id:2, title:"العقيدة الصحيحة وما يضادها", author:"الشيخ عبدالعزيز بن باز", desc:"رسالة مختصرة في بيان العقيدة الصحيحة التي يجب على المسلم التمسك بها", pdf:"https://manafea.com/books/ar/correct-creed.pdf", pages:85, color:"#2C5F7C" },
     { id:3, title:"حصن المسلم", author:"سعيد بن علي القحطاني", desc:"مجموعة شاملة من الأذكار والأدعية اليومية من القرآن والسنة", pdf:"https://manafea.com/books/ar/hisn-almuslim.pdf", pages:64, color:"#9E832E" },
     { id:4, title:"رياض الصالحين", author:"الإمام النووي", desc:"كتاب جامع في أحاديث الآداب والأخلاق والأحكام", pdf:"https://manafea.com/books/ar/riyadh-saliheen.pdf", pages:590, color:"#0F2530" },
@@ -38,7 +38,7 @@ const BOOKS_BY_LANG = {
     { id:8, title:"تفسير ابن كثير", author:"الحافظ ابن كثير", desc:"من أشهر كتب التفسير بالمأثور", pdf:"https://manafea.com/books/ar/tafsir-ibn-kathir.pdf", pages:1800, color:"#0F2530" },
   ],
   en: [
-    { id:1, title:"The True Religion", author:"Dr. Abu Ameenah Bilal Philips", desc:"A book presenting the truth of Islam and its core principles in a clear manner", pdf:"https://manafea.com/books/en/true-religion.pdf", pages:120, color:"#1B3A4B" },
+    { id:1, title:"The True Religion", author:"Dr. Abu Ameenah Bilal Philips", desc:"A book presenting the truth of Islam and its core principles in a clear manner", pdf:"https://manafea.com/books/en/true-religion.pdf", pages:120, cover:"", color:"#1B3A4B" },
     { id:2, title:"The Correct Creed", author:"Sheikh Abdul-Aziz ibn Baz", desc:"A concise treatise on the correct Islamic creed every Muslim should hold", pdf:"https://manafea.com/books/en/correct-creed.pdf", pages:85, color:"#2C5F7C" },
     { id:3, title:"Fortress of the Muslim", author:"Said bin Ali Al-Qahtani", desc:"A comprehensive collection of daily supplications from the Quran and Sunnah", pdf:"https://manafea.com/books/en/hisn-almuslim.pdf", pages:64, color:"#9E832E" },
     { id:4, title:"Gardens of the Righteous", author:"Imam An-Nawawi", desc:"A comprehensive hadith collection on manners, ethics, and rulings", pdf:"https://manafea.com/books/en/riyadh-saliheen.pdf", pages:590, color:"#0F2530" },
@@ -81,7 +81,7 @@ export default function ManafaaLibraryPage() {
       const { data, error } = await supabase
         .from("books")
         .select(`
-          id, pdf_url, cover_url, sort_order, lang,
+          id, pdf_url, cover_url, pages, sort_order, lang,
           book_translations(lang, title, author, description)
         `)
         .eq("lang", lang)
@@ -171,14 +171,22 @@ export default function ManafaaLibraryPage() {
             {filtered.map((book, i) => (
               <div key={book.id} onClick={()=>setActiveBook(book)} className="card-hover bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer group animate-fadeInUp" style={{animationDelay:`${Math.min(i*.08,.5)}s`}}>
                 {/* Cover */}
-                <div className="h-56 flex flex-col items-center justify-center relative p-4" style={{background:`linear-gradient(135deg,${book.color},var(--primary))`}}>
-                  <span className="text-5xl opacity-15 absolute top-4 right-4">📖</span>
-                  <div className="relative z-10 text-center">
-                    <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style={{background:'rgba(255,255,255,0.15)'}}>
-                      <span className="text-2xl">📚</span>
+                <div className="h-56 relative overflow-hidden" style={{background:`linear-gradient(135deg,${book.color},var(--primary))`}}>
+                  {book.cover ? (
+                    <img src={book.cover} alt={book.title}
+                      className="w-full h-full object-cover"
+                      onError={e=>{e.target.style.display='none'}} />
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center p-4">
+                      <span className="text-5xl opacity-15 absolute top-4 right-4">📖</span>
+                      <div className="relative z-10 text-center">
+                        <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3" style={{background:'rgba(255,255,255,0.15)'}}>
+                          <span className="text-2xl">📚</span>
+                        </div>
+                        <h3 className="text-white font-bold text-sm leading-tight px-2 quran-font">{book.title}</h3>
+                      </div>
                     </div>
-                    <h3 className="text-white font-bold text-sm leading-tight px-2 quran-font">{book.title}</h3>
-                  </div>
+                  )}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300" style={{background:'rgba(200,169,81,0.9)'}}>
                     <span className="text-white text-sm font-bold">{t("read_now")}</span>
                   </div>

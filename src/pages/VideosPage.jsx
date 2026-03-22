@@ -286,9 +286,10 @@ export default function ManafaaVideosPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredVideos.slice(0, 4).map((v, i) => (
               <div key={i} onClick={() => setActiveVideo(v)} className="card-hover group rounded-2xl overflow-hidden bg-white shadow-md cursor-pointer animate-fadeInUp" style={{ animationDelay: `${i * 0.1}s` }}>
-                <div className="relative h-48 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--primary-dark), var(--primary))' }}>
-                  <span className="text-6xl opacity-20">{v.catIcon}</span>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <div className="relative h-48 overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--primary-dark), var(--primary))' }}>
+                  {v.ytId && <img src={`https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg`} alt={v.t} className="w-full h-full object-cover" onError={e=>{e.target.style.display='none'}} />}
+                  {!v.ytId && <span className="text-6xl opacity-20 absolute inset-0 flex items-center justify-center">{v.catIcon}</span>}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300" style={{background:'rgba(0,0,0,0.4)'}}>
                     <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg" style={{ background: 'var(--gold)' }}>
                       <svg className="w-7 h-7" style={{ marginInlineStart: '3px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                     </div>
@@ -336,9 +337,10 @@ export default function ManafaaVideosPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {catVids.map((v, vi) => (
                   <div key={vi} onClick={() => setActiveVideo({ ...v, catName: cat.name, catIcon: cat.icon })} className="card-hover group rounded-2xl overflow-hidden bg-white shadow-md cursor-pointer">
-                    <div className="relative h-44 flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${vi % 2 === 0 ? 'var(--primary-dark)' : 'var(--primary-light)'}, var(--primary))` }}>
-                      <span className="text-5xl opacity-20">{cat.icon}</span>
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <div className="relative h-44 overflow-hidden" style={{ background: `linear-gradient(135deg, ${vi % 2 === 0 ? 'var(--primary-dark)' : 'var(--primary-light)'}, var(--primary))` }}>
+                      {v.ytId && <img src={`https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg`} alt={v.t} className="w-full h-full object-cover" onError={e=>{e.target.style.display='none'}} />}
+                      {!v.ytId && <span className="text-5xl opacity-20 absolute inset-0 flex items-center justify-center">{cat.icon}</span>}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300" style={{background:'rgba(0,0,0,0.4)'}}>
                         <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg" style={{ background: 'var(--gold)' }}>
                           <svg className="w-6 h-6" style={{ marginInlineStart: '2px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                         </div>
@@ -377,9 +379,10 @@ export default function ManafaaVideosPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {catVids.map((v, vi) => (
                       <div key={vi} onClick={() => setActiveVideo({ ...v, catName: cat?.name, catIcon: cat?.icon })} className="card-hover group rounded-2xl overflow-hidden bg-white shadow-md cursor-pointer animate-fadeInUp" style={{ animationDelay: `${vi * 0.1}s` }}>
-                        <div className="relative h-48 flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${vi % 2 === 0 ? 'var(--primary-dark)' : 'var(--primary-light)'}, var(--primary))` }}>
-                          <span className="text-6xl opacity-20">{cat?.icon}</span>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className="relative h-48 overflow-hidden" style={{ background: `linear-gradient(135deg, ${vi % 2 === 0 ? 'var(--primary-dark)' : 'var(--primary-light)'}, var(--primary))` }}>
+                          {v.ytId && <img src={`https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg`} alt={v.t} className="w-full h-full object-cover" onError={e=>{e.target.style.display='none'}} />}
+                          {!v.ytId && <span className="text-6xl opacity-20 absolute inset-0 flex items-center justify-center">{cat?.icon}</span>}
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300" style={{background:'rgba(0,0,0,0.4)'}}>
                             <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg" style={{ background: 'var(--gold)' }}>
                               <svg className="w-7 h-7" style={{ marginInlineStart: '3px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                             </div>
