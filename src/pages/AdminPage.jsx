@@ -447,7 +447,13 @@ function BooksSection({ lang }) {
               <button className="modal-close" onClick={()=>setModal(null)}>✕</button>
             </div>
             <div className="modal-body">
-              <div className="form-group"><label className="form-label">العنوان ({LANGS.find(l=>l.code===lang)?.name})</label><input className="form-input" value={form.title||""} onChange={e=>setForm({...form,title:e.target.value})} /></div>
+              {modal==="add" && <div className="alert alert-success" style={{marginBottom:14,fontSize:".82rem"}}>
+                📝 <strong>الخطوات:</strong> ١- اكتب عنوان الكتاب ← ٢- اكتب المؤلف ← ٣- ارفع ملف PDF ← ٤- احفظ
+              </div>}
+              <div className="form-group">
+                <label className="form-label">عنوان الكتاب ({LANGS.find(l=>l.code===lang)?.name})</label>
+                <input className="form-input" placeholder="مثال: رياض الصالحين" value={form.title||""} onChange={e=>setForm({...form,title:e.target.value})} />
+              </div>
               <div className="form-group"><label className="form-label">المؤلف</label><input className="form-input" value={form.author||""} onChange={e=>setForm({...form,author:e.target.value})} /></div>
               <div className="form-group"><label className="form-label">الوصف</label><input className="form-input" value={form.description||""} onChange={e=>setForm({...form,description:e.target.value})} /></div>
               {/* رفع PDF */}
