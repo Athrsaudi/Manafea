@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { supaInsert as supaIns } from "../lib/supabase";
+import { supaInsert as supaIns, supabase } from "../lib/supabase";
 
 const langs = [
   { code: "ar", name: "العربية", dir: "rtl" },
@@ -93,6 +93,45 @@ export default function ManafaaHomepage() {
   const [hRat, setHRat] = useState(0);
   const [cmt, setCmt] = useState("");
   const [sent, setSent] = useState(false);
+  const [dbVids, setDbVids] = useState([]);
+  const [dbBooks, setDbBooks] = useState([]);
+
+  // جلب الفيديوهات المميزة والكتب من Supabase
+  useEffect(() => {
+    // فيديوهات مميزة
+    supabase
+      .from("videos")
+      .select(`id, video_url, lang, category_id, video_translations(lang,title), video_categories(slug, video_category_translations(lang,name))`)
+      .eq("lang", lang)
+      .eq("is_featured", true)
+      .order("sort_order")
+      .limit(4)
+      .then(({ data }) => {
+        if (data?.length) {
+          setDbVids(data.map(v => {
+            const trans = v.video_translations?.find(t => t.lang === lang) || v.video_translations?.[0] || {};
+            const catTrans = v.video_categories?.video_category_translations?.find(t => t.lang === lang) || v.video_categories?.video_category_translations?.[0] || {};
+            const ytId = v.video_url?.includes("watch?v=") ? v.video_url.split("watch?v=")[1] : v.video_url;
+            return { t: trans.title || "", c: catTrans.name || "", ytId };
+          }));
+        } else { setDbVids([]); }
+      });
+    // كتب
+    supabase
+      .from("books")
+      .select(`id, cover_url, pages, lang, book_translations(lang,title,author)`)
+      .eq("lang", lang)
+      .order("sort_order")
+      .limit(4)
+      .then(({ data }) => {
+        if (data?.length) {
+          setDbBooks(data.map(b => {
+            const trans = b.book_translations?.find(t => t.lang === lang) || b.book_translations?.[0] || {};
+            return { t: trans.title || "", a: trans.author || "", cover: b.cover_url || "" };
+          }));
+        } else { setDbBooks([]); }
+      });
+  }, [lang]);
 
   const lo = langs.find(l => l.code === lang) || langs[0];
   const dir = lo.dir;
@@ -100,8 +139,8 @@ export default function ManafaaHomepage() {
   const t = k => ui[k] || T.ar[k] || k;
   const arr = dir === "rtl" ? "←" : "→";
   const slides = SL[lang] || SL.ar;
-  const vids = VD[lang] || VD.ar;
-  const books = BK[lang] || BK.ar;
+  const vids = dbVids;
+  const books = dbBooks;
   const cq = (CQ[lang] || CQ.ar)[0];
 
   const nav = [
@@ -253,9 +292,12 @@ export default function ManafaaHomepage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {vids.map((v,i) => (
             <div key={i} onClick={() => navigate("/videos")} className="ch group rounded-2xl overflow-hidden bg-white shadow-md" style={{cursor:'pointer'}}>
-              <div className="relative h-48 flex items-center justify-center" style={{background:'var(--p)'}}>
-                <span className="text-6xl opacity-30">{v.e}</span>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <div className="relative h-48 overflow-hidden" style={{background:'var(--p)'}}>
+                {v.ytId
+                  ? <img src={`https://img.youtube.com/vi/${v.ytId}/mqdefault.jpg`} alt={v.t} className="w-full h-full object-cover" onError={e=>{e.target.style.display='none'}} />
+                  : <span className="text-6xl opacity-30 absolute inset-0 flex items-center justify-center">{v.e||"🎬"}</span>
+                }
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300" style={{background:'rgba(0,0,0,0.4)'}}>
                   <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg" style={{background:'var(--g)'}}>
                     <svg className="w-6 h-6" style={{marginInlineStart:'2px'}} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   </div>
@@ -379,11 +421,14 @@ export default function ManafaaHomepage() {
         </div>
 
         {/* Book cards — ينقل لصفحة المكتبة */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {books.map((b,i) => (
             <div key={i} onClick={() => navigate("/library")} className="ch bg-white rounded-2xl shadow-md overflow-hidden group" style={{cursor:'pointer'}}>
-              <div className="h-52 flex items-center justify-center relative" style={{background:`linear-gradient(135deg,${i%2===0?'var(--pd)':'var(--pl)'},var(--p))`}}>
-                <span className="text-5xl opacity-20">📖</span>
+              <div className="h-52 overflow-hidden relative" style={{background:`linear-gradient(135deg,${i%2===0?'var(--pd)':'var(--pl)'},var(--p))`}}>
+                {b.cover
+                  ? <img src={b.cover} alt={b.t} className="w-full h-full object-cover" onError={e=>{e.target.style.display='none'}} />
+                  : <span className="text-5xl opacity-20 absolute inset-0 flex items-center justify-center">📖</span>
+                }
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all" style={{background:'rgba(200,169,81,.9)'}}>
                   <span className="text-white text-sm font-bold">{t("l_read")}</span>
                 </div>
