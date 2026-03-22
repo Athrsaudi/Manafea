@@ -456,64 +456,39 @@ function BooksSection({ lang }) {
               </div>
               <div className="form-group"><label className="form-label">المؤلف</label><input className="form-input" value={form.author||""} onChange={e=>setForm({...form,author:e.target.value})} /></div>
               <div className="form-group"><label className="form-label">الوصف</label><input className="form-input" value={form.description||""} onChange={e=>setForm({...form,description:e.target.value})} /></div>
-              {/* رفع PDF */}
+              {/* ── PDF ── */}
               <div className="form-group">
-                <label className="form-label">ملف PDF — ارفع من جهازك</label>
+                <label className="form-label">📄 ملف PDF — ارفع من جهازك</label>
                 <input type="file" accept="application/pdf" className="form-input" style={{padding:"8px"}}
-                  onChange={async e=>{
-                    const file = e.target.files[0];
-                    if(!file) return;
-                    setForm(f=>({...f, pdfFile:file, pdfName:file.name}));
-                    // استخراج الغلاف تلقائياً من الصفحة الأولى
-                    try {
-                      const pdfjsLib = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.min.mjs");
-                      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs";
-                      const arrayBuffer = await file.arrayBuffer();
-                      const pdf = await pdfjsLib.getDocument({data:arrayBuffer}).promise;
-                      const page = await pdf.getPage(1);
-                      const viewport = page.getViewport({scale:1.5});
-                      const canvas = document.createElement("canvas");
-                      canvas.width = viewport.width;
-                      canvas.height = viewport.height;
-                      const ctx = canvas.getContext("2d");
-                      await page.render({canvasContext:ctx, viewport}).promise;
-                      const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-                      // Convert to blob for upload
-                      const res = await fetch(dataUrl);
-                      const blob = await res.blob();
-                      const coverFile = new File([blob], file.name.replace(/[^a-zA-Z0-9._-]/g,'_').replace('.pdf','.jpg'), {type:"image/jpeg"});
-                      setForm(f=>({...f, coverFile, coverPreview:dataUrl}));
-                    } catch(err) {
-                      console.warn("PDF cover extraction failed:", err);
-                    }
+                  onChange={e=>{
+                    const f=e.target.files[0];
+                    if(f) setForm(prev=>({...prev,pdfFile:f,pdfName:f.name}));
                   }} />
-                {form.pdfName && <p style={{fontSize:".78rem",color:"var(--g)",marginTop:4}}>📄 {form.pdfName}</p>}
+                {form.pdfName && <p style={{fontSize:".75rem",color:"var(--g)",marginTop:4}}>📄 {form.pdfName}</p>}
               </div>
               <div className="form-group">
-                <label className="form-label">أو رابط PDF مباشر (اختياري)</label>
+                <label className="form-label">أو رابط PDF مباشر</label>
                 <input className="form-input" placeholder="https://..." value={form.pdf_url||""} onChange={e=>setForm({...form,pdf_url:e.target.value})} />
               </div>
-              {/* غلاف الكتاب — يُستخرج تلقائياً من PDF أو يُرفع يدوياً */}
-              {form.coverPreview && (
-                <div style={{marginBottom:14}}>
-                  <p style={{fontSize:".78rem",color:"var(--g)",marginBottom:6}}>✅ غلاف مُستخرج تلقائياً من الصفحة الأولى</p>
-                  <img src={form.coverPreview} style={{width:"100%",maxHeight:200,objectFit:"contain",borderRadius:8,background:"#f8f8f8"}} />
-                </div>
-              )}
+
+              {/* ── غلاف الكتاب ── */}
               <div className="form-group">
-                <label className="form-label">غلاف مخصص — ارفع صورة (اختياري، يستبدل التلقائي)</label>
+                <label className="form-label">🖼️ صورة الغلاف — ارفع من جهازك</label>
                 <input type="file" accept="image/*" className="form-input" style={{padding:"8px"}}
                   onChange={e=>{
-                    const file = e.target.files[0];
-                    if(file) {
-                      setForm({...form, coverFile:file, coverPreview:URL.createObjectURL(file)});
-                    }
+                    const f=e.target.files[0];
+                    if(f) setForm(prev=>({...prev,coverFile:f,coverPreview:URL.createObjectURL(f)}));
                   }} />
+                {form.coverPreview && (
+                  <img src={form.coverPreview} style={{marginTop:8,width:"100%",maxHeight:180,objectFit:"cover",borderRadius:8}} />
+                )}
               </div>
               <div className="form-group">
-                <label className="form-label">أو رابط الغلاف مباشر</label>
-                <input className="form-input" placeholder="https://..." value={form.cover_url||""} onChange={e=>setForm({...form,cover_url:e.target.value,coverPreview:e.target.value})} />
+                <label className="form-label">أو رابط صورة الغلاف</label>
+                <input className="form-input" placeholder="https://..." value={form.cover_url||""}
+                  onChange={e=>setForm({...form,cover_url:e.target.value,coverPreview:e.target.value})} />
               </div>
+
               <div className="form-row">
                 <div className="form-group"><label className="form-label">عدد الصفحات</label><input className="form-input" type="number" min="0" placeholder="0" value={form.pages||""} onChange={e=>setForm({...form,pages:+e.target.value})} /></div>
                 <div className="form-group"><label className="form-label">الترتيب</label><input className="form-input" type="number" value={form.sort_order||1} onChange={e=>setForm({...form,sort_order:+e.target.value})} /></div>
