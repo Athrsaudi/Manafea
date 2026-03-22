@@ -100,7 +100,7 @@ export default function ManafaaLibraryPage() {
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style={{background:'var(--gold)',color:'var(--primary-dark)'}}><span className="text-lg sm:text-xl font-bold quran-font">م</span></div>
             <div className="hidden sm:block"><h1 className="text-white font-bold text-base leading-tight">{t("site_name")}</h1><p className="text-xs" style={{color:'var(--gold)'}}>{t("site_desc")}</p></div>
           </div>
-          <div className="hidden lg:flex items-center gap-1">{nav.map((n,i)=><a key={i} href="#" className={`nav-item text-sm px-3 py-2 rounded-lg transition-all ${n.k==="n_lib"?"text-white bg-white/10":"text-white/70 hover:text-white hover:bg-white/5"}`}>{t(n.k)}</Link>)}</div>
+          <div className="hidden lg:flex items-center gap-1">{nav.map((n,i)=><Link key={i} to={n.href} className={`nav-item text-sm px-3 py-2 rounded-lg transition-all ${n.k==="n_lib"?"text-white bg-white/10":"text-white/70 hover:text-white hover:bg-white/5"}`}>{t(n.k)}</Link>)}</div>
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative">
               <button onClick={()=>setShowLM(!showLM)} className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all">
@@ -117,7 +117,7 @@ export default function ManafaaLibraryPage() {
             <button onClick={()=>setMob(!mob)} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">{mob?<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>:<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>}</svg></button>
           </div>
         </div>
-        {mob&&<div className="lg:hidden pb-4 animate-slideDown"><div className="bg-white/5 rounded-xl p-2">{nav.map((n,i)=><a key={i} href="#" onClick={()=>setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k==="n_lib"?"text-white bg-white/10":"text-white/80 hover:bg-white/5"}`}><span>{t(n.k)}</span></a>)}</div></div>}
+        {mob&&<div className="lg:hidden pb-4 animate-slideDown"><div className="bg-white/5 rounded-xl p-2">{nav.map((n,i)=><Link key={i} to={n.href} onClick={()=>setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k==="n_lib"?"text-white bg-white/10":"text-white/80 hover:bg-white/5"}`}><span>{t(n.k)}</span></a>)}</div></div>}
         </div>
       </nav>
 
