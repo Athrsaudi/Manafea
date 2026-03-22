@@ -134,7 +134,7 @@ export default function ManafaaQuranPage(){
   const lo=langs.find(l=>l.code===lang)||langs[0];const dir=lo.dir;const ui=T[lang]||T.ar;const t=k=>ui[k]||T.ar[k]||k;const rec=RECITERS[recIdx];
   useEffect(()=>{const h=()=>setScrolled(window.scrollY>50);window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h)},[]);
   useEffect(()=>{window.scrollTo(0,0)},[selSu]);
-  const nav=[{k:"n_home"},{k:"n_vid"},{k:"n_quran"},{k:"n_lib"},{k:"n_hajj"},{k:"n_umrah"},{k:"n_contest"}];
+  const nav=[{k:"n_home",href:"/"},{k:"n_vid",href:"/videos"},{k:"n_quran",href:"/quran"},{k:"n_lib",href:"/library"},{k:"n_hajj",href:"/hajj"},{k:"n_umrah",href:"/umrah"},{k:"n_contest",href:"/contest"}];
   const filtered=S.filter(s=>{const ms=s.ar.includes(search)||s.en.toLowerCase().includes(search.toLowerCase())||String(s.n).includes(search);const mt=typeF==="all"||s.tp===typeF;return ms&&mt});
 
   return(<div dir={dir} className="min-h-screen bg-[#FAFBFC]" style={{fontFamily:"'Tajawal','Segoe UI',sans-serif"}}>
