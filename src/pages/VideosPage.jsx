@@ -44,24 +44,24 @@ const CATS = {
 // ─── Videos Data (24 videos across 8 categories — ar/en, others fallback to en) ───
 const VIDS = {
   ar: {
-    aqeedah: [{t:"أركان الإسلام الخمسة",d:"شرح مفصل لأركان الإسلام الخمسة وأهميتها في حياة المسلم",f:true,ytId:"JLEnhiqiOqo"}},{t:"أركان الإيمان الستة",d:"تعرف على أركان الإيمان الستة التي يجب على كل مسلم الإيمان بها",f:false,ytId:"7bHSAJaVFmQ"}},{t:"التوحيد وأقسامه",d:"شرح أقسام التوحيد الثلاثة: الربوبية والألوهية والأسماء والصفات",f:false,ytId:"kffacxfA7G4"}],
-    fiqh: [{t:"صفة الوضوء الصحيحة",d:"تعلم كيفية الوضوء بالطريقة الصحيحة كما وردت في السنة النبوية",f:true,ytId:"EYpdEYK25Dc"}},{t:"أحكام الصلاة للمبتدئين",d:"دليل شامل لأحكام الصلاة من التكبير إلى التسليم",f:false,ytId:"xz9LKf9G2sk"}},{t:"أحكام الصيام",d:"تعرف على أحكام الصيام وشروطه ومفسداته",f:false,ytId:"YMvDMH5DKRY"}],
-    tafseer: [{t:"تفسير سورة الفاتحة",d:"شرح وتفسير معاني سورة الفاتحة آية بآية",f:true,ytId:"GvQTpFwI7YM"}},{t:"تفسير سورة الكهف",d:"دروس وعبر من سورة الكهف",f:false,ytId:"X9fVTI7QyiE"}},{t:"تفسير جزء عم",d:"تفسير ميسر لسور جزء عم",f:false,ytId:"OBpWxXCQcHI"}],
-    seerah: [{t:"مولد النبي ﷺ ونشأته",d:"قصة مولد النبي محمد ﷺ ونشأته في مكة",f:true,ytId:"MpBGau3QLNI"}},{t:"الهجرة النبوية",d:"قصة هجرة النبي ﷺ من مكة إلى المدينة",f:false,ytId:"NUTGal5uXx8"}},{t:"غزوة بدر الكبرى",d:"أحداث غزوة بدر الكبرى ودروسها",f:false,ytId:"AaXlZmLJY24"}],
-    hadith: [{t:"شرح الأربعين النووية",d:"شرح مختصر للأحاديث الأربعين النووية",f:true,ytId:"FBggPNAH7mA"}},{t:"حديث جبريل عليه السلام",d:"شرح حديث جبريل في الإسلام والإيمان والإحسان",f:false,ytId:"UF8uR6Z6KLc"}},{t:"أحاديث الأذكار اليومية",d:"أحاديث نبوية في أذكار الصباح والمساء",f:false,ytId:"pZZBYpqjEZg"}],
-    ethics: [{t:"حسن الخلق في الإسلام",d:"أهمية حسن الخلق ومكانته في الإسلام",f:true,ytId:"PBgWyKXFAkk"}},{t:"آداب المسجد",d:"تعرف على آداب دخول المسجد والجلوس فيه",f:false,ytId:"dQw4w9WgXcQ"}},{t:"فضل الصدقة",d:"فضائل الصدقة وأجرها عند الله",f:false,ytId:"YMvDMH5DKRY"}],
-    ramadan: [{t:"كيف نستغل شهر رمضان",d:"نصائح عملية لاستغلال شهر رمضان المبارك",f:true,ytId:"AaXlZmLJY24"}},{t:"فضائل ليلة القدر",d:"فضائل ليلة القدر وكيفية إحيائها",f:false,ytId:"FBggPNAH7mA"}},{t:"أحكام زكاة الفطر",d:"متى وكيف تُخرج زكاة الفطر",f:false,ytId:"JLEnhiqiOqo"}],
-    hajj: [{t:"صفة الحج كاملة",d:"شرح مناسك الحج كاملة من الإحرام إلى طواف الوداع",f:true,ytId:"OBpWxXCQcHI"}},{t:"أخطاء شائعة في الحج",d:"تعرف على الأخطاء الشائعة التي يقع فيها الحجاج",f:false,ytId:"UF8uR6Z6KLc"}},{t:"أدعية الحج والعمرة",d:"مجموعة من الأدعية المأثورة في الحج والعمرة",f:false,ytId:"kffacxfA7G4"}],
+    aqeedah: [{t:"أركان الإسلام الخمسة",d:"شرح مفصل لأركان الإسلام الخمسة وأهميتها في حياة المسلم",f:true,ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo"},{t:"أركان الإيمان الستة",d:"تعرف على أركان الإيمان الستة التي يجب على كل مسلم الإيمان بها",f:false,ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ"},{t:"التوحيد وأقسامه",d:"شرح أقسام التوحيد الثلاثة: الربوبية والألوهية والأسماء والصفات",f:false}],
+    fiqh: [{t:"صفة الوضوء الصحيحة",d:"تعلم كيفية الوضوء بالطريقة الصحيحة كما وردت في السنة النبوية",f:true,ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc"},{t:"أحكام الصلاة للمبتدئين",d:"دليل شامل لأحكام الصلاة من التكبير إلى التسليم",f:false,ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk"},{t:"أحكام الصيام",d:"تعرف على أحكام الصيام وشروطه ومفسداته",f:false}],
+    tafseer: [{t:"تفسير سورة الفاتحة",d:"شرح وتفسير معاني سورة الفاتحة آية بآية",f:true,ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM"},{t:"تفسير سورة الكهف",d:"دروس وعبر من سورة الكهف",f:false,ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE"},{t:"تفسير جزء عم",d:"تفسير ميسر لسور جزء عم",f:false}],
+    seerah: [{t:"مولد النبي ﷺ ونشأته",d:"قصة مولد النبي محمد ﷺ ونشأته في مكة",f:true,ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI"},{t:"الهجرة النبوية",d:"قصة هجرة النبي ﷺ من مكة إلى المدينة",f:false,ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8"},{t:"غزوة بدر الكبرى",d:"أحداث غزوة بدر الكبرى ودروسها",f:false}],
+    hadith: [{t:"شرح الأربعين النووية",d:"شرح مختصر للأحاديث الأربعين النووية",f:true,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"حديث جبريل عليه السلام",d:"شرح حديث جبريل في الإسلام والإيمان والإحسان",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"أحاديث الأذكار اليومية",d:"أحاديث نبوية في أذكار الصباح والمساء",f:false}],
+    ethics: [{t:"حسن الخلق في الإسلام",d:"أهمية حسن الخلق ومكانته في الإسلام",f:true,ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk"},{t:"آداب المسجد",d:"تعرف على آداب دخول المسجد والجلوس فيه",f:false,ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY"},{t:"فضل الصدقة",d:"فضائل الصدقة وأجرها عند الله",f:false}],
+    ramadan: [{t:"كيف نستغل شهر رمضان",d:"نصائح عملية لاستغلال شهر رمضان المبارك",f:true,ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24"},{t:"فضائل ليلة القدر",d:"فضائل ليلة القدر وكيفية إحيائها",f:false,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"أحكام زكاة الفطر",d:"متى وكيف تُخرج زكاة الفطر",f:false}],
+    hajj: [{t:"صفة الحج كاملة",d:"شرح مناسك الحج كاملة من الإحرام إلى طواف الوداع",f:true,ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI"},{t:"أخطاء شائعة في الحج",d:"تعرف على الأخطاء الشائعة التي يقع فيها الحجاج",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"أدعية الحج والعمرة",d:"مجموعة من الأدعية المأثورة في الحج والعمرة",f:false}],
   },
   en: {
-    aqeedah: [{t:"Five Pillars of Islam",d:"A detailed explanation of the five pillars of Islam and their importance",f:true,ytId:"JLEnhiqiOqo"}},{t:"Six Pillars of Faith",d:"Learn about the six pillars of faith every Muslim must believe in",f:false,ytId:"7bHSAJaVFmQ"}},{t:"Tawheed and Its Categories",d:"Explanation of the three categories of Tawheed",f:false,ytId:"kffacxfA7G4"}],
-    fiqh: [{t:"How to Perform Wudu Correctly",d:"Learn the correct way to perform Wudu as described in the Prophetic Sunnah",f:true,ytId:"EYpdEYK25Dc"}},{t:"Prayer Rulings for Beginners",d:"A comprehensive guide to prayer rulings from Takbeer to Tasleem",f:false,ytId:"xz9LKf9G2sk"}},{t:"Rulings of Fasting",d:"Learn about fasting rulings, conditions, and invalidators",f:false,ytId:"YMvDMH5DKRY"}],
-    tafseer: [{t:"Tafseer of Surah Al-Fatiha",d:"Explanation of the meanings of Surah Al-Fatiha verse by verse",f:true,ytId:"GvQTpFwI7YM"}},{t:"Tafseer of Surah Al-Kahf",d:"Lessons and morals from Surah Al-Kahf",f:false,ytId:"X9fVTI7QyiE"}},{t:"Tafseer of Juz Amma",d:"Simplified Tafseer of Juz Amma surahs",f:false,ytId:"OBpWxXCQcHI"}],
-    seerah: [{t:"Birth and Early Life of the Prophet ﷺ",d:"The story of Prophet Muhammad's birth and upbringing in Makkah",f:true,ytId:"MpBGau3QLNI"}},{t:"The Prophetic Migration",d:"The story of the Prophet's migration from Makkah to Madinah",f:false,ytId:"NUTGal5uXx8"}},{t:"The Battle of Badr",d:"Events and lessons from the great Battle of Badr",f:false,ytId:"AaXlZmLJY24"}],
-    hadith: [{t:"Explanation of Nawawi's 40 Hadith",d:"Brief explanation of Imam Nawawi's 40 Hadith collection",f:true,ytId:"FBggPNAH7mA"}},{t:"Hadith of Jibreel",d:"Explanation of the Hadith of Jibreel about Islam, Iman, and Ihsan",f:false,ytId:"UF8uR6Z6KLc"}},{t:"Daily Remembrance Hadiths",d:"Prophetic hadiths on morning and evening supplications",f:false,ytId:"pZZBYpqjEZg"}],
-    ethics: [{t:"Good Character in Islam",d:"The importance and status of good character in Islam",f:true,ytId:"PBgWyKXFAkk"}},{t:"Mosque Etiquette",d:"Learn about the etiquettes of entering and sitting in the mosque",f:false,ytId:"dQw4w9WgXcQ"}},{t:"Virtue of Charity",d:"The virtues and rewards of charity with Allah",f:false,ytId:"YMvDMH5DKRY"}],
-    ramadan: [{t:"How to Benefit from Ramadan",d:"Practical tips to make the most of Ramadan",f:true,ytId:"AaXlZmLJY24"}},{t:"Virtues of Laylat Al-Qadr",d:"Virtues of the Night of Decree and how to observe it",f:false,ytId:"FBggPNAH7mA"}},{t:"Rulings of Zakat Al-Fitr",d:"When and how to pay Zakat Al-Fitr",f:false,ytId:"JLEnhiqiOqo"}],
-    hajj: [{t:"Complete Hajj Guide",d:"Full explanation of Hajj rituals from Ihram to Farewell Tawaf",f:true,ytId:"OBpWxXCQcHI"}},{t:"Common Hajj Mistakes",d:"Learn about common mistakes pilgrims make and how to avoid them",f:false,ytId:"UF8uR6Z6KLc"}},{t:"Hajj and Umrah Supplications",d:"Collection of authentic supplications for Hajj and Umrah",f:false,ytId:"kffacxfA7G4"}],
+    aqeedah: [{t:"Five Pillars of Islam",d:"A detailed explanation of the five pillars of Islam and their importance",f:true,ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo"},{t:"Six Pillars of Faith",d:"Learn about the six pillars of faith every Muslim must believe in",f:false,ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ"},{t:"Tawheed and Its Categories",d:"Explanation of the three categories of Tawheed",f:false}],
+    fiqh: [{t:"How to Perform Wudu Correctly",d:"Learn the correct way to perform Wudu as described in the Prophetic Sunnah",f:true,ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc"},{t:"Prayer Rulings for Beginners",d:"A comprehensive guide to prayer rulings from Takbeer to Tasleem",f:false,ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk"},{t:"Rulings of Fasting",d:"Learn about fasting rulings, conditions, and invalidators",f:false}],
+    tafseer: [{t:"Tafseer of Surah Al-Fatiha",d:"Explanation of the meanings of Surah Al-Fatiha verse by verse",f:true,ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM"},{t:"Tafseer of Surah Al-Kahf",d:"Lessons and morals from Surah Al-Kahf",f:false,ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE"},{t:"Tafseer of Juz Amma",d:"Simplified Tafseer of Juz Amma surahs",f:false}],
+    seerah: [{t:"Birth and Early Life of the Prophet ﷺ",d:"The story of Prophet Muhammad's birth and upbringing in Makkah",f:true,ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI"},{t:"The Prophetic Migration",d:"The story of the Prophet's migration from Makkah to Madinah",f:false,ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8"},{t:"The Battle of Badr",d:"Events and lessons from the great Battle of Badr",f:false}],
+    hadith: [{t:"Explanation of Nawawi's 40 Hadith",d:"Brief explanation of Imam Nawawi's 40 Hadith collection",f:true,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"Hadith of Jibreel",d:"Explanation of the Hadith of Jibreel about Islam, Iman, and Ihsan",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"Daily Remembrance Hadiths",d:"Prophetic hadiths on morning and evening supplications",f:false}],
+    ethics: [{t:"Good Character in Islam",d:"The importance and status of good character in Islam",f:true,ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk"},{t:"Mosque Etiquette",d:"Learn about the etiquettes of entering and sitting in the mosque",f:false,ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY"},{t:"Virtue of Charity",d:"The virtues and rewards of charity with Allah",f:false}],
+    ramadan: [{t:"How to Benefit from Ramadan",d:"Practical tips to make the most of Ramadan",f:true,ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24"},{t:"Virtues of Laylat Al-Qadr",d:"Virtues of the Night of Decree and how to observe it",f:false,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"Rulings of Zakat Al-Fitr",d:"When and how to pay Zakat Al-Fitr",f:false}],
+    hajj: [{t:"Complete Hajj Guide",d:"Full explanation of Hajj rituals from Ihram to Farewell Tawaf",f:true,ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI"},{t:"Common Hajj Mistakes",d:"Learn about common mistakes pilgrims make and how to avoid them",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"Hajj and Umrah Supplications",d:"Collection of authentic supplications for Hajj and Umrah",f:false}],
   },
 };
 
@@ -156,68 +156,9 @@ export default function ManafaaVideosPage() {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* ===== BISMILLAH ===== */}
-      <div className="w-full py-2 text-center text-sm" style={{ background: 'var(--primary-dark)', color: 'var(--gold)' }}>{t("bismillah")}</div>
+      
+      <Navbar lang={lang} setLang={setLang} />
 
-      {/* ===== NAVIGATION (identical to homepage) ===== */}
-      <nav className={`glass-nav sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'shadow-2xl' : ''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--gold)', color: 'var(--primary-dark)' }}>
-                <span className="text-lg sm:text-xl font-bold quran-font">م</span>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-white font-bold text-base leading-tight">{t("site_name")}</h1>
-                <p className="text-xs" style={{ color: 'var(--gold)' }}>{t("site_desc")}</p>
-              </div>
-            </div>
-            <div className="hidden lg:flex items-center gap-1">
-              {navItems.map((n, i) => (
-                <a key={i} href={n.href} className={`nav-item text-sm px-3 py-2 rounded-lg transition-all ${n.k === "n_vid" ? "text-white bg-white/10" : "text-white/80 hover:text-white hover:bg-white/5"}`}>{t(n.k)}</a>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="relative">
-                <button onClick={() => setShowLM(!showLM)} className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" /></svg>
-                  <span className="hidden sm:inline">{lo.name}</span>
-                </button>
-                {showLM && (
-                  <div className={`absolute ${dir === "rtl" ? "left-0" : "right-0"} top-full mt-2 w-44 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-slideDown z-50`}>
-                    {langs.map(l => (
-                      <button key={l.code} onClick={() => { setLang(l.code); setShowLM(false); }}
-                        className={`w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between ${lang === l.code ? 'bg-blue-50 font-bold' : ''}`}
-                        style={{ textAlign: l.dir === "rtl" ? "right" : "left", color: lang === l.code ? 'var(--primary)' : 'var(--text)' }}>
-                        <span>{l.name}</span>
-                        {lang === l.code && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <button className="hidden sm:flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg transition-all font-medium" style={{ background: 'var(--gold)', color: 'var(--primary-dark)' }}>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                {t("login")}
-              </button>
-              <button onClick={() => setMob(!mob)} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">{mob ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</svg>
-              </button>
-            </div>
-          </div>
-          {mob && (
-            <div className="lg:hidden pb-4 animate-slideDown">
-              <div className="bg-white/5 rounded-xl p-2">
-                {navItems.map((n, i) => (
-                  <a key={i} href={n.href} onClick={() => setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k === "n_vid" ? "text-white bg-white/10" : "text-white/80 hover:bg-white/5"}`}>
-                    <span>{t(n.k)}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
 
       {/* ===== HERO SECTION ===== */}
       <section className="hero-gradient relative overflow-hidden" style={{ minHeight: '50vh' }}>
@@ -440,158 +381,17 @@ export default function ManafaaVideosPage() {
                   style={{ display: 'block' }}
                 />
               ) : (
-                <div className="relative h-56 sm:h-72 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--primary-dark), var(--primary))' }}>
-                  <span className="text-7xl opacity-20">{activeVideo.catIcon}</span>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full flex items-center justify-center shadow-2xl" style={{ background: 'var(--gold)' }}>
-                      <svg className="w-9 h-9" style={{ marginInlineStart: '4px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                    </div>
+                <div className="h-56 sm:h-72 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--primary-dark), var(--primary))' }}>
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: 'var(--gold)' }}>
+                    <svg className="w-9 h-9" style={{ marginInlineStart: '4px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                   </div>
                 </div>
               )}
-              <button onClick={() => setActiveVideo(null)} className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(0,0,0,.6)', color: 'white', border: 'none', cursor: 'pointer' }}>
+              <button onClick={() => setActiveVideo(null)}
+                style={{ position:'absolute', top:10, right:10, background:'rgba(0,0,0,.6)', border:'none', borderRadius:'50%', width:36, height:36, color:'white', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
-              <div className={`absolute bottom-3 ${dir === "rtl" ? "right-3" : "left-3"} px-3 py-1.5 rounded-full text-xs font-medium text-white`} style={{ background: 'rgba(200,169,81,0.9)' }}>
-                {activeVideo.catName}
-              </div>
-            </div>
-            {/* Video Info */}
-            <div className="p-6 sm:p-8">
-              <h2 className="text-xl sm:text-2xl font-black mb-3" style={{ color: 'var(--primary)' }}>{activeVideo.t}</h2>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-light)' }}>{activeVideo.d}</p>
-              <button className="btn-primary w-full py-3.5 rounded-xl text-white font-bold text-sm">
-                {t("watch_now")} {arr}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      </>
-      ) : (
-        /* No videos for this language */
-        <section className="py-20 sm:py-28 max-w-3xl mx-auto px-4 sm:px-6 text-center" style={{ marginTop: '-32px' }}>
-          <div className="bg-white rounded-3xl shadow-xl p-12" style={{ border: '1px solid rgba(200,169,81,0.15)' }}>
-            <span className="text-6xl block mb-6">🎬</span>
-            <h3 className="text-xl font-black mb-3" style={{ color: 'var(--primary)' }}>{t("no_videos")}</h3>
-          </div>
-        </section>
-      )}
-
-      {/* ===== FOOTER (matching homepage) ===== */}
-      <footer style={{ background: 'var(--primary-dark)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {/* About */}
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'var(--gold)', color: 'var(--primary-dark)' }}>
-                  <span className="font-bold quran-font">م</span>
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">{t("site_name")}</h3>
-                  <p className="text-xs" style={{ color: 'var(--gold)' }}>{t("site_desc")}</p>
-                </div>
-              </div>
-            </div>
-            {/* Languages */}
-            <div>
-              <h4 className="text-white font-bold mb-4">{t("ft_langs")}</h4>
-              <div className="flex flex-wrap gap-2">
-                {langs.map(l => (
-                  <button key={l.code} onClick={() => setLang(l.code)} className="text-xs px-3 py-1.5 rounded-full transition-all"
-                    style={{ background: lang === l.code ? 'var(--gold)' : 'rgba(255,255,255,0.05)', color: lang === l.code ? 'var(--primary-dark)' : 'rgba(255,255,255,0.6)', fontWeight: lang === l.code ? 'bold' : 'normal' }}>
-                    {l.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            <p className="text-white/30 text-sm">© {new Date().getFullYear()} {t("ft_copy")}</p>
-          </div>
-        </div>
-      </footer>
-
-      {/* Overlay to close menus */}
-      {(showLM || mob) && <div className="fixed inset-0 z-40" onClick={() => { setShowLM(false); setMob(false); }}></div>}
-    </div>
-  );
-}
-      <Navbar lang={lang} setLang={setLang} />
-n (
-              <>
-                <div className="text-center mb-12">
-                  <span className="text-5xl block mb-4">{cat?.icon}</span>
-                  <h2 className="text-3xl sm:text-4xl font-black" style={{ color: 'var(--primary)' }}>{cat?.name}</h2>
-                  <p className="mt-3 text-base" style={{ color: 'var(--text-light)' }}>{cat?.desc}</p>
-                  <span className="inline-block mt-3 text-sm px-4 py-1.5 rounded-full" style={{ background: 'rgba(200, 169, 81, 0.1)', color: 'var(--gold-dark)' }}>
-                    {catVids.length} {t("videos_count")}
-                  </span>
-                </div>
-                {catVids.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {catVids.map((v, vi) => (
-                      <div key={vi} onClick={() => setActiveVideo({ ...v, catName: cat?.name, catIcon: cat?.icon })} className="card-hover group rounded-2xl overflow-hidden bg-white shadow-md cursor-pointer animate-fadeInUp" style={{ animationDelay: `${vi * 0.1}s` }}>
-                        <div className="relative h-48 flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${vi % 2 === 0 ? 'var(--primary-dark)' : 'var(--primary-light)'}, var(--primary))` }}>
-                          <span className="text-6xl opacity-20">{cat?.icon}</span>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                            <div className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg" style={{ background: 'var(--gold)' }}>
-                              <svg className="w-7 h-7" style={{ marginInlineStart: '3px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                            </div>
-                          </div>
-                          {v.f && <div className={`absolute top-3 ${dir === "rtl" ? "right-3" : "left-3"} px-2.5 py-1 rounded-full text-xs font-bold`} style={{ background: 'var(--gold)', color: 'var(--primary-dark)' }}>⭐ {t("featured")}</div>}
-                        </div>
-                        <div className="p-5">
-                          <h3 className="font-bold text-base leading-relaxed mb-2" style={{ color: 'var(--text)' }}>{v.t}</h3>
-                          <p className="text-sm leading-relaxed" style={{ color: 'var(--text-light)' }}>{v.d}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <span className="text-5xl block mb-4">📭</span>
-                    <p style={{ color: 'var(--text-light)' }}>{t("no_videos")}</p>
-                  </div>
-                )}
-              </>
-            );
-          })()}
-        </section>
-      )}
-
-      {/* ===== VIDEO MODAL ===== */}
-      {activeVideo && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }} onClick={() => setActiveVideo(null)}>
-          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden animate-fadeInUp" onClick={e => e.stopPropagation()} style={{ border: '1px solid rgba(200,169,81,0.2)' }}>
-            {/* YouTube Player */}
-            <div className="relative" style={{ background: '#000' }}>
-              {activeVideo.ytId ? (
-                <iframe
-                  width="100%" height="315"
-                  src={`https://www.youtube.com/embed/${activeVideo.ytId}?autoplay=1&rel=0`}
-                  title={activeVideo.t}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ display: 'block' }}
-                />
-              ) : (
-                <div className="relative h-56 sm:h-72 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--primary-dark), var(--primary))' }}>
-                  <span className="text-7xl opacity-20">{activeVideo.catIcon}</span>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full flex items-center justify-center shadow-2xl" style={{ background: 'var(--gold)' }}>
-                      <svg className="w-9 h-9" style={{ marginInlineStart: '4px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <button onClick={() => setActiveVideo(null)} className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(0,0,0,.6)', color: 'white', border: 'none', cursor: 'pointer' }}>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-              <div className={`absolute bottom-3 ${dir === "rtl" ? "right-3" : "left-3"} px-3 py-1.5 rounded-full text-xs font-medium text-white`} style={{ background: 'rgba(200,169,81,0.9)' }}>
+              <div className={`absolute bottom-3 ${dir === "rtl" ? "right-3" : "left-3"{'}'} px-3 py-1.5 rounded-full text-xs font-medium text-white`} style={{ background: 'rgba(200,169,81,0.9)' }}>
                 {activeVideo.catName}
               </div>
             </div>
