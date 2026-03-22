@@ -159,11 +159,31 @@ export default function ManafaaQuranPage(){
         </div>
       </div></div></section>
 
-      {/* Search + Filter */}
+      {/* Search + Filter + Reciter */}
       <section className="relative -mt-8 z-20 max-w-5xl mx-auto px-4 sm:px-6"><div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6"><div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative"><svg className={`absolute top-1/2 -translate-y-1/2 ${dir==="rtl"?"right-4":"left-4"} w-4 h-4`} fill="none" viewBox="0 0 24 24" stroke="var(--text-light)"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t("search")} className="w-full py-3 rounded-xl border-2 text-sm focus:outline-none transition-colors" style={{borderColor:'#E5E7EB',direction:dir,textAlign:dir==="rtl"?"right":"left",fontFamily:'Tajawal',paddingInlineStart:'44px',paddingInlineEnd:'16px'}} onFocus={e=>e.target.style.borderColor='var(--gold)'} onBlur={e=>e.target.style.borderColor='#E5E7EB'}/></div>
         <div className="flex gap-2 flex-shrink-0">{["all","meccan","medinan"].map(tp=><button key={tp} onClick={()=>setTypeF(tp)} className="px-4 py-2.5 rounded-xl text-sm font-bold transition-all" style={{background:typeF===tp?(tp==="meccan"?'var(--primary)':tp==="medinan"?'var(--gold)':'var(--primary)'):'transparent',color:typeF===tp?'white':'var(--text-light)',border:typeF===tp?'none':'1px solid #E5E7EB'}}>{t(tp)}</button>)}</div>
-      </div></div></section>
+      </div>
+      {/* Reciter Selector */}
+      <div className="mt-3 pt-3" style={{borderTop:'1px solid #F1F5F9'}}>
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-xs font-bold" style={{color:'var(--text-light)'}}>{t("select_reciter")}:</span>
+          <div className="flex gap-2 flex-wrap">
+            {RECITERS.map((r,i)=>(
+              <button key={r.id} onClick={()=>setRecIdx(i)}
+                className="px-3 py-1.5 rounded-full text-xs font-medium transition-all"
+                style={{
+                  background: recIdx===i ? 'var(--primary)' : 'rgba(27,58,75,0.06)',
+                  color: recIdx===i ? 'white' : 'var(--text-light)',
+                  border: recIdx===i ? 'none' : '1px solid #E5E7EB',
+                }}>
+                {["ar","ur","fa"].includes(lang) ? r.ar : r.en}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+      </div></section>
 
       {/* Surah Grid */}
       <section className="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6"><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{filtered.map((s,i)=><div key={s.n} onClick={()=>setSelSu(s)} className="ch bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer group afu" style={{animationDelay:`${Math.min(i*.03,.5)}s`}}>
