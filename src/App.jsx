@@ -7,6 +7,7 @@ import LibraryPage from './pages/LibraryPage'
 import HajjPage from './pages/HajjPage'
 import UmrahPage from './pages/UmrahPage'
 import ContestPage from './pages/ContestPage'
+import AdminPage from './pages/AdminPage'
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/hajj" element={<HajjPage />} />
         <Route path="/umrah" element={<UmrahPage />} />
         <Route path="/contest" element={<ContestPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </LangProvider>
   )
