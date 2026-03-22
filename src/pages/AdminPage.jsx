@@ -452,7 +452,35 @@ function BooksSection({ lang }) {
               </div>}
               <div className="form-group">
                 <label className="form-label">عنوان الكتاب ({LANGS.find(l=>l.code===lang)?.name})</label>
-                <input className="form-input" placeholder="مثال: رياض الصالحين" value={form.title||""} onChange={e=>setForm({...form,title:e.target.value})} />
+                <input className="form-input" placeholder="مثال: رياض الصالحين" value={form.title||""}
+                  onChange={e=>setForm({...form,title:e.target.value})}
+                  onBlur={async e=>{
+                    const title = e.target.value.trim();
+                    if(!title || form.coverFile || form.cover_url || form.coverPreview) return;
+                    // بحث تلقائي عن غلاف الكتاب
+                    try {
+                      const q = encodeURIComponent(title);
+                      const res = await fetch(`https://openlibrary.org/search.json?title=${q}&limit=1&fields=key,cover_i`);
+                      const json = await res.json();
+                      const coverId = json?.docs?.[0]?.cover_i;
+                      if(coverId) {
+                        const coverUrl = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
+                        setForm(f=>({...f, coverPreview:coverUrl, cover_url:coverUrl}));
+                      }
+                    } catch(err) { /* فشل البحث بصمت */ }
+                  }} />
+                {form.coverPreview && (
+                  <div style={{marginTop:8,display:'flex',alignItems:'center',gap:8}}>
+                    <img src={form.coverPreview} style={{width:60,height:80,objectFit:'cover',borderRadius:6,border:'2px solid var(--g)'}} />
+                    <div>
+                      <p style={{fontSize:'.72rem',color:'var(--g)',fontWeight:'bold'}}>✅ غلاف وُجد تلقائياً</p>
+                      <button type="button" onClick={()=>setForm(f=>({...f,coverPreview:'',cover_url:'',coverFile:null}))}
+                        style={{fontSize:'.7rem',color:'var(--red)',background:'none',border:'none',cursor:'pointer',padding:0,marginTop:2}}>
+                        × احذف واضف غلافاً مخصصاً
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="form-group"><label className="form-label">المؤلف</label><input className="form-input" value={form.author||""} onChange={e=>setForm({...form,author:e.target.value})} /></div>
               <div className="form-group"><label className="form-label">الوصف</label><input className="form-input" value={form.description||""} onChange={e=>setForm({...form,description:e.target.value})} /></div>
