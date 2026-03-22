@@ -366,7 +366,7 @@ function BooksSection({ lang }) {
       // رفع غلاف الكتاب إن وجد
       let coverUrl = form.cover_url || "";
       if (form.coverFile) {
-        const covName = `${Date.now()}_${form.coverFile.name.replace(/\s/g,"_")}`;
+        const covName = `${Date.now()}_${form.coverFile.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
         const { error: covErr } = await sb.storage.from("covers").upload(`books/${lang}/${covName}`, form.coverFile, {upsert:true});
         if (!covErr) {
           const { data: { publicUrl } } = sb.storage.from("covers").getPublicUrl(`books/${lang}/${covName}`);
@@ -377,7 +377,7 @@ function BooksSection({ lang }) {
       // رفع ملف PDF إن وجد
       let pdfUrl = form.pdf_url || "";
       if (form.pdfFile) {
-        const fileName = `${Date.now()}_${form.pdfFile.name.replace(/\s/g,"_")}`;
+        const fileName = `${Date.now()}_${form.pdfFile.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
         const { data: uploaded, error: upErr } = await sb.storage
           .from("books")
           .upload(`pdfs/${lang}/${fileName}`, form.pdfFile, { upsert: true });
@@ -481,7 +481,7 @@ function BooksSection({ lang }) {
                       // Convert to blob for upload
                       const res = await fetch(dataUrl);
                       const blob = await res.blob();
-                      const coverFile = new File([blob], file.name.replace(".pdf",".jpg"), {type:"image/jpeg"});
+                      const coverFile = new File([blob], file.name.replace(/[^a-zA-Z0-9._-]/g,'_').replace('.pdf','.jpg'), {type:"image/jpeg"});
                       setForm(f=>({...f, coverFile, coverPreview:dataUrl}));
                     } catch(err) {
                       console.warn("PDF cover extraction failed:", err);
