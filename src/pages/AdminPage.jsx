@@ -342,7 +342,7 @@ function BooksSection({ lang }) {
 
   const loadData = async () => {
     setLoading(true);
-    const { data } = await sb.from("books").select("id,pdf_url,cover_url,sort_order,lang,book_translations(id,lang,title,author,description)").eq("lang",lang).order("sort_order");
+    const { data } = await sb.from("books").select("id,pdf_url,cover_url,pages,sort_order,lang,book_translations(id,lang,title,author,description)").eq("lang",lang).order("sort_order");
     setBooks(data||[]);
     setLoading(false);
   };
@@ -350,13 +350,13 @@ function BooksSection({ lang }) {
   const getT = (b) => b.book_translations?.find(t=>t.lang===lang)||b.book_translations?.[0]||{};
 
   const openAdd = () => {
-    setForm({pdf_url:"",cover_url:"",title:"",author:"",description:"",sort_order:books.length+1});
+    setForm({pdf_url:"",cover_url:"",pages:0,title:"",author:"",description:"",sort_order:books.length+1});
     setModal("add");
   };
 
   const openEdit = (b) => {
     const t = getT(b);
-    setForm({id:b.id,pdf_url:b.pdf_url,cover_url:b.cover_url||"",title:t.title||"",author:t.author||"",description:t.description||"",sort_order:b.sort_order,trans_id:t.id});
+    setForm({id:b.id,pdf_url:b.pdf_url,cover_url:b.cover_url||"",pages:b.pages||0,title:t.title||"",author:t.author||"",description:t.description||"",sort_order:b.sort_order,trans_id:t.id});
     setModal("edit");
   };
 
@@ -377,10 +377,10 @@ function BooksSection({ lang }) {
       if (!pdfUrl) { alert("يجب إضافة ملف PDF أو رابط"); setSaving(false); return; }
 
       if (modal==="add") {
-        const {data:bk} = await sb.from("books").insert({pdf_url:pdfUrl,cover_url:form.cover_url||null,sort_order:form.sort_order,lang}).select().single();
+        const {data:bk} = await sb.from("books").insert({pdf_url:pdfUrl,cover_url:form.cover_url||null,pages:form.pages||0,sort_order:form.sort_order,lang}).select().single();
         await sb.from("book_translations").insert({book_id:bk.id,lang,title:form.title,author:form.author,description:form.description});
       } else {
-        await sb.from("books").update({pdf_url:pdfUrl,cover_url:form.cover_url||null,sort_order:form.sort_order}).eq("id",form.id);
+        await sb.from("books").update({pdf_url:pdfUrl,cover_url:form.cover_url||null,pages:form.pages||0,sort_order:form.sort_order}).eq("id",form.id);
         if(form.trans_id) await sb.from("book_translations").update({title:form.title,author:form.author,description:form.description}).eq("id",form.trans_id);
         else await sb.from("book_translations").insert({book_id:form.id,lang,title:form.title,author:form.author,description:form.description});
       }
@@ -406,13 +406,14 @@ function BooksSection({ lang }) {
         {loading ? <div className="loading">جارٍ التحميل...</div> :
           books.length===0 ? <div className="empty-state"><div className="icon">📚</div><p>لا توجد كتب بهذه اللغة</p></div> : (
             <table className="table">
-              <thead><tr><th>الكتاب</th><th>العنوان</th><th>المؤلف</th><th>رابط PDF</th><th>الترتيب</th><th>إجراءات</th></tr></thead>
+              <thead><tr><th>الكتاب</th><th>العنوان</th><th>المؤلف</th><th>الصفحات</th><th>رابط PDF</th><th>الترتيب</th><th>إجراءات</th></tr></thead>
               <tbody>
                 {books.map(b=>{const t=getT(b); return (
                   <tr key={b.id}>
                     <td><div className="thumb">📖</div></td>
                     <td><strong>{t.title||"—"}</strong></td>
                     <td style={{color:"var(--tl)"}}>{t.author||"—"}</td>
+                    <td>{b.pages||0} صفحة</td>
                     <td><a href={b.pdf_url} target="_blank" style={{color:"var(--g)",fontSize:".78rem"}}>فتح PDF ↗</a></td>
                     <td>{b.sort_order}</td>
                     <td style={{display:"flex",gap:6}}>
@@ -451,8 +452,9 @@ function BooksSection({ lang }) {
               </div>
               <div className="form-row">
                 <div className="form-group"><label className="form-label">رابط الغلاف (اختياري)</label><input className="form-input" placeholder="https://..." value={form.cover_url||""} onChange={e=>setForm({...form,cover_url:e.target.value})} /></div>
-                <div className="form-group"><label className="form-label">الترتيب</label><input className="form-input" type="number" value={form.sort_order||1} onChange={e=>setForm({...form,sort_order:+e.target.value})} /></div>
+                <div className="form-group"><label className="form-label">عدد الصفحات</label><input className="form-input" type="number" min="0" placeholder="0" value={form.pages||""} onChange={e=>setForm({...form,pages:+e.target.value})} /></div>
               </div>
+              <div className="form-group"><label className="form-label">الترتيب</label><input className="form-input" type="number" value={form.sort_order||1} onChange={e=>setForm({...form,sort_order:+e.target.value})} /></div>
             </div>
             <div className="modal-footer">
               <button className="btn btn-primary" onClick={save} disabled={saving}>{saving?"جارٍ الحفظ...":"حفظ"}</button>
