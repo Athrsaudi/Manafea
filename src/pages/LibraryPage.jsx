@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLang } from "../lib/LangContext";
 import { useNavigate, Link } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import Navbar from "../components/Navbar";
@@ -53,7 +54,7 @@ const BOOKS_BY_LANG = {
 const IP=()=><svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="igl" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M40 0L80 40L40 80L0 40Z" fill="none" stroke="currentColor" strokeWidth="0.5"/><circle cx="40" cy="40" r="15" fill="none" stroke="currentColor" strokeWidth="0.5"/><path d="M20 20L60 20L60 60L20 60Z" fill="none" stroke="currentColor" strokeWidth="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(#igl)"/></svg>;
 
 export default function ManafaaLibraryPage() {
-  const [lang, setLang] = useState("ar");
+  const { lang, setLang } = useLang();
   const [showLM, setShowLM] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);
@@ -131,7 +132,7 @@ export default function ManafaaLibraryPage() {
       `}</style>
 
 
-      <Navbar lang={lang} setLang={setLang} />
+      <Navbar />
 
 
       {/* HERO */}

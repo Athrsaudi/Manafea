@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLang } from "../lib/LangContext";
 import { useNavigate, Link } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import Navbar from "../components/Navbar";
@@ -88,7 +89,7 @@ const IslamicPattern = () => (
 // ─── MAIN COMPONENT ───
 // ═══════════════════════════════════════
 export default function ManafaaVideosPage() {
-  const [lang, setLang] = useState("ar");
+  const { lang, setLang } = useLang();
   const [showLM, setShowLM] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);
@@ -198,7 +199,7 @@ export default function ManafaaVideosPage() {
       `}</style>
 
 
-      <Navbar lang={lang} setLang={setLang} />
+      <Navbar />
 
 
       {/* ===== HERO SECTION ===== */}

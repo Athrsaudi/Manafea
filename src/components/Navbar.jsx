@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-
-const langs = [
-  { code: "ar", name: "العربية", dir: "rtl" },
-  { code: "en", name: "English", dir: "ltr" },
-  { code: "tr", name: "Türkçe", dir: "ltr" },
-  { code: "ur", name: "اردو", dir: "rtl" },
-  { code: "ms", name: "Melayu", dir: "ltr" },
-  { code: "fr", name: "Français", dir: "ltr" },
-  { code: "fa", name: "فارسی", dir: "rtl" },
-  { code: "bn", name: "বাংলা", dir: "ltr" },
-  { code: "hi", name: "हिन्दी", dir: "ltr" },
-];
+import { useLang } from "../lib/LangContext";
 
 const NAV_LINKS = [
-  { k: "n_home",    h: "/" },
-  { k: "n_vid",     h: "/videos" },
-  { k: "n_quran",   h: "/quran" },
-  { k: "n_lib",     h: "/library" },
-  { k: "n_hajj",    h: "/hajj" },
-  { k: "n_umrah",   h: "/umrah" },
-  { k: "n_contest", h: "/contest" },
+  { h: "/" },
+  { h: "/videos" },
+  { h: "/quran" },
+  { h: "/library" },
+  { h: "/hajj" },
+  { h: "/umrah" },
+  { h: "/contest" },
 ];
+
+const BISMILLAH = {
+  ar:"بسم الله الرحمن الرحيم",
+  en:"In the Name of Allah, the Most Gracious, the Most Merciful",
+  tr:"Rahman ve Rahim olan Allah'ın adıyla",
+  ur:"اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے",
+  ms:"Dengan nama Allah Yang Maha Pemurah lagi Maha Penyayang",
+  fr:"Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux",
+  fa:"به نام خداوند بخشنده مهربان",
+  bn:"পরম করুণাময় অসীম দয়ালু আল্লাহর নামে",
+  hi:"अल्लाह के नाम से जो बड़ा कृपाशील अत्यंत दयावान है",
+};
 
 const LOGIN_TEXT = {
   ar:"تسجيل الدخول", en:"Login", tr:"Giriş", ur:"لاگ ان",
@@ -40,13 +41,26 @@ const NAV_TEXT = {
   hi:["होम","वीडियो","कुरान","पुस्तकालय","हज","उमरा","प्रतियोगिता"],
 };
 
-export default function Navbar({ lang, setLang }) {
+const LANGS = [
+  { code: "ar", name: "العربية", dir: "rtl" },
+  { code: "en", name: "English", dir: "ltr" },
+  { code: "tr", name: "Türkçe", dir: "ltr" },
+  { code: "ur", name: "اردو", dir: "rtl" },
+  { code: "ms", name: "Melayu", dir: "ltr" },
+  { code: "fr", name: "Français", dir: "ltr" },
+  { code: "fa", name: "فارسی", dir: "rtl" },
+  { code: "bn", name: "বাংলা", dir: "ltr" },
+  { code: "hi", name: "हिन्दी", dir: "ltr" },
+];
+
+export default function Navbar() {
+  const { lang, setLang } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);
   const [showLM, setShowLM] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const lo = langs.find(l => l.code === lang) || langs[0];
+  const lo = LANGS.find(l => l.code === lang) || LANGS[0];
   const dir = lo.dir;
   const navText = NAV_TEXT[lang] || NAV_TEXT.ar;
 
@@ -59,118 +73,140 @@ export default function Navbar({ lang, setLang }) {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'shadow-2xl' : ''}`}
-         style={{background:'rgba(27,58,75,.97)', backdropFilter:'blur(20px)', direction: dir}}>
-      <div className="max-w-7xl mx-auto px-3 sm:px-6">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+    <div dir={dir}>
+      {/* بسم الله — أعلى شيء في كل الصفحات */}
+      <div style={{background:'#0F2530', color:'#C8A951', textAlign:'center', padding:'6px 16px', fontSize:'13px', fontFamily:"'Tajawal','Segoe UI',sans-serif"}}>
+        {BISMILLAH[lang] || BISMILLAH.ar}
+      </div>
 
-          {/* Logo */}
-          <Link to="/" style={{textDecoration:'none',flexShrink:0}}>
-            <img
-              src="/logo.jpg"
-              alt="مشروع منافع"
-              style={{height:'48px', width:'48px', borderRadius:'50%', objectFit:'cover', border:'2px solid #C8A951'}}
-            />
-          </Link>
+      {/* Navbar */}
+      <nav className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'shadow-2xl' : ''}`}
+           style={{background:'rgba(27,58,75,.97)', backdropFilter:'blur(20px)'}}>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+          <div className="flex items-center justify-between h-16 sm:h-20">
 
-          {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((n, i) => (
-              <Link key={i} to={n.h}
-                className="text-sm px-3 py-2 rounded-lg transition-all"
-                style={{
-                  color: isActive(n.h) ? 'white' : 'rgba(255,255,255,.75)',
-                  background: isActive(n.h) ? 'rgba(200,169,81,.2)' : 'none',
-                  fontWeight: isActive(n.h) ? 'bold' : 'normal',
-                  textDecoration: 'none',
-                  borderBottom: isActive(n.h) ? '2px solid #C8A951' : '2px solid transparent',
-                }}>
-                {navText[i]}
-              </Link>
-            ))}
-          </div>
+            {/* Logo */}
+            <Link to="/" style={{textDecoration:'none', flexShrink:0}}>
+              <img src="/logo.jpg" alt="مشروع منافع"
+                style={{height:'48px', width:'48px', borderRadius:'50%', objectFit:'cover', border:'2px solid #C8A951'}} />
+            </Link>
 
-          {/* Right: Language + Login + Mobile Toggle */}
-          <div className="flex items-center gap-2">
-            {/* Language Picker */}
-            <div className="relative">
-              <button onClick={() => setShowLM(!showLM)}
-                style={{background:'none',border:'1px solid rgba(200,169,81,.4)',borderRadius:'8px',color:'rgba(255,255,255,.85)',cursor:'pointer',fontSize:'13px',padding:'5px 10px',display:'flex',alignItems:'center',gap:'4px'}}>
-                🌐 {lo.name}
-              </button>
-              {showLM && (
-                <div className={`absolute ${dir==='rtl'?'left-0':'right-0'} top-full mt-2 w-44 bg-white rounded-xl shadow-2xl overflow-hidden z-50`}
-                     style={{border:'1px solid #eee'}}>
-                  {langs.map(l => (
-                    <button key={l.code} onClick={() => { setLang(l.code); setShowLM(false); }}
-                      className="w-full px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center justify-between transition-colors"
-                      style={{textAlign:l.dir==='rtl'?'right':'left',border:'none',cursor:'pointer',
-                              background:lang===l.code?'#EFF6FF':'white',
-                              color:lang===l.code?'#1B3A4B':'#333',
-                              fontWeight:lang===l.code?'bold':'normal'}}>
-                      <span>{l.name}</span>
-                      {lang===l.code && <span style={{color:'#C8A951'}}>✓</span>}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Login Button */}
-            <button onClick={() => alert('قريباً / Coming Soon')}
-              style={{background:'linear-gradient(135deg,#C8A951,#B8942E)',border:'none',borderRadius:'10px',
-                      color:'#0F2530',fontWeight:'bold',fontSize:'13px',padding:'7px 14px',cursor:'pointer',
-                      display:'flex',alignItems:'center',gap:'5px',whiteSpace:'nowrap'}}>
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-              </svg>
-              {LOGIN_TEXT[lang] || LOGIN_TEXT.ar}
-            </button>
-
-            {/* Mobile Toggle */}
-            <button onClick={() => setMob(!mob)}
-              className="lg:hidden text-white p-2 rounded-lg"
-              style={{background:'none',border:'none',cursor:'pointer'}}>
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {mob
-                  ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
-                  : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>}
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {mob && (
-          <div className="lg:hidden pb-3" style={{borderTop:'1px solid rgba(255,255,255,.08)'}}>
-            <div className="pt-2 space-y-1">
+            {/* Desktop Nav Links */}
+            <div className="hidden lg:flex items-center gap-1">
               {NAV_LINKS.map((n, i) => (
-                <Link key={i} to={n.h} onClick={() => setMob(false)}
-                  className="flex items-center px-4 py-3 rounded-lg text-sm transition-all"
+                <Link key={i} to={n.h}
                   style={{
                     color: isActive(n.h) ? 'white' : 'rgba(255,255,255,.75)',
-                    background: isActive(n.h) ? 'rgba(200,169,81,.15)' : 'transparent',
-                    textDecoration: 'none',
+                    background: isActive(n.h) ? 'rgba(200,169,81,.2)' : 'none',
                     fontWeight: isActive(n.h) ? 'bold' : 'normal',
+                    textDecoration: 'none',
+                    borderBottom: isActive(n.h) ? '2px solid #C8A951' : '2px solid transparent',
+                    fontSize:'14px', padding:'6px 10px', borderRadius:'8px',
+                    fontFamily:"'Tajawal','Segoe UI',sans-serif",
                   }}>
                   {navText[i]}
                 </Link>
               ))}
-              {/* Mobile Login */}
-              <button onClick={() => alert('قريباً / Coming Soon')}
-                className="w-full text-right px-4 py-3 rounded-lg text-sm font-bold mt-1"
-                style={{background:'linear-gradient(135deg,#C8A951,#B8942E)',color:'#0F2530',border:'none',cursor:'pointer'}}>
+            </div>
+
+            {/* Right: Language + Login + Mobile Toggle */}
+            <div className="flex items-center gap-2">
+
+              {/* Language Picker */}
+              <div className="relative">
+                <button onClick={() => setShowLM(!showLM)}
+                  style={{background:'none', border:'1px solid rgba(200,169,81,.4)', borderRadius:'8px',
+                          color:'rgba(255,255,255,.85)', cursor:'pointer', fontSize:'13px',
+                          padding:'5px 10px', display:'flex', alignItems:'center', gap:'4px',
+                          fontFamily:"'Tajawal','Segoe UI',sans-serif"}}>
+                  🌐 {lo.name}
+                </button>
+                {showLM && (
+                  <div className={`absolute ${dir==='rtl'?'left-0':'right-0'} top-full mt-2 w-44 bg-white rounded-xl shadow-2xl overflow-hidden z-50`}
+                       style={{border:'1px solid #eee'}}>
+                    {LANGS.map(l => (
+                      <button key={l.code} onClick={() => { setLang(l.code); setShowLM(false); }}
+                        style={{
+                          width:'100%', padding:'10px 16px', fontSize:'13px',
+                          textAlign: l.dir==='rtl' ? 'right' : 'left',
+                          border:'none', cursor:'pointer', display:'flex',
+                          alignItems:'center', justifyContent:'space-between',
+                          background: lang===l.code ? '#EFF6FF' : 'white',
+                          color: lang===l.code ? '#1B3A4B' : '#333',
+                          fontWeight: lang===l.code ? 'bold' : 'normal',
+                          fontFamily:"'Tajawal','Segoe UI',sans-serif",
+                        }}>
+                        <span>{l.name}</span>
+                        {lang===l.code && <span style={{color:'#C8A951'}}>✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Login Button */}
+              <button onClick={() => navigate('/admin')}
+                style={{
+                  background:'linear-gradient(135deg,#C8A951,#B8942E)',
+                  border:'none', borderRadius:'10px', color:'#0F2530',
+                  fontWeight:'bold', fontSize:'13px', padding:'7px 14px',
+                  cursor:'pointer', display:'flex', alignItems:'center',
+                  gap:'5px', whiteSpace:'nowrap',
+                  fontFamily:"'Tajawal','Segoe UI',sans-serif",
+                }}>
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
                 {LOGIN_TEXT[lang] || LOGIN_TEXT.ar}
+              </button>
+
+              {/* Mobile Toggle */}
+              <button onClick={() => setMob(!mob)} className="lg:hidden"
+                style={{background:'none', border:'none', cursor:'pointer', color:'white', padding:'4px'}}>
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {mob
+                    ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+                    : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>}
+                </svg>
               </button>
             </div>
           </div>
-        )}
-      </div>
 
-      {/* Overlay */}
-      {(showLM || mob) && (
-        <div className="fixed inset-0 z-40" onClick={() => { setShowLM(false); setMob(false); }}/>
-      )}
-    </nav>
+          {/* Mobile Menu */}
+          {mob && (
+            <div className="lg:hidden pb-3" style={{borderTop:'1px solid rgba(255,255,255,.08)'}}>
+              <div className="pt-2 space-y-1">
+                {NAV_LINKS.map((n, i) => (
+                  <Link key={i} to={n.h} onClick={() => setMob(false)}
+                    style={{
+                      display:'block', padding:'10px 16px', borderRadius:'8px',
+                      color: isActive(n.h) ? 'white' : 'rgba(255,255,255,.75)',
+                      background: isActive(n.h) ? 'rgba(200,169,81,.15)' : 'transparent',
+                      textDecoration:'none', fontWeight: isActive(n.h) ? 'bold' : 'normal',
+                      fontFamily:"'Tajawal','Segoe UI',sans-serif",
+                    }}>
+                    {navText[i]}
+                  </Link>
+                ))}
+                <button onClick={() => { navigate('/admin'); setMob(false); }}
+                  style={{
+                    width:'100%', padding:'10px 16px', borderRadius:'8px',
+                    background:'linear-gradient(135deg,#C8A951,#B8942E)',
+                    color:'#0F2530', border:'none', cursor:'pointer',
+                    fontWeight:'bold', fontFamily:"'Tajawal','Segoe UI',sans-serif",
+                    textAlign: dir==='rtl' ? 'right' : 'left',
+                  }}>
+                  {LOGIN_TEXT[lang] || LOGIN_TEXT.ar}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {(showLM || mob) && (
+          <div className="fixed inset-0 z-40" onClick={() => { setShowLM(false); setMob(false); }}/>
+        )}
+      </nav>
+    </div>
   );
 }

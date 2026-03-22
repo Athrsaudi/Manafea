@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLang } from "../lib/LangContext";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { supaInsert as supaIns, supabase } from "../lib/supabase";
@@ -87,7 +88,7 @@ const IP = () => (
 
 export default function ManafaaHomepage() {
   const navigate = useNavigate();
-  const [lang, setLang] = useState("ar");
+  const { lang, setLang } = useLang();
   const [slide, setSlide] = useState(0);
   const [rat, setRat] = useState(0);
   const [hRat, setHRat] = useState(0);
@@ -208,7 +209,7 @@ export default function ManafaaHomepage() {
         {t("bismillah")}
       </div>
 
-      <Navbar lang={lang} setLang={setLang} />
+      <Navbar />
 
 
       {/* Hero */}

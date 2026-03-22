@@ -100,7 +100,7 @@ function shuffleArr(arr) {
 
 /* ═══ Main Component ═══ */
 export default function ManafaaContestPage() {
-  const [lang, setLang] = useState("ar");
+  const { lang, setLang } = useLang();
   const [showLM, setShowLM] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);
@@ -203,7 +203,7 @@ export default function ManafaaContestPage() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap');*{box-sizing:border-box;margin:0;padding:0}@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}`}</style>
 
       
-      <Navbar lang={lang} setLang={setLang} />
+      <Navbar />
 
 
 

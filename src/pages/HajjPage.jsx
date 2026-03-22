@@ -2,6 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
 import { useState, useEffect } from "react";
+import { useLang } from "../lib/LangContext";
 
 const L=[{c:"ar",n:"العربية",d:"rtl"},{c:"en",n:"English",d:"ltr"},{c:"tr",n:"Türkçe",d:"ltr"},{c:"ur",n:"اردو",d:"rtl"},{c:"ms",n:"Melayu",d:"ltr"},{c:"fr",n:"Français",d:"ltr"},{c:"fa",n:"فارسی",d:"rtl"},{c:"bn",n:"বাংলা",d:"ltr"},{c:"hi",n:"हिन्दी",d:"ltr"}];
 
@@ -141,7 +142,7 @@ const StepView=({stations,cur,setCur,t,dir,onBack})=>{
 
 // ═══════════════════════════════════════
 export default function ManafaaHajjPage(){
-  const[lang,setLang]=useState("ar");const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[activeStep,setActiveStep]=useState(null);
+  const {lang,setLang}=useLang();const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[activeStep,setActiveStep]=useState(null);
   const lo=L.find(l=>l.c===lang)||L[0];const dir=lo.d;const ui=T[lang]||T.ar;const t=k=>ui[k]||T.ar[k]||k;
   const stations=ST[lang]||null;const has=stations&&stations.length>0;
 
@@ -152,7 +153,7 @@ export default function ManafaaHajjPage(){
   return(<div dir={dir} className="min-h-screen bg-[#FAFBFC]" style={{fontFamily:"'Tajawal','Segoe UI',sans-serif"}}>
     <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Amiri:wght@400;700&display=swap');*{box-sizing:border-box;margin:0;padding:0}:root{--primary:#1B3A4B;--primary-dark:#0F2530;--gold:#C8A951;--gold-dark:#9E832E;--text:#1a1a2e}@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes sd{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}@keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}.afu{animation:fu .8s ease-out forwards}.gn{background:rgba(27,58,75,.95);backdrop-filter:blur(20px)}.hg{background:linear-gradient(135deg,#0F2530 0%,#1B3A4B 30%,#2C5F7C 70%,#1B3A4B 100%)}.gs{background:linear-gradient(90deg,#9E832E,#C8A951,#E8D48B,#C8A951,#9E832E);background-size:200% 100%;animation:sh 4s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent}.ni{position:relative;transition:all .3s}.ni::after{content:'';position:absolute;bottom:-4px;${dir==="rtl"?"right":"left"}:0;width:0;height:2px;background:#C8A951;transition:width .3s}.ni:hover::after{width:100%}.quran-font{font-family:'Amiri',serif}.ch{transition:all .4s cubic-bezier(.4,0,.2,1)}.ch:hover{transform:translateY(-6px);box-shadow:0 20px 40px -12px rgba(27,58,75,.12)}`}</style>
 
-    <Navbar lang={lang} setLang={setLang} />
+    <Navbar />
 
     {activeStep!==null && has ? (
       <StepView stations={stations} cur={activeStep} setCur={setActiveStep} t={t} dir={dir} onBack={()=>{setActiveStep(null);window.scrollTo({top:0,behavior:'smooth'})}}/>

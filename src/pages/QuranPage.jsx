@@ -5,6 +5,7 @@ import { supaInsert as supaIns } from "../lib/supabase";
 // Re-creating due to filesystem issue
 
 import { useState, useEffect, useRef } from "react";
+import { useLang } from "../lib/LangContext";
 
 const langs = [
   { code: "ar", name: "العربية", dir: "rtl" },{ code: "en", name: "English", dir: "ltr" },{ code: "tr", name: "Türkçe", dir: "ltr" },{ code: "ur", name: "اردو", dir: "rtl" },{ code: "ms", name: "Melayu", dir: "ltr" },{ code: "fr", name: "Français", dir: "ltr" },{ code: "fa", name: "فارسی", dir: "rtl" },{ code: "bn", name: "বাংলা", dir: "ltr" },{ code: "hi", name: "हिन्दी", dir: "ltr" },
@@ -131,7 +132,7 @@ const Reader=({su,rec,t,dir,onBack,lang})=>{
 
 // ─── Main ───
 export default function ManafaaQuranPage(){
-  const[lang,setLang]=useState("ar");const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[search,setSearch]=useState("");const[typeF,setTypeF]=useState("all");const[selSu,setSelSu]=useState(null);const[recIdx,setRecIdx]=useState(0);const[showRec,setShowRec]=useState(false);
+  const {lang,setLang}=useLang();const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[search,setSearch]=useState("");const[typeF,setTypeF]=useState("all");const[selSu,setSelSu]=useState(null);const[recIdx,setRecIdx]=useState(0);const[showRec,setShowRec]=useState(false);
   const lo=langs.find(l=>l.code===lang)||langs[0];const dir=lo.dir;const ui=T[lang]||T.ar;const t=k=>ui[k]||T.ar[k]||k;const rec=RECITERS[recIdx];
   useEffect(()=>{const h=()=>setScrolled(window.scrollY>50);window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h)},[]);
   useEffect(()=>{window.scrollTo(0,0)},[selSu]);
@@ -141,7 +142,7 @@ export default function ManafaaQuranPage(){
   return(<div dir={dir} className="min-h-screen bg-[#FAFBFC]" style={{fontFamily:"'Tajawal','Segoe UI',sans-serif"}}>
     <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Amiri:wght@400;700&display=swap');*{box-sizing:border-box;margin:0;padding:0}:root{--primary:#1B3A4B;--primary-light:#2C5F7C;--primary-dark:#0F2530;--gold:#C8A951;--gold-light:#E8D48B;--gold-dark:#9E832E;--text:#1a1a2e;--text-light:#6B7280}@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes sd{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}@keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}.afu{animation:fu .8s ease-out forwards}.asd{animation:sd .3s ease-out forwards}.gn{background:rgba(27,58,75,.95);backdrop-filter:blur(20px)}.hg{background:linear-gradient(135deg,#0F2530 0%,#1B3A4B 30%,#2C5F7C 70%,#1B3A4B 100%)}.gs{background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light),var(--gold),var(--gold-dark));background-size:200% 100%;animation:sh 4s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent}.ch{transition:all .4s cubic-bezier(.4,0,.2,1)}.ch:hover{transform:translateY(-6px);box-shadow:0 20px 40px -12px rgba(27,58,75,.12)}.ni{position:relative;transition:all .3s}.ni::after{content:'';position:absolute;bottom:-4px;${dir==="rtl"?"right":"left"}:0;width:0;height:2px;background:var(--gold);transition:width .3s}.ni:hover::after{width:100%}.sb::-webkit-scrollbar{display:none}.sb{-ms-overflow-style:none;scrollbar-width:none}`}</style>
 
-    <Navbar lang={lang} setLang={setLang} />
+    <Navbar />
 
     {selSu?<Reader su={selSu} rec={rec} t={t} dir={dir} lang={lang} onBack={()=>setSelSu(null)}/>:<>
       {/* Hero */}
