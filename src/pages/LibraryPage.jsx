@@ -1,4 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js";
+import Navbar from "../components/Navbar";
+
+const supabase = createClient(
+  "https://pxacnzpundghlojfldif.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4YWNuenB1bmRnaGxvamZsZGlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NDU4NjgsImV4cCI6MjA4ODMyMTg2OH0.GXnkjYc06QjGMRVOkzpGKh9wcnG0BIxEM-GfmTbM3Tk"
+);
 
 const langs = [
   { code: "ar", name: "العربية", dir: "rtl" },{ code: "en", name: "English", dir: "ltr" },{ code: "tr", name: "Türkçe", dir: "ltr" },{ code: "ur", name: "اردو", dir: "rtl" },{ code: "ms", name: "Melayu", dir: "ltr" },{ code: "fr", name: "Français", dir: "ltr" },{ code: "fa", name: "فارسی", dir: "rtl" },{ code: "bn", name: "বাংলা", dir: "ltr" },{ code: "hi", name: "हिन्दी", dir: "ltr" },
@@ -52,6 +60,7 @@ export default function ManafaaLibraryPage() {
   const [search, setSearch] = useState("");
   const [activeBook, setActiveBook] = useState(null);
   const [readingPdf, setReadingPdf] = useState(null);
+  const [dbBooks, setDbBooks] = useState([]);
 
   const lo = langs.find(l => l.code === lang) || langs[0];
   const dir = lo.dir;
@@ -60,13 +69,45 @@ export default function ManafaaLibraryPage() {
   const arr = dir === "rtl" ? "←" : "→";
 
   // Books for current language
-  const books = BOOKS_BY_LANG[lang] || [];
+  const books = dbBooks.length > 0 ? dbBooks : (BOOKS_BY_LANG[lang] || []);
   const filtered = books.filter(b => b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase()));
 
   useEffect(() => { const h = () => setScrolled(window.scrollY > 50); window.addEventListener("scroll", h); return () => window.removeEventListener("scroll", h); }, []);
   useEffect(() => { setSearch(""); setActiveBook(null); setReadingPdf(null); }, [lang]);
 
-  const nav = [{k:"n_home"},{k:"n_vid"},{k:"n_quran"},{k:"n_lib"},{k:"n_hajj"},{k:"n_umrah"},{k:"n_contest"}];
+  // جلب الكتب من Supabase
+  useEffect(() => {
+    async function fetchBooks() {
+      const { data, error } = await supabase
+        .from("books")
+        .select(`
+          id, pdf_url, cover_url, sort_order, lang,
+          book_translations(lang, title, author, description)
+        `)
+        .eq("lang", lang)
+        .order("sort_order");
+
+      if (error || !data) return;
+
+      const mapped = data.map((b, i) => {
+        const trans = b.book_translations?.find(t => t.lang === lang) || b.book_translations?.[0] || {};
+        const colors = ["#1B3A4B","#2C5F7C","#9E832E","#0F2530","#1B3A4B","#2C5F7C","#9E832E","#0F2530"];
+        return {
+          id: b.id,
+          title: trans.title || "",
+          author: trans.author || "",
+          desc: trans.description || "",
+          pdf: b.pdf_url,
+          pages: 0,
+          color: colors[i % colors.length],
+        };
+      });
+      setDbBooks(mapped);
+    }
+    fetchBooks();
+  }, [lang]);
+
+  const nav = [{k:"n_home",h:"/"},{k:"n_vid",h:"/videos"},{k:"n_quran",h:"/quran"},{k:"n_lib",h:"/library"},{k:"n_hajj",h:"/hajj"},{k:"n_umrah",h:"/umrah"},{k:"n_contest",h:"/contest"}];
 
   return (
     <div dir={dir} className="min-h-screen bg-[#FAFBFC]" style={{ fontFamily:"'Tajawal','Segoe UI',sans-serif" }}>
@@ -88,36 +129,9 @@ export default function ManafaaLibraryPage() {
         .quran-font{font-family:'Amiri',serif}
       `}</style>
 
-      {/* BISMILLAH */}
-      <div className="w-full py-2 text-center text-sm" style={{background:'var(--primary-dark)',color:'var(--gold)'}}>{t("bismillah")}</div>
 
-      {/* NAV */}
-      <nav className={`glass-nav sticky top-0 z-50 transition-all duration-500 ${scrolled?'shadow-2xl':''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6"><div className="flex items-center justify-between h-16 sm:h-20">
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style={{background:'var(--gold)',color:'var(--primary-dark)'}}><span className="text-lg sm:text-xl font-bold quran-font">م</span></div>
-            <div className="hidden sm:block"><h1 className="text-white font-bold text-base leading-tight">{t("site_name")}</h1><p className="text-xs" style={{color:'var(--gold)'}}>{t("site_desc")}</p></div>
-          </div>
-          <div className="hidden lg:flex items-center gap-1">{nav.map((n,i)=><a key={i} href="#" className={`nav-item text-sm px-3 py-2 rounded-lg transition-all ${n.k==="n_lib"?"text-white bg-white/10":"text-white/70 hover:text-white hover:bg-white/5"}`}>{t(n.k)}</a>)}</div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="relative">
-              <button onClick={()=>setShowLM(!showLM)} className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
-                <span className="hidden sm:inline">{lo.name}</span>
-              </button>
-              {showLM&&<div className={`absolute ${dir==="rtl"?"left-0":"right-0"} top-full mt-2 w-44 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-slideDown z-50`}>
-                {langs.map(l=><button key={l.code} onClick={()=>{setLang(l.code);setShowLM(false)}} className={`w-full px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center justify-between ${lang===l.code?'bg-blue-50 font-bold':''}`} style={{textAlign:l.dir==="rtl"?"right":"left",color:lang===l.code?'var(--primary)':'var(--text)'}}><span>{l.name}</span>{lang===l.code&&<span style={{color:'var(--gold)'}}>✓</span>}</button>)}
-              </div>}
-            </div>
-            <button className="hidden sm:flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg font-medium" style={{background:'var(--gold)',color:'var(--primary-dark)'}}>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>{t("login")}
-            </button>
-            <button onClick={()=>setMob(!mob)} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">{mob?<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>:<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>}</svg></button>
-          </div>
-        </div>
-        {mob&&<div className="lg:hidden pb-4 animate-slideDown"><div className="bg-white/5 rounded-xl p-2">{nav.map((n,i)=><a key={i} href="#" onClick={()=>setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k==="n_lib"?"text-white bg-white/10":"text-white/80 hover:bg-white/5"}`}><span>{t(n.k)}</span></a>)}</div></div>}
-        </div>
-      </nav>
+      <Navbar lang={lang} setLang={setLang} />
+
 
       {/* HERO */}
       <section className="hero-gradient relative overflow-hidden" style={{minHeight:'45vh'}}>
