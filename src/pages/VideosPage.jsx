@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { supaInsert as supaIns } from "../lib/supabase";
+import { useState, useEffect } from "react";
 
 // ─── Same config as homepage ───
 const langs = [
@@ -44,24 +45,24 @@ const CATS = {
 // ─── Videos Data (24 videos across 8 categories — ar/en, others fallback to en) ───
 const VIDS = {
   ar: {
-    aqeedah: [{t:"أركان الإسلام الخمسة",d:"شرح مفصل لأركان الإسلام الخمسة وأهميتها في حياة المسلم",f:true,ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo"},{t:"أركان الإيمان الستة",d:"تعرف على أركان الإيمان الستة التي يجب على كل مسلم الإيمان بها",f:false,ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ"},{t:"التوحيد وأقسامه",d:"شرح أقسام التوحيد الثلاثة: الربوبية والألوهية والأسماء والصفات",f:false}],
-    fiqh: [{t:"صفة الوضوء الصحيحة",d:"تعلم كيفية الوضوء بالطريقة الصحيحة كما وردت في السنة النبوية",f:true,ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc"},{t:"أحكام الصلاة للمبتدئين",d:"دليل شامل لأحكام الصلاة من التكبير إلى التسليم",f:false,ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk"},{t:"أحكام الصيام",d:"تعرف على أحكام الصيام وشروطه ومفسداته",f:false}],
-    tafseer: [{t:"تفسير سورة الفاتحة",d:"شرح وتفسير معاني سورة الفاتحة آية بآية",f:true,ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM"},{t:"تفسير سورة الكهف",d:"دروس وعبر من سورة الكهف",f:false,ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE"},{t:"تفسير جزء عم",d:"تفسير ميسر لسور جزء عم",f:false}],
-    seerah: [{t:"مولد النبي ﷺ ونشأته",d:"قصة مولد النبي محمد ﷺ ونشأته في مكة",f:true,ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI"},{t:"الهجرة النبوية",d:"قصة هجرة النبي ﷺ من مكة إلى المدينة",f:false,ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8"},{t:"غزوة بدر الكبرى",d:"أحداث غزوة بدر الكبرى ودروسها",f:false}],
-    hadith: [{t:"شرح الأربعين النووية",d:"شرح مختصر للأحاديث الأربعين النووية",f:true,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"حديث جبريل عليه السلام",d:"شرح حديث جبريل في الإسلام والإيمان والإحسان",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"أحاديث الأذكار اليومية",d:"أحاديث نبوية في أذكار الصباح والمساء",f:false}],
-    ethics: [{t:"حسن الخلق في الإسلام",d:"أهمية حسن الخلق ومكانته في الإسلام",f:true,ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk"},{t:"آداب المسجد",d:"تعرف على آداب دخول المسجد والجلوس فيه",f:false,ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY"},{t:"فضل الصدقة",d:"فضائل الصدقة وأجرها عند الله",f:false}],
-    ramadan: [{t:"كيف نستغل شهر رمضان",d:"نصائح عملية لاستغلال شهر رمضان المبارك",f:true,ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24"},{t:"فضائل ليلة القدر",d:"فضائل ليلة القدر وكيفية إحيائها",f:false,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"أحكام زكاة الفطر",d:"متى وكيف تُخرج زكاة الفطر",f:false}],
-    hajj: [{t:"صفة الحج كاملة",d:"شرح مناسك الحج كاملة من الإحرام إلى طواف الوداع",f:true,ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI"},{t:"أخطاء شائعة في الحج",d:"تعرف على الأخطاء الشائعة التي يقع فيها الحجاج",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"أدعية الحج والعمرة",d:"مجموعة من الأدعية المأثورة في الحج والعمرة",f:false}],
+    aqeedah: [{t:"أركان الإسلام الخمسة",d:"شرح مفصل لأركان الإسلام الخمسة وأهميتها في حياة المسلم",f:true},{t:"أركان الإيمان الستة",d:"تعرف على أركان الإيمان الستة التي يجب على كل مسلم الإيمان بها",f:false},{t:"التوحيد وأقسامه",d:"شرح أقسام التوحيد الثلاثة: الربوبية والألوهية والأسماء والصفات",f:false}],
+    fiqh: [{t:"صفة الوضوء الصحيحة",d:"تعلم كيفية الوضوء بالطريقة الصحيحة كما وردت في السنة النبوية",f:true},{t:"أحكام الصلاة للمبتدئين",d:"دليل شامل لأحكام الصلاة من التكبير إلى التسليم",f:false},{t:"أحكام الصيام",d:"تعرف على أحكام الصيام وشروطه ومفسداته",f:false}],
+    tafseer: [{t:"تفسير سورة الفاتحة",d:"شرح وتفسير معاني سورة الفاتحة آية بآية",f:true},{t:"تفسير سورة الكهف",d:"دروس وعبر من سورة الكهف",f:false},{t:"تفسير جزء عم",d:"تفسير ميسر لسور جزء عم",f:false}],
+    seerah: [{t:"مولد النبي ﷺ ونشأته",d:"قصة مولد النبي محمد ﷺ ونشأته في مكة",f:true},{t:"الهجرة النبوية",d:"قصة هجرة النبي ﷺ من مكة إلى المدينة",f:false},{t:"غزوة بدر الكبرى",d:"أحداث غزوة بدر الكبرى ودروسها",f:false}],
+    hadith: [{t:"شرح الأربعين النووية",d:"شرح مختصر للأحاديث الأربعين النووية",f:true},{t:"حديث جبريل عليه السلام",d:"شرح حديث جبريل في الإسلام والإيمان والإحسان",f:false},{t:"أحاديث الأذكار اليومية",d:"أحاديث نبوية في أذكار الصباح والمساء",f:false}],
+    ethics: [{t:"حسن الخلق في الإسلام",d:"أهمية حسن الخلق ومكانته في الإسلام",f:true},{t:"آداب المسجد",d:"تعرف على آداب دخول المسجد والجلوس فيه",f:false},{t:"فضل الصدقة",d:"فضائل الصدقة وأجرها عند الله",f:false}],
+    ramadan: [{t:"كيف نستغل شهر رمضان",d:"نصائح عملية لاستغلال شهر رمضان المبارك",f:true},{t:"فضائل ليلة القدر",d:"فضائل ليلة القدر وكيفية إحيائها",f:false},{t:"أحكام زكاة الفطر",d:"متى وكيف تُخرج زكاة الفطر",f:false}],
+    hajj: [{t:"صفة الحج كاملة",d:"شرح مناسك الحج كاملة من الإحرام إلى طواف الوداع",f:true},{t:"أخطاء شائعة في الحج",d:"تعرف على الأخطاء الشائعة التي يقع فيها الحجاج",f:false},{t:"أدعية الحج والعمرة",d:"مجموعة من الأدعية المأثورة في الحج والعمرة",f:false}],
   },
   en: {
-    aqeedah: [{t:"Five Pillars of Islam",d:"A detailed explanation of the five pillars of Islam and their importance",f:true,ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo",ytId:"JLEnhiqiOqo"},{t:"Six Pillars of Faith",d:"Learn about the six pillars of faith every Muslim must believe in",f:false,ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ",ytId:"7bHSAJaVFmQ"},{t:"Tawheed and Its Categories",d:"Explanation of the three categories of Tawheed",f:false}],
-    fiqh: [{t:"How to Perform Wudu Correctly",d:"Learn the correct way to perform Wudu as described in the Prophetic Sunnah",f:true,ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc",ytId:"EYpdEYK25Dc"},{t:"Prayer Rulings for Beginners",d:"A comprehensive guide to prayer rulings from Takbeer to Tasleem",f:false,ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk",ytId:"xz9LKf9G2sk"},{t:"Rulings of Fasting",d:"Learn about fasting rulings, conditions, and invalidators",f:false}],
-    tafseer: [{t:"Tafseer of Surah Al-Fatiha",d:"Explanation of the meanings of Surah Al-Fatiha verse by verse",f:true,ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM",ytId:"GvQTpFwI7YM"},{t:"Tafseer of Surah Al-Kahf",d:"Lessons and morals from Surah Al-Kahf",f:false,ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE",ytId:"X9fVTI7QyiE"},{t:"Tafseer of Juz Amma",d:"Simplified Tafseer of Juz Amma surahs",f:false}],
-    seerah: [{t:"Birth and Early Life of the Prophet ﷺ",d:"The story of Prophet Muhammad's birth and upbringing in Makkah",f:true,ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI",ytId:"MpBGau3QLNI"},{t:"The Prophetic Migration",d:"The story of the Prophet's migration from Makkah to Madinah",f:false,ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8",ytId:"NUTGal5uXx8"},{t:"The Battle of Badr",d:"Events and lessons from the great Battle of Badr",f:false}],
-    hadith: [{t:"Explanation of Nawawi's 40 Hadith",d:"Brief explanation of Imam Nawawi's 40 Hadith collection",f:true,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"Hadith of Jibreel",d:"Explanation of the Hadith of Jibreel about Islam, Iman, and Ihsan",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"Daily Remembrance Hadiths",d:"Prophetic hadiths on morning and evening supplications",f:false}],
-    ethics: [{t:"Good Character in Islam",d:"The importance and status of good character in Islam",f:true,ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk",ytId:"PBgWyKXFAkk"},{t:"Mosque Etiquette",d:"Learn about the etiquettes of entering and sitting in the mosque",f:false,ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY",ytId:"L5HGvS3KGLY"},{t:"Virtue of Charity",d:"The virtues and rewards of charity with Allah",f:false}],
-    ramadan: [{t:"How to Benefit from Ramadan",d:"Practical tips to make the most of Ramadan",f:true,ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24",ytId:"AaXlZmLJY24"},{t:"Virtues of Laylat Al-Qadr",d:"Virtues of the Night of Decree and how to observe it",f:false,ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA",ytId:"FBggPNAH7mA"},{t:"Rulings of Zakat Al-Fitr",d:"When and how to pay Zakat Al-Fitr",f:false}],
-    hajj: [{t:"Complete Hajj Guide",d:"Full explanation of Hajj rituals from Ihram to Farewell Tawaf",f:true,ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI",ytId:"OBpWxXCQcHI"},{t:"Common Hajj Mistakes",d:"Learn about common mistakes pilgrims make and how to avoid them",f:false,ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc",ytId:"UF8uR6Z6KLc"},{t:"Hajj and Umrah Supplications",d:"Collection of authentic supplications for Hajj and Umrah",f:false}],
+    aqeedah: [{t:"Five Pillars of Islam",d:"A detailed explanation of the five pillars of Islam and their importance",f:true},{t:"Six Pillars of Faith",d:"Learn about the six pillars of faith every Muslim must believe in",f:false},{t:"Tawheed and Its Categories",d:"Explanation of the three categories of Tawheed",f:false}],
+    fiqh: [{t:"How to Perform Wudu Correctly",d:"Learn the correct way to perform Wudu as described in the Prophetic Sunnah",f:true},{t:"Prayer Rulings for Beginners",d:"A comprehensive guide to prayer rulings from Takbeer to Tasleem",f:false},{t:"Rulings of Fasting",d:"Learn about fasting rulings, conditions, and invalidators",f:false}],
+    tafseer: [{t:"Tafseer of Surah Al-Fatiha",d:"Explanation of the meanings of Surah Al-Fatiha verse by verse",f:true},{t:"Tafseer of Surah Al-Kahf",d:"Lessons and morals from Surah Al-Kahf",f:false},{t:"Tafseer of Juz Amma",d:"Simplified Tafseer of Juz Amma surahs",f:false}],
+    seerah: [{t:"Birth and Early Life of the Prophet ﷺ",d:"The story of Prophet Muhammad's birth and upbringing in Makkah",f:true},{t:"The Prophetic Migration",d:"The story of the Prophet's migration from Makkah to Madinah",f:false},{t:"The Battle of Badr",d:"Events and lessons from the great Battle of Badr",f:false}],
+    hadith: [{t:"Explanation of Nawawi's 40 Hadith",d:"Brief explanation of Imam Nawawi's 40 Hadith collection",f:true},{t:"Hadith of Jibreel",d:"Explanation of the Hadith of Jibreel about Islam, Iman, and Ihsan",f:false},{t:"Daily Remembrance Hadiths",d:"Prophetic hadiths on morning and evening supplications",f:false}],
+    ethics: [{t:"Good Character in Islam",d:"The importance and status of good character in Islam",f:true},{t:"Mosque Etiquette",d:"Learn about the etiquettes of entering and sitting in the mosque",f:false},{t:"Virtue of Charity",d:"The virtues and rewards of charity with Allah",f:false}],
+    ramadan: [{t:"How to Benefit from Ramadan",d:"Practical tips to make the most of Ramadan",f:true},{t:"Virtues of Laylat Al-Qadr",d:"Virtues of the Night of Decree and how to observe it",f:false},{t:"Rulings of Zakat Al-Fitr",d:"When and how to pay Zakat Al-Fitr",f:false}],
+    hajj: [{t:"Complete Hajj Guide",d:"Full explanation of Hajj rituals from Ihram to Farewell Tawaf",f:true},{t:"Common Hajj Mistakes",d:"Learn about common mistakes pilgrims make and how to avoid them",f:false},{t:"Hajj and Umrah Supplications",d:"Collection of authentic supplications for Hajj and Umrah",f:false}],
   },
 };
 
@@ -107,8 +108,8 @@ export default function ManafaaVideosPage() {
   useEffect(() => { setActiveCat("all"); setActiveVideo(null); }, [lang]);
 
   const navItems = [
-    { k: "n_home", href: "#" }, { k: "n_vid", href: "#" }, { k: "n_quran", href: "#" },
-    { k: "n_lib", href: "#" }, { k: "n_hajj", href: "#" }, { k: "n_umrah", href: "#" }, { k: "n_contest", href: "#" },
+    { k: "n_home", href: "/" }, { k: "n_vid", href: "/videos" }, { k: "n_quran", href: "/quran" },
+    { k: "n_lib", href: "/library" }, { k: "n_hajj", href: "/hajj" }, { k: "n_umrah", href: "/umrah" }, { k: "n_contest", href: "/contest" },
   ];
 
   // Gather all videos for "all" filter or filter by category
@@ -158,6 +159,7 @@ export default function ManafaaVideosPage() {
 
       
       <Navbar lang={lang} setLang={setLang} />
+
 
 
       {/* ===== HERO SECTION ===== */}
@@ -368,30 +370,18 @@ export default function ManafaaVideosPage() {
       {activeVideo && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }} onClick={() => setActiveVideo(null)}>
           <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden animate-fadeInUp" onClick={e => e.stopPropagation()} style={{ border: '1px solid rgba(200,169,81,0.2)' }}>
-            {/* YouTube Player */}
-            <div className="relative" style={{ background: '#000' }}>
-              {activeVideo.ytId ? (
-                <iframe
-                  width="100%" height="315"
-                  src={`https://www.youtube.com/embed/${activeVideo.ytId}?autoplay=1&rel=0`}
-                  title={activeVideo.t}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ display: 'block' }}
-                />
-              ) : (
-                <div className="h-56 sm:h-72 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--primary-dark), var(--primary))' }}>
-                  <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: 'var(--gold)' }}>
-                    <svg className="w-9 h-9" style={{ marginInlineStart: '4px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                  </div>
+            {/* Video Player Placeholder */}
+            <div className="relative h-56 sm:h-72 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--primary-dark), var(--primary))' }}>
+              <span className="text-7xl opacity-20">{activeVideo.catIcon}</span>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition-transform hover:scale-110" style={{ background: 'var(--gold)' }}>
+                  <svg className="w-9 h-9" style={{ marginInlineStart: '4px' }} fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                 </div>
-              )}
-              <button onClick={() => setActiveVideo(null)}
-                style={{ position:'absolute', top:10, right:10, background:'rgba(0,0,0,.6)', border:'none', borderRadius:'50%', width:36, height:36, color:'white', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </div>
+              <button onClick={() => setActiveVideo(null)} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 text-white flex items-center justify-center hover:bg-black/50 transition-all">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
-              <div className={`absolute bottom-3 ${dir === "rtl" ? "right-3" : "left-3"{'}'} px-3 py-1.5 rounded-full text-xs font-medium text-white`} style={{ background: 'rgba(200,169,81,0.9)' }}>
+              <div className={`absolute bottom-4 ${dir === "rtl" ? "right-4" : "left-4"} px-3 py-1.5 rounded-full text-xs font-medium text-white`} style={{ background: 'rgba(200,169,81,0.9)' }}>
                 {activeVideo.catName}
               </div>
             </div>

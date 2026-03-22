@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { supaInsert as supaIns } from "../lib/supabase";
+import { useState, useEffect } from "react";
 
 const langs = [
   { code: "ar", name: "العربية", dir: "rtl" },{ code: "en", name: "English", dir: "ltr" },{ code: "tr", name: "Türkçe", dir: "ltr" },{ code: "ur", name: "اردو", dir: "rtl" },{ code: "ms", name: "Melayu", dir: "ltr" },{ code: "fr", name: "Français", dir: "ltr" },{ code: "fa", name: "فارسی", dir: "rtl" },{ code: "bn", name: "বাংলা", dir: "ltr" },{ code: "hi", name: "हिन्दी", dir: "ltr" },
@@ -68,7 +69,7 @@ export default function ManafaaLibraryPage() {
   useEffect(() => { const h = () => setScrolled(window.scrollY > 50); window.addEventListener("scroll", h); return () => window.removeEventListener("scroll", h); }, []);
   useEffect(() => { setSearch(""); setActiveBook(null); setReadingPdf(null); }, [lang]);
 
-  const nav = [{k:"n_home"},{k:"n_vid"},{k:"n_quran"},{k:"n_lib"},{k:"n_hajj"},{k:"n_umrah"},{k:"n_contest"}];
+  const nav=[{k:"n_home",href:"/"},{k:"n_vid",href:"/videos"},{k:"n_quran",href:"/quran"},{k:"n_lib",href:"/library"},{k:"n_hajj",href:"/hajj"},{k:"n_umrah",href:"/umrah"},{k:"n_contest",href:"/contest"}];
 
   return (
     <div dir={dir} className="min-h-screen bg-[#FAFBFC]" style={{ fontFamily:"'Tajawal','Segoe UI',sans-serif" }}>
@@ -91,9 +92,7 @@ export default function ManafaaLibraryPage() {
       `}</style>
 
       {/* BISMILLAH */}
-      
       <Navbar lang={lang} setLang={setLang} />
-
 
       {/* HERO */}
       <section className="hero-gradient relative overflow-hidden" style={{minHeight:'45vh'}}>
@@ -199,7 +198,7 @@ export default function ManafaaLibraryPage() {
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                   {t("read_now")} {arr}
                 </button>
-                <a href={activeBook.pdf} target="_blank" rel="noopener noreferrer" className="flex-1 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:bg-gray-100" style={{border:'2px solid #E5E7EB',color:'var(--primary)',textDecoration:'none',cursor:'pointer'}} onClick={() => { setReadingPdf(activeBook); setActiveBook(null); }}>
+                <a href={activeBook.pdf} target="_blank" rel="noopener noreferrer" className="flex-1 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all hover:bg-gray-100" style={{border:'2px solid #E5E7EB',color:'var(--primary)',textDecoration:'none'}}>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                   {t("download")}
                 </a>
@@ -211,24 +210,6 @@ export default function ManafaaLibraryPage() {
 
       {/* PDF READER (fullscreen) */}
       {readingPdf && (
-        <div className="fixed inset-0 z-[200] flex flex-col" style={{ background: '#1B3A4B' }}>
-          {/* PDF Viewer Header */}
-          <div className="flex items-center justify-between px-4 py-3" style={{ background: '#0F2530', borderBottom: '1px solid rgba(200,169,81,.2)' }}>
-            <h3 className="text-white font-bold text-sm">{readingPdf.t}</h3>
-            <button onClick={() => setReadingPdf(null)}
-              style={{ background: 'rgba(200,169,81,.2)', border: 'none', borderRadius: 8, color: '#C8A951', cursor: 'pointer', padding: '6px 14px', fontWeight: 'bold', fontFamily: 'Tajawal' }}>
-              ✕ إغلاق
-            </button>
-          </div>
-          {/* PDF iframe */}
-          <iframe
-            src={`https://docs.google.com/viewer?url=${encodeURIComponent(readingPdf.pdf)}&embedded=true`}
-            width="100%" height="100%"
-            style={{ border: 'none', flex: 1 }}
-            title={readingPdf.t}
-          />
-        </div>
-      ) || readingPdf_PLACEHOLDER && (
         <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,zIndex:9999,background:'#1a1a2e',display:'flex',flexDirection:'column'}}>
           {/* Reader Header */}
           <div style={{background:'rgba(27,58,75,0.98)',padding:'10px 16px',display:'flex',alignItems:'center',justifyContent:'space-between',flexShrink:0}}>
@@ -278,7 +259,7 @@ export default function ManafaaLibraryPage() {
         </div>
       </footer>
 
-      {(showLM||mob)&&<div className="fixed inset-0 z-40" onClick={()=>{setShowLM(false);setMob(false)}}></div>}
+      
     </div>
   );
 }
