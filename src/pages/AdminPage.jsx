@@ -363,11 +363,24 @@ function BooksSection({ lang }) {
   const save = async () => {
     setSaving(true);
     try {
+      // رفع ملف PDF إن وجد
+      let pdfUrl = form.pdf_url || "";
+      if (form.pdfFile) {
+        const fileName = `${Date.now()}_${form.pdfFile.name.replace(/\s/g,"_")}`;
+        const { data: uploaded, error: upErr } = await sb.storage
+          .from("books")
+          .upload(`pdfs/${lang}/${fileName}`, form.pdfFile, { upsert: true });
+        if (upErr) throw new Error("فشل رفع الملف: " + upErr.message);
+        const { data: { publicUrl } } = sb.storage.from("books").getPublicUrl(`pdfs/${lang}/${fileName}`);
+        pdfUrl = publicUrl;
+      }
+      if (!pdfUrl) { alert("يجب إضافة ملف PDF أو رابط"); setSaving(false); return; }
+
       if (modal==="add") {
-        const {data:bk} = await sb.from("books").insert({pdf_url:form.pdf_url,cover_url:form.cover_url||null,sort_order:form.sort_order,lang}).select().single();
+        const {data:bk} = await sb.from("books").insert({pdf_url:pdfUrl,cover_url:form.cover_url||null,sort_order:form.sort_order,lang}).select().single();
         await sb.from("book_translations").insert({book_id:bk.id,lang,title:form.title,author:form.author,description:form.description});
       } else {
-        await sb.from("books").update({pdf_url:form.pdf_url,cover_url:form.cover_url||null,sort_order:form.sort_order}).eq("id",form.id);
+        await sb.from("books").update({pdf_url:pdfUrl,cover_url:form.cover_url||null,sort_order:form.sort_order}).eq("id",form.id);
         if(form.trans_id) await sb.from("book_translations").update({title:form.title,author:form.author,description:form.description}).eq("id",form.trans_id);
         else await sb.from("book_translations").insert({book_id:form.id,lang,title:form.title,author:form.author,description:form.description});
       }
@@ -425,7 +438,17 @@ function BooksSection({ lang }) {
               <div className="form-group"><label className="form-label">العنوان ({LANGS.find(l=>l.code===lang)?.name})</label><input className="form-input" value={form.title||""} onChange={e=>setForm({...form,title:e.target.value})} /></div>
               <div className="form-group"><label className="form-label">المؤلف</label><input className="form-input" value={form.author||""} onChange={e=>setForm({...form,author:e.target.value})} /></div>
               <div className="form-group"><label className="form-label">الوصف</label><input className="form-input" value={form.description||""} onChange={e=>setForm({...form,description:e.target.value})} /></div>
-              <div className="form-group"><label className="form-label">رابط PDF</label><input className="form-input" placeholder="https://..." value={form.pdf_url||""} onChange={e=>setForm({...form,pdf_url:e.target.value})} /></div>
+              {/* رفع PDF */}
+              <div className="form-group">
+                <label className="form-label">ملف PDF — ارفع من جهازك</label>
+                <input type="file" accept="application/pdf" className="form-input" style={{padding:"8px"}}
+                  onChange={e=>setForm({...form,pdfFile:e.target.files[0],pdfName:e.target.files[0]?.name})} />
+                {form.pdfName && <p style={{fontSize:".78rem",color:"var(--g)",marginTop:4}}>📄 {form.pdfName}</p>}
+              </div>
+              <div className="form-group">
+                <label className="form-label">أو رابط PDF مباشر (اختياري)</label>
+                <input className="form-input" placeholder="https://..." value={form.pdf_url||""} onChange={e=>setForm({...form,pdf_url:e.target.value})} />
+              </div>
               <div className="form-row">
                 <div className="form-group"><label className="form-label">رابط الغلاف (اختياري)</label><input className="form-input" placeholder="https://..." value={form.cover_url||""} onChange={e=>setForm({...form,cover_url:e.target.value})} /></div>
                 <div className="form-group"><label className="form-label">الترتيب</label><input className="form-input" type="number" value={form.sort_order||1} onChange={e=>setForm({...form,sort_order:+e.target.value})} /></div>
