@@ -187,7 +187,15 @@ export default function ManafaaContestPage() {
   const pct = quiz.length > 0 ? Math.round((score / quiz.length) * 100) : 0;
   const grade = pct >= 90 ? { e: "🏆", t: u.ex, c: "#22c55e" } : pct >= 70 ? { e: "⭐", t: u.gd, c: "#C8A951" } : pct >= 50 ? { e: "📚", t: u.av, c: "#f59e0b" } : { e: "💪", t: u.wk, c: "#ef4444" };
 
-  const navKeys = ["n_home","n_vid","n_quran","n_lib","n_hajj","n_umrah","n_contest"];
+  const navKeys = [
+    {k:"n_home", href:"/"},
+    {k:"n_vid", href:"/videos"},
+    {k:"n_quran", href:"/quran"},
+    {k:"n_lib", href:"/library"},
+    {k:"n_hajj", href:"/hajj"},
+    {k:"n_umrah", href:"/umrah"},
+    {k:"n_contest", href:"/contest"},
+  ];
 
   return (
     <div dir={dir} style={{ fontFamily: "'Tajawal','Segoe UI',sans-serif", minHeight: "100vh", background: "#FAFBFC" }}>
@@ -202,6 +210,9 @@ export default function ManafaaContestPage() {
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#C8A951", color: "#0F2530", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontFamily: "Amiri,serif", fontSize: "18px" }}>م</div>
             <div><div style={{ color: "white", fontWeight: "bold", fontSize: "14px" }}>{u.sn}</div><div style={{ color: "#C8A951", fontSize: "11px" }}>{u.sd}</div></div>
+          </div>
+          <div className="hidden lg:flex items-center gap-1">
+            {navKeys.map((n,i)=><Link key={i} to={n.href} style={{color:n.k==="n_contest"?"white":"rgba(255,255,255,.7)",padding:"6px 12px",borderRadius:"8px",fontSize:"14px",background:n.k==="n_contest"?"rgba(255,255,255,.1)":"none",textDecoration:"none"}}>{u.nav[i]}</Link>)}
           </div>
           <div style={{ position: "relative" }}>
             <button onClick={() => setShowLM(!showLM)} style={{ background: "none", border: "none", color: "rgba(255,255,255,.8)", cursor: "pointer", fontSize: "14px", padding: "6px 10px", borderRadius: "8px" }}>{lo.n} ▾</button>
