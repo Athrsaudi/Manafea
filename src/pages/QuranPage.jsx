@@ -156,7 +156,7 @@ export default function ManafaaQuranPage(){
         <button onClick={()=>setMob(!mob)} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">{mob?<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>:<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>}</svg></button>
       </div>
     </div>
-    {mob&&<div className="lg:hidden pb-4 asd"><div className="bg-white/5 rounded-xl p-2">{nav.map((n,i)=><Link key={i} to={n.href} onClick={()=>setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k==="n_quran"?"text-white bg-white/10":"text-white/80 hover:bg-white/5"}`}><span>{t(n.k)}</span></a>)}</div></div>}
+    {mob&&<div className="lg:hidden pb-4 asd"><div className="bg-white/5 rounded-xl p-2">{nav.map((n,i)=><Link key={i} to={n.href} onClick={()=>setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k==="n_quran"?"text-white bg-white/10":"text-white/80 hover:bg-white/5"}`}><span>{t(n.k)}</span></Link>)}</div></div>}
     </div></nav>
 
     {selSu?<Reader su={selSu} rec={rec} t={t} dir={dir} lang={lang} onBack={()=>setSelSu(null)}/>:<>
