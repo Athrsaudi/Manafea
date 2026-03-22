@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
 
 const langs = [
@@ -87,13 +88,10 @@ const IP = () => (
 export default function ManafaaHomepage() {
   const navigate = useNavigate();
   const [lang, setLang] = useState("ar");
-  const [showLM, setShowLM] = useState(false);
   const [slide, setSlide] = useState(0);
   const [rat, setRat] = useState(0);
   const [hRat, setHRat] = useState(0);
   const [cmt, setCmt] = useState("");
-  const [scrolled, setScrolled] = useState(false);
-  const [mob, setMob] = useState(false);
   const [sent, setSent] = useState(false);
 
   const lo = langs.find(l => l.code === lang) || langs[0];
@@ -166,80 +164,13 @@ export default function ManafaaHomepage() {
     <div dir={dir} className="min-h-screen" style={{fontFamily:"'Tajawal','Segoe UI',sans-serif",background:'#FAFBFC'}}>
       <style>{CSS}</style>
 
+      <Navbar lang={lang} setLang={setLang} />
+
       {/* Bismillah */}
       <div className="w-full py-2 text-center text-sm" style={{background:'var(--pd)',color:'var(--g)'}}>
         {t("bismillah")}
       </div>
 
-      {/* Navbar */}
-      <nav className={`gn sticky top-0 z-50 transition-all duration-500 ${scrolled?'shadow-2xl':''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 flex-shrink-0" style={{textDecoration:'none'}}>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style={{background:'var(--g)',color:'var(--pd)'}}>
-                <span className="text-lg sm:text-xl font-bold qf">م</span>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-white font-bold text-base leading-tight">{t("site_name")}</h1>
-                <p className="text-xs" style={{color:'var(--g)'}}>{t("site_desc")}</p>
-              </div>
-            </Link>
-
-            {/* Desktop nav */}
-            <div className="hidden lg:flex items-center gap-1">
-              {nav.map((n,i) => (
-                <Link key={i} to={n.h} className="ni text-white/80 hover:text-white text-sm px-3 py-2 rounded-lg hover:bg-white/5 transition-all">
-                  {t(n.k)}
-                </Link>
-              ))}
-            </div>
-
-            {/* Right actions */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Language picker */}
-              <div className="relative">
-                <button onClick={() => setShowLM(!showLM)} className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all" style={{background:'none',border:'none',cursor:'pointer'}}>
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/>
-                  </svg>
-                  <span className="hidden sm:inline">{lo.name}</span>
-                </button>
-                {showLM && (
-                  <div className={`absolute ${dir==="rtl"?"left-0":"right-0"} top-full mt-2 w-44 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden asd z-50`}>
-                    {langs.map(l => (
-                      <button key={l.code} onClick={() => {setLang(l.code); setShowLM(false);}} className={`w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between ${lang===l.code?'bg-blue-50 font-bold':''}`} style={{textAlign:l.dir==="rtl"?"right":"left",color:lang===l.code?'var(--p)':'var(--tx)',border:'none',cursor:'pointer'}}>
-                        <span>{l.name}</span>
-                        {lang===l.code && <span style={{color:'var(--g)'}}>✓</span>}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Mobile menu toggle */}
-              <button onClick={() => setMob(!mob)} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10" style={{background:'none',border:'none',cursor:'pointer'}}>
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  {mob ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>}
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile menu */}
-          {mob && (
-            <div className="lg:hidden pb-4 asd">
-              <div className="bg-white/5 rounded-xl p-2">
-                {nav.map((n,i) => (
-                  <Link key={i} to={n.h} onClick={() => setMob(false)} className="flex items-center gap-3 text-white/80 hover:text-white px-4 py-3 rounded-lg hover:bg-white/5 transition-all" style={{textDecoration:'none'}}>
-                    <span>{t(n.k)}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
 
       {/* Hero */}
       <section className="hg relative overflow-hidden" style={{minHeight:'85vh'}}>
@@ -583,7 +514,6 @@ export default function ManafaaHomepage() {
         </div>
       </footer>
 
-      {(showLM||mob) && <div className="fixed inset-0 z-40" onClick={() => {setShowLM(false); setMob(false);}}></div>}
     </div>
   );
 }

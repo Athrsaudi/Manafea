@@ -1,4 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
 import { useState, useEffect, useMemo } from "react";
 
@@ -201,27 +202,10 @@ export default function ManafaaContestPage() {
     <div dir={dir} style={{ fontFamily: "'Tajawal','Segoe UI',sans-serif", minHeight: "100vh", background: "#FAFBFC" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap');*{box-sizing:border-box;margin:0;padding:0}@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}`}</style>
 
-      {/* Bismillah */}
-      <div style={{ background: "#0F2530", color: "#C8A951", textAlign: "center", padding: "8px 0", fontSize: "14px" }}>{u.bism}</div>
+      
+      <Navbar lang={lang} setLang={setLang} />
 
-      {/* Nav */}
-      <nav style={{ background: "rgba(27,58,75,.95)", backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 50 }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#C8A951", color: "#0F2530", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontFamily: "Amiri,serif", fontSize: "18px" }}>م</div>
-            <div><div style={{ color: "white", fontWeight: "bold", fontSize: "14px" }}>{u.sn}</div><div style={{ color: "#C8A951", fontSize: "11px" }}>{u.sd}</div></div>
-          </div>
-          <div className="hidden lg:flex items-center gap-1">
-            {navKeys.map((n,i)=><Link key={i} to={n.href} style={{color:n.k==="n_contest"?"white":"rgba(255,255,255,.7)",padding:"6px 12px",borderRadius:"8px",fontSize:"14px",background:n.k==="n_contest"?"rgba(255,255,255,.1)":"none",textDecoration:"none"}}>{u.nav[i]}</Link>)}
-          </div>
-          <div style={{ position: "relative" }}>
-            <button onClick={() => setShowLM(!showLM)} style={{ background: "none", border: "none", color: "rgba(255,255,255,.8)", cursor: "pointer", fontSize: "14px", padding: "6px 10px", borderRadius: "8px" }}>{lo.n} ▾</button>
-            {showLM && <div style={{ position: "absolute", [dir === "rtl" ? "left" : "right"]: 0, top: "100%", marginTop: "8px", width: "176px", background: "white", borderRadius: "12px", boxShadow: "0 10px 40px rgba(0,0,0,.15)", overflow: "hidden", zIndex: 50 }}>
-              {LL.map(l => <button key={l.c} onClick={() => { setLang(l.c); setShowLM(false); }} style={{ display: "block", width: "100%", padding: "10px 16px", border: "none", background: lang === l.c ? "#EFF6FF" : "white", textAlign: l.d === "rtl" ? "right" : "left", cursor: "pointer", fontSize: "14px", color: lang === l.c ? "#1B3A4B" : "#333", fontWeight: lang === l.c ? "bold" : "normal" }}>{l.n}{lang === l.c && " ✓"}</button>)}
-            </div>}
-          </div>
-        </div>
-      </nav>
+
 
       {/* Hero */}
       <div style={{ background: "linear-gradient(135deg,#0F2530,#1B3A4B,#2C5F7C,#1B3A4B)", padding: "48px 16px", textAlign: "center" }}>

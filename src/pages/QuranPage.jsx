@@ -1,4 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
 // This file was already written above - copying exact same content
 // Re-creating due to filesystem issue
@@ -140,24 +141,7 @@ export default function ManafaaQuranPage(){
   return(<div dir={dir} className="min-h-screen bg-[#FAFBFC]" style={{fontFamily:"'Tajawal','Segoe UI',sans-serif"}}>
     <style>{`@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Amiri:wght@400;700&display=swap');*{box-sizing:border-box;margin:0;padding:0}:root{--primary:#1B3A4B;--primary-light:#2C5F7C;--primary-dark:#0F2530;--gold:#C8A951;--gold-light:#E8D48B;--gold-dark:#9E832E;--text:#1a1a2e;--text-light:#6B7280}@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}@keyframes sd{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}@keyframes sh{0%{background-position:-200% 0}100%{background-position:200% 0}}.afu{animation:fu .8s ease-out forwards}.asd{animation:sd .3s ease-out forwards}.gn{background:rgba(27,58,75,.95);backdrop-filter:blur(20px)}.hg{background:linear-gradient(135deg,#0F2530 0%,#1B3A4B 30%,#2C5F7C 70%,#1B3A4B 100%)}.gs{background:linear-gradient(90deg,var(--gold-dark),var(--gold),var(--gold-light),var(--gold),var(--gold-dark));background-size:200% 100%;animation:sh 4s linear infinite;-webkit-background-clip:text;-webkit-text-fill-color:transparent}.ch{transition:all .4s cubic-bezier(.4,0,.2,1)}.ch:hover{transform:translateY(-6px);box-shadow:0 20px 40px -12px rgba(27,58,75,.12)}.ni{position:relative;transition:all .3s}.ni::after{content:'';position:absolute;bottom:-4px;${dir==="rtl"?"right":"left"}:0;width:0;height:2px;background:var(--gold);transition:width .3s}.ni:hover::after{width:100%}.sb::-webkit-scrollbar{display:none}.sb{-ms-overflow-style:none;scrollbar-width:none}`}</style>
 
-    <div className="w-full py-2 text-center text-sm" style={{background:'var(--primary-dark)',color:'var(--gold)'}}>{t("bismillah")}</div>
-
-    {/* Nav */}
-    <nav className={`gn sticky top-0 z-50 transition-all duration-500 ${scrolled?'shadow-2xl':''}`}><div className="max-w-7xl mx-auto px-4 sm:px-6"><div className="flex items-center justify-between h-16 sm:h-20">
-      <div className="flex items-center gap-3 flex-shrink-0"><div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style={{background:'var(--gold)',color:'var(--primary-dark)'}}><span className="text-lg sm:text-xl font-bold" style={{fontFamily:'Amiri,serif'}}>م</span></div><div className="hidden sm:block"><h1 className="text-white font-bold text-base leading-tight">{t("site_name")}</h1><p className="text-xs" style={{color:'var(--gold)'}}>{t("site_desc")}</p></div></div>
-      <div className="hidden lg:flex items-center gap-1">{nav.map((n,i)=><Link key={i} to={n.href} className={`ni text-sm px-3 py-2 rounded-lg transition-all ${n.k==="n_quran"?"text-white bg-white/10":"text-white/70 hover:text-white hover:bg-white/5"}`}>{t(n.k)}</Link>)}</div>
-      <div className="flex items-center gap-2 sm:gap-3">
-        <div className="relative"><button onClick={()=>setShowRec(!showRec)} className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all"><span>🎙️</span><span className="hidden sm:inline text-xs">{dir==="rtl"?rec.ar:rec.en}</span></button>
-          {showRec&&<div className={`absolute ${dir==="rtl"?"left-0":"right-0"} top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden asd z-50`}>{RECITERS.map((r,i)=><button key={i} onClick={()=>{setRecIdx(i);setShowRec(false)}} className={`w-full px-4 py-3 text-sm hover:bg-gray-50 flex items-center justify-between ${recIdx===i?'bg-blue-50 font-bold':''}`} style={{textAlign:dir==="rtl"?"right":"left",color:recIdx===i?'var(--primary)':'var(--text)'}}><span>{dir==="rtl"?r.ar:r.en}</span>{recIdx===i&&<span style={{color:'var(--gold)'}}>✓</span>}</button>)}</div>}
-        </div>
-        <div className="relative"><button onClick={()=>setShowLM(!showLM)} className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg><span className="hidden sm:inline">{lo.name}</span></button>
-          {showLM&&<div className={`absolute ${dir==="rtl"?"left-0":"right-0"} top-full mt-2 w-44 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden asd z-50`}>{langs.map(l=><button key={l.code} onClick={()=>{setLang(l.code);setShowLM(false)}} className={`w-full px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center justify-between ${lang===l.code?'bg-blue-50 font-bold':''}`} style={{textAlign:l.dir==="rtl"?"right":"left",color:lang===l.code?'var(--primary)':'var(--text)'}}><span>{l.name}</span>{lang===l.code&&<span style={{color:'var(--gold)'}}>✓</span>}</button>)}</div>}
-        </div>
-        <button onClick={()=>setMob(!mob)} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">{mob?<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>:<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>}</svg></button>
-      </div>
-    </div>
-    {mob&&<div className="lg:hidden pb-4 asd"><div className="bg-white/5 rounded-xl p-2">{nav.map((n,i)=><Link key={i} to={n.href} onClick={()=>setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k==="n_quran"?"text-white bg-white/10":"text-white/80 hover:bg-white/5"}`}><span>{t(n.k)}</span></Link>)}</div></div>}
-    </div></nav>
+    <Navbar lang={lang} setLang={setLang} />
 
     {selSu?<Reader su={selSu} rec={rec} t={t} dir={dir} lang={lang} onBack={()=>setSelSu(null)}/>:<>
       {/* Hero */}

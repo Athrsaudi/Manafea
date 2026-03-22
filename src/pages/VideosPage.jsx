@@ -1,4 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
 import { useState, useEffect } from "react";
 
@@ -156,68 +157,10 @@ export default function ManafaaVideosPage() {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
-      {/* ===== BISMILLAH ===== */}
-      <div className="w-full py-2 text-center text-sm" style={{ background: 'var(--primary-dark)', color: 'var(--gold)' }}>{t("bismillah")}</div>
+      
+      <Navbar lang={lang} setLang={setLang} />
 
-      {/* ===== NAVIGATION (identical to homepage) ===== */}
-      <nav className={`glass-nav sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'shadow-2xl' : ''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--gold)', color: 'var(--primary-dark)' }}>
-                <span className="text-lg sm:text-xl font-bold quran-font">م</span>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-white font-bold text-base leading-tight">{t("site_name")}</h1>
-                <p className="text-xs" style={{ color: 'var(--gold)' }}>{t("site_desc")}</p>
-              </div>
-            </div>
-            <div className="hidden lg:flex items-center gap-1">
-              {navItems.map((n, i) => (
-                <Link key={i} to={n.href} className={`nav-item text-sm px-3 py-2 rounded-lg transition-all ${n.k === "n_vid" ? "text-white bg-white/10" : "text-white/80 hover:text-white hover:bg-white/5"}`}>{t(n.k)}</Link>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="relative">
-                <button onClick={() => setShowLM(!showLM)} className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm px-2.5 py-1.5 rounded-lg hover:bg-white/5 transition-all">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" /></svg>
-                  <span className="hidden sm:inline">{lo.name}</span>
-                </button>
-                {showLM && (
-                  <div className={`absolute ${dir === "rtl" ? "left-0" : "right-0"} top-full mt-2 w-44 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden animate-slideDown z-50`}>
-                    {langs.map(l => (
-                      <button key={l.code} onClick={() => { setLang(l.code); setShowLM(false); }}
-                        className={`w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors flex items-center justify-between ${lang === l.code ? 'bg-blue-50 font-bold' : ''}`}
-                        style={{ textAlign: l.dir === "rtl" ? "right" : "left", color: lang === l.code ? 'var(--primary)' : 'var(--text)' }}>
-                        <span>{l.name}</span>
-                        {lang === l.code && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <button className="hidden sm:flex items-center gap-1.5 text-sm px-4 py-2 rounded-lg transition-all font-medium" style={{ background: 'var(--gold)', color: 'var(--primary-dark)' }}>
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                {t("login")}
-              </button>
-              <button onClick={() => setMob(!mob)} className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">{mob ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</svg>
-              </button>
-            </div>
-          </div>
-          {mob && (
-            <div className="lg:hidden pb-4 animate-slideDown">
-              <div className="bg-white/5 rounded-xl p-2">
-                {navItems.map((n, i) => (
-                  <Link key={i} to={n.href} onClick={() => setMob(false)} className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${n.k === "n_vid" ? "text-white bg-white/10" : "text-white/80 hover:bg-white/5"}`}>
-                    <span>{t(n.k)}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
+
 
       {/* ===== HERO SECTION ===== */}
       <section className="hero-gradient relative overflow-hidden" style={{ minHeight: '50vh' }}>
