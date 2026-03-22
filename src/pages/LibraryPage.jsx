@@ -98,7 +98,8 @@ export default function ManafaaLibraryPage() {
           author: trans.author || "",
           desc: trans.description || "",
           pdf: b.pdf_url,
-          pages: 0,
+          cover: b.cover_url || "",
+          pages: b.pages || 0,
           color: colors[i % colors.length],
         };
       });
@@ -213,15 +214,27 @@ export default function ManafaaLibraryPage() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.7)',backdropFilter:'blur(8px)'}} onClick={()=>setActiveBook(null)}>
           <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden animate-fadeInUp" onClick={e=>e.stopPropagation()} style={{border:'1px solid rgba(200,169,81,0.2)',maxHeight:'90vh',overflowY:'auto'}}>
             {/* Header */}
-            <div className="relative h-52 sm:h-64 flex items-center justify-center" style={{background:`linear-gradient(135deg,${activeBook.color},var(--primary))`}}>
-              <IP/>
-              <div className="relative z-10 text-center px-6">
-                <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style={{background:'rgba(255,255,255,0.15)',border:'2px solid rgba(255,255,255,0.2)'}}>
-                  <span className="text-3xl">📚</span>
+            <div className="relative h-52 sm:h-64 overflow-hidden" style={{background:`linear-gradient(135deg,${activeBook.color},var(--primary))`}}>
+              {activeBook.cover ? (
+                <img src={activeBook.cover} alt={activeBook.title} className="w-full h-full object-cover" onError={e=>{e.target.style.display='none'}} />
+              ) : (
+                <>
+                  <IP/>
+                  <div className="relative z-10 text-center px-6 flex flex-col items-center justify-center h-full">
+                    <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4" style={{background:'rgba(255,255,255,0.15)',border:'2px solid rgba(255,255,255,0.2)'}}>
+                      <span className="text-3xl">📚</span>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-black text-white quran-font">{activeBook.title}</h2>
+                    <p className="text-white/60 text-sm mt-1">{activeBook.author}</p>
+                  </div>
+                </>
+              )}
+              {activeBook.cover && (
+                <div className="absolute bottom-0 left-0 right-0 p-4" style={{background:'linear-gradient(to top, rgba(0,0,0,0.7), transparent)'}}>
+                  <h2 className="text-xl font-black text-white quran-font">{activeBook.title}</h2>
+                  <p className="text-white/70 text-sm">{activeBook.author}</p>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-black text-white quran-font">{activeBook.title}</h2>
-                <p className="text-white/60 text-sm mt-1">{activeBook.author}</p>
-              </div>
+              )}
               <button onClick={()=>setActiveBook(null)} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 text-white flex items-center justify-center hover:bg-black/50 transition-all">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
               </button>
