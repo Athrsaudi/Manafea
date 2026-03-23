@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { trackPage } from "../lib/analytics";
 import { supabase } from "../lib/supabase";
 import { useLang } from "../lib/LangContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -51,6 +52,8 @@ const IP=()=><svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmln
 
 export default function ManafaaLibraryPage() {
   const { lang, setLang } = useLang();
+
+  useEffect(() => { trackPage("/library", lang); }, [lang]);
   const [showLM, setShowLM] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);

@@ -2,6 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
 import { useState, useEffect } from "react";
+import { trackPage } from "../lib/analytics";
 import { useLang } from "../lib/LangContext";
 
 const L=[{c:"ar",n:"العربية",d:"rtl"},{c:"en",n:"English",d:"ltr"},{c:"tr",n:"Türkçe",d:"ltr"},{c:"ur",n:"اردو",d:"rtl"},{c:"ms",n:"Melayu",d:"ltr"},{c:"fr",n:"Français",d:"ltr"},{c:"fa",n:"فارسی",d:"rtl"},{c:"bn",n:"বাংলা",d:"ltr"},{c:"hi",n:"हिन्दी",d:"ltr"}];
@@ -150,7 +151,9 @@ const StepView=({stations,cur,setCur,t,dir,onBack})=>{
 
 // ═══════════════════════════════════════
 export default function ManafaaHajjPage(){
-  const {lang,setLang}=useLang();const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[activeStep,setActiveStep]=useState(null);
+  const {lang,setLang}=useLang();
+  useEffect(() => { trackPage("/hajj", lang); }, [lang]);
+const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[activeStep,setActiveStep]=useState(null);
   const lo=L.find(l=>l.c===lang)||L[0];const dir=lo.d;const ui=T[lang]||T.ar;const t=k=>ui[k]||T.ar[k]||k;
   const stations=ST[lang]||null;const has=stations&&stations.length>0;
 

@@ -132,7 +132,9 @@ const Reader=({su,rec,t,dir,onBack,lang})=>{
 
 // ─── Main ───
 export default function ManafaaQuranPage(){
-  const {lang,setLang}=useLang();const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[search,setSearch]=useState("");const[typeF,setTypeF]=useState("all");const[selSu,setSelSu]=useState(null);const[recIdx,setRecIdx]=useState(0);const[showRec,setShowRec]=useState(false);
+  const {lang,setLang}=useLang();
+  useEffect(() => { trackPage("/quran", lang); }, [lang]);
+const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(false);const[mob,setMob]=useState(false);const[search,setSearch]=useState("");const[typeF,setTypeF]=useState("all");const[selSu,setSelSu]=useState(null);const[recIdx,setRecIdx]=useState(0);const[showRec,setShowRec]=useState(false);
   const lo=langs.find(l=>l.code===lang)||langs[0];const dir=lo.dir;const ui=T[lang]||T.ar;const t=k=>ui[k]||T.ar[k]||k;const rec=RECITERS[recIdx];
   useEffect(()=>{const h=()=>setScrolled(window.scrollY>50);window.addEventListener("scroll",h);return()=>window.removeEventListener("scroll",h)},[]);
   useEffect(()=>{window.scrollTo(0,0)},[selSu]);

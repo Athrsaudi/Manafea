@@ -102,6 +102,8 @@ function shuffleArr(arr) {
 /* ═══ Main Component ═══ */
 export default function ManafaaContestPage() {
   const { lang, setLang } = useLang();
+
+  useEffect(() => { trackPage("/contest", lang); }, [lang]);
   const [showLM, setShowLM] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);

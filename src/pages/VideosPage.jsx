@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { trackPage } from "../lib/analytics";
 import { supabase } from "../lib/supabase";
 import { useLang } from "../lib/LangContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -86,6 +87,8 @@ const IslamicPattern = () => (
 // ═══════════════════════════════════════
 export default function ManafaaVideosPage() {
   const { lang, setLang } = useLang();
+
+  useEffect(() => { trackPage("/videos", lang); }, [lang]);
   const [showLM, setShowLM] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);

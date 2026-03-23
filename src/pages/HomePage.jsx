@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { trackPage } from "../lib/analytics";
 import { useLang } from "../lib/LangContext";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -89,6 +90,8 @@ const IP = () => (
 export default function ManafaaHomepage() {
   const navigate = useNavigate();
   const { lang, setLang } = useLang();
+
+  useEffect(() => { trackPage("/", lang); }, [lang]);
   const [slide, setSlide] = useState(0);
   const [rat, setRat] = useState(0);
   const [hRat, setHRat] = useState(0);

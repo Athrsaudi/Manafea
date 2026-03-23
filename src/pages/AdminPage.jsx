@@ -17,6 +17,7 @@ const LANGS = [
 ];
 
 const SECTIONS = [
+  {id:"analytics", icon:"📊", label:"الإحصائيات"},
   {id:"videos",   icon:"🎬", label:"الفيديوهات"},
   {id:"books",    icon:"📚", label:"المكتبة"},
   {id:"hero",     icon:"🏠", label:"الصفحة الرئيسية"},
@@ -973,6 +974,137 @@ function FeedbackSection() {
   );
 }
 
+
+// ── ANALYTICS SECTION ──
+function AnalyticsSection() {
+  const [data, setData] = useState(null);
+  const [days, setDays] = useState(30);
+  const [loading, setLoading] = useState(true);
+
+  const load = async (d) => {
+    setLoading(true);
+    const { data: res } = await sb.rpc("get_analytics_summary", { days_back: d });
+    setData(res);
+    setLoading(false);
+  };
+
+  useEffect(() => { load(days); }, [days]);
+
+  const PAGE_NAMES = {
+    "/":"الرئيسية","/videos":"الفيديوهات","/library":"المكتبة",
+    "/quran":"القرآن","/hajj":"الحج","/umrah":"العمرة","/contest":"المسابقة"
+  };
+
+  const LANG_NAMES = {
+    ar:"العربية",en:"English",tr:"Türkçe",ur:"اردو",
+    ms:"Melayu",fr:"Français",fa:"فارسی",bn:"বাংলা",hi:"हिन्दी"
+  };
+
+  if (loading) return <div style={{textAlign:"center",padding:"60px",color:"var(--g)"}}>⏳ جارٍ تحميل الإحصائيات...</div>;
+  if (!data) return <div style={{textAlign:"center",padding:"60px"}}>لا توجد بيانات بعد</div>;
+
+  const statBox = (num, label, icon) => (
+    <div style={{background:"var(--bg2)",borderRadius:12,padding:"20px 16px",textAlign:"center",flex:1,minWidth:120}}>
+      <div style={{fontSize:"2rem",fontWeight:900,color:"var(--g)"}}>{icon} {(num||0).toLocaleString()}</div>
+      <div style={{fontSize:"0.8rem",color:"#888",marginTop:4}}>{label}</div>
+    </div>
+  );
+
+  const barChart = (items, labelKey, valueKey, nameMap) => (
+    <div style={{display:"flex",flexDirection:"column",gap:6}}>
+      {(items||[]).slice(0,8).map((item,i) => {
+        const max = items[0]?.[valueKey] || 1;
+        const pct = Math.round((item[valueKey]/max)*100);
+        return (
+          <div key={i} style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{minWidth:100,fontSize:"0.8rem",textAlign:"right",color:"var(--tx)"}}>{nameMap?.[item[labelKey]]||item[labelKey]}</div>
+            <div style={{flex:1,background:"rgba(200,169,81,0.1)",borderRadius:4,height:20,position:"relative"}}>
+              <div style={{width:pct+"%",background:"linear-gradient(90deg,#C8A951,#B8942E)",height:"100%",borderRadius:4,transition:"width 0.5s"}}/>
+            </div>
+            <div style={{minWidth:36,fontSize:"0.8rem",fontWeight:"bold",color:"var(--g)"}}>{item[valueKey]}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
+        <h2 style={{fontSize:"1.1rem",fontWeight:"bold",color:"var(--p)"}}>📊 إحصائيات الموقع</h2>
+        <div style={{display:"flex",gap:8}}>
+          {[7,30,90].map(d => (
+            <button key={d} onClick={()=>{setDays(d);load(d);}}
+              style={{padding:"6px 14px",borderRadius:20,border:"1px solid var(--g)",background:days===d?"var(--g)":"transparent",color:days===d?"#0F2530":"var(--g)",cursor:"pointer",fontSize:"0.8rem",fontWeight:"bold"}}>
+              {d} يوم
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Summary Stats */}
+      <div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:24}}>
+        {statBox(data.total_views,    "إجمالي المشاهدات",    "👁️")}
+        {statBox(data.unique_sessions,"زوار فريدون",          "👥")}
+        {statBox((data.by_country||[]).length, "دولة مختلفة", "🌍")}
+        {statBox((data.by_lang||[]).length,    "لغة نشطة",    "🌐")}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+        {/* Pages */}
+        <div style={{background:"var(--bg2)",borderRadius:12,padding:16}}>
+          <h3 style={{fontSize:"0.85rem",fontWeight:"bold",marginBottom:12,color:"var(--p)"}}>📄 أكثر الصفحات زيارة</h3>
+          {barChart(data.by_page, "page", "views", PAGE_NAMES)}
+        </div>
+        {/* Languages */}
+        <div style={{background:"var(--bg2)",borderRadius:12,padding:16}}>
+          <h3 style={{fontSize:"0.85rem",fontWeight:"bold",marginBottom:12,color:"var(--p)"}}>🌐 اللغات</h3>
+          {barChart(data.by_lang, "lang", "views", LANG_NAMES)}
+        </div>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+        {/* Countries */}
+        <div style={{background:"var(--bg2)",borderRadius:12,padding:16}}>
+          <h3 style={{fontSize:"0.85rem",fontWeight:"bold",marginBottom:12,color:"var(--p)"}}>🌍 الدول</h3>
+          {barChart(data.by_country, "country", "views", null)}
+        </div>
+        {/* Devices */}
+        <div style={{background:"var(--bg2)",borderRadius:12,padding:16}}>
+          <h3 style={{fontSize:"0.85rem",fontWeight:"bold",marginBottom:12,color:"var(--p)"}}>📱 الأجهزة</h3>
+          {barChart(data.by_device, "device", "views", {mobile:"موبايل",desktop:"كمبيوتر",tablet:"تابلت"})}
+        </div>
+      </div>
+
+      {/* Daily chart */}
+      <div style={{background:"var(--bg2)",borderRadius:12,padding:16}}>
+        <h3 style={{fontSize:"0.85rem",fontWeight:"bold",marginBottom:12,color:"var(--p)"}}>📅 المشاهدات اليومية</h3>
+        <div style={{display:"flex",alignItems:"flex-end",gap:4,height:80,overflowX:"auto"}}>
+          {(data.by_day||[]).slice().reverse().map((d,i) => {
+            const max = Math.max(...(data.by_day||[]).map(x=>x.views)) || 1;
+            const h = Math.max(4, Math.round((d.views/max)*72));
+            return (
+              <div key={i} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2,flex:"0 0 auto"}}>
+                <div title={`${d.day}: ${d.views} مشاهدة`}
+                  style={{width:20,height:h,background:"linear-gradient(to top,#C8A951,#E8D48B)",borderRadius:"3px 3px 0 0",cursor:"pointer"}}/>
+                <div style={{fontSize:"9px",color:"#888",transform:"rotate(-45deg)",transformOrigin:"top left",whiteSpace:"nowrap",marginTop:8}}>
+                  {d.day?.slice(5)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Umami note */}
+      <div style={{marginTop:16,padding:"12px 16px",background:"rgba(200,169,81,0.08)",borderRadius:10,border:"1px solid rgba(200,169,81,0.2)",fontSize:"0.8rem",color:"#888"}}>
+        💡 لإحصائيات أعمق مع خرائط جغرافية وتتبع حركة الزوار، أضف{" "}
+        <a href="https://umami.is" target="_blank" style={{color:"var(--g)"}}>Umami Analytics</a> (مجاني)
+      </div>
+    </div>
+  );
+}
+
 // ── MAIN ADMIN ──
 export default function AdminPage() {
   const [authed, setAuthed] = useState(!!sessionStorage.getItem("admin_ok"));
@@ -1034,6 +1166,7 @@ export default function AdminPage() {
           {section==="hajj"    && <StepsSection lang={lang} type="hajj" />}
           {section==="umrah"   && <StepsSection lang={lang} type="umrah" />}
           {section==="contest" && <ContestSection lang={lang} />}
+          {section==="analytics"&& <AnalyticsSection />}
           {section==="feedback"&& <FeedbackSection />}
         </div>
       </div>
