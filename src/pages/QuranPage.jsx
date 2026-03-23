@@ -1,9 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
-// This file was already written above - copying exact same content
-// Re-creating due to filesystem issue
-
+import { trackPage } from "../lib/analytics";
 import { useState, useEffect, useRef } from "react";
 import { useLang } from "../lib/LangContext";
 

@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { supaInsert as supaIns } from "../lib/supabase";
 import { useState, useEffect, useMemo } from "react";
 import { useLang } from "../lib/LangContext";
+import { trackPage } from "../lib/analytics";
 
 /* ═══ Languages ═══ */
 const LL=[{c:"ar",n:"العربية",d:"rtl"},{c:"en",n:"English",d:"ltr"},{c:"tr",n:"Türkçe",d:"ltr"},{c:"ur",n:"اردو",d:"rtl"},{c:"ms",n:"Melayu",d:"ltr"},{c:"fr",n:"Français",d:"ltr"},{c:"fa",n:"فارسی",d:"rtl"},{c:"bn",n:"বাংলা",d:"ltr"},{c:"hi",n:"हिन्दी",d:"ltr"}];
