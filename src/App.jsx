@@ -8,6 +8,7 @@ import LibraryPage from './pages/LibraryPage'
 import HajjPage from './pages/HajjPage'
 import UmrahPage from './pages/UmrahPage'
 import ContestPage from './pages/ContestPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 const AdminPage = lazy(() => import('./pages/AdminPage'))
 
@@ -26,7 +27,7 @@ export default function App() {
           <Suspense fallback={<div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',fontFamily:'Tajawal',color:'#1B3A4B'}}>جارٍ التحميل...</div>}>
             <AdminPage />
           </Suspense>
-        } />
+        } />\n        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </LangProvider>
   )

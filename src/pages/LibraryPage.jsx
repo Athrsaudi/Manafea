@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
 import { useLang } from "../lib/LangContext";
 import { useNavigate, Link } from "react-router-dom";
-import { createClient } from "@supabase/supabase-js";
 import Navbar from "../components/Navbar";
 
-const supabase = createClient(
-  "https://pxacnzpundghlojfldif.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4YWNuenB1bmRnaGxvamZsZGlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NDU4NjgsImV4cCI6MjA4ODMyMTg2OH0.GXnkjYc06QjGMRVOkzpGKh9wcnG0BIxEM-GfmTbM3Tk"
-);
 
 const langs = [
   { code: "ar", name: "العربية", dir: "rtl" },{ code: "en", name: "English", dir: "ltr" },{ code: "tr", name: "Türkçe", dir: "ltr" },{ code: "ur", name: "اردو", dir: "rtl" },{ code: "ms", name: "Melayu", dir: "ltr" },{ code: "fr", name: "Français", dir: "ltr" },{ code: "fa", name: "فارسی", dir: "rtl" },{ code: "bn", name: "বাংলা", dir: "ltr" },{ code: "hi", name: "हिन्दी", dir: "ltr" },

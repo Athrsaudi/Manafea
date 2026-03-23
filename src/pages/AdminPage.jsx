@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase as sb } from "../lib/supabase";
 import * as pdfjsLib from "pdfjs-dist";
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
 
-const sb = createClient(
-  "https://pxacnzpundghlojfldif.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4YWNuenB1bmRnaGxvamZsZGlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NDU4NjgsImV4cCI6MjA4ODMyMTg2OH0.GXnkjYc06QjGMRVOkzpGKh9wcnG0BIxEM-GfmTbM3Tk"
-);
 
 const LANGS = [
   {code:"ar",name:"العربية"},
@@ -117,14 +113,20 @@ function Login({ onLogin }) {
   const submit = async () => {
     setLoading(true); setErr("");
     // Simple check against admins table
-    const { data } = await sb.from("admins").select("id,username").eq("username", user).single();
-    if (data) {
-      // In production use bcrypt — here we check password directly
-      if (pass === "manafea2024") {
-        sessionStorage.setItem("admin_ok", "1");
-        onLogin();
-      } else setErr("كلمة المرور غير صحيحة");
-    } else setErr("المستخدم غير موجود");
+    const { data: verified } = await sb.rpc("verify_admin", { p_username: user, p_password: pass });
+    if (verified === true) {
+      // Create admin session token
+      const token = crypto.randomUUID();
+      const { data: admin } = await sb.from("admins").select("id").eq("username", user).single();
+      await sb.from("admin_sessions").insert({ token, admin_id: admin.id });
+      sessionStorage.setItem("admin_ok", "1");
+      sessionStorage.setItem("admin_token", token);
+      onLogin();
+    } else if (verified === false) {
+      setErr("كلمة المرور غير صحيحة");
+    } else {
+      setErr("المستخدم غير موجود");
+    }
     setLoading(false);
   };
 
@@ -979,7 +981,13 @@ export default function AdminPage() {
 
   if (!authed) return <><style>{CSS}</style><Login onLogin={()=>setAuthed(true)} /></>;
 
-  const logout = () => { sessionStorage.removeItem("admin_ok"); setAuthed(false); };
+  const logout = () => {
+    const token = sessionStorage.getItem("admin_token");
+    if (token) sb.from("admin_sessions").delete().eq("token", token).then(() => {});
+    sessionStorage.removeItem("admin_ok");
+    sessionStorage.removeItem("admin_token");
+    setAuthed(false);
+  };
 
   const needsLang = ["videos","books","hero","hajj","umrah","contest"].includes(section);
 
