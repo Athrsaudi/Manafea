@@ -98,6 +98,7 @@ export default function ManafaaHomepage() {
   const [cmt, setCmt] = useState("");
   const [sent, setSent] = useState(false);
   const [dbVids, setDbVids] = useState([]);
+  const [stats, setStats] = useState({ videos: 0, books: 0, visitors: 0, langs: 9 });
   const [dbBooks, setDbBooks] = useState([]);
 
   // جلب الفيديوهات المميزة والكتب من Supabase
@@ -136,6 +137,18 @@ export default function ManafaaHomepage() {
         } else { setDbBooks([]); }
       });
   }, [lang]);
+
+  // جلب الإحصائيات الحقيقية
+  useEffect(() => {
+    supabase.rpc("get_site_stats").then(({ data }) => {
+      if (data) setStats({
+        videos:   data.videos_count  || 0,
+        books:    data.books_count   || 0,
+        visitors: data.monthly_visitors || 0,
+        langs:    9,
+      });
+    });
+  }, []);
 
   const lo = langs.find(l => l.code === lang) || langs[0];
   const dir = lo.dir;
@@ -265,7 +278,7 @@ export default function ManafaaHomepage() {
       {/* Stats */}
       <section className="relative -mt-12 z-20 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {[{n:"500+",k:"s_vid",i:"🎬"},{n:"200+",k:"s_book",i:"📚"},{n:"9",k:"s_lang",i:"🌍"},{n:"50K+",k:"s_visit",i:"👥"}].map((s,i) => (
+          {[{n:stats.videos,k:"s_vid",i:"🎬"},{n:stats.books,k:"s_book",i:"📚"},{n:stats.langs,k:"s_lang",i:"🌍"},{n:stats.visitors,k:"s_visit",i:"👥"}].map((s,i) => (
             <div key={i} className="text-center">
               <span className="text-3xl mb-2 block">{s.i}</span>
               <div className="text-2xl sm:text-3xl font-black" style={{color:'var(--p)'}}>{s.n}</div>
