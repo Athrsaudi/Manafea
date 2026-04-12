@@ -173,18 +173,8 @@ export default function ManafaaContestPage() {
     if (!nm.trim() || !co.trim() || !ph.trim()) { setErr(true); return; }
     setErr(false);
     // Save to Supabase
-    try {
-      fetch("https://pxacnzpundghlojfldif.supabase.co/rest/v1/contest_submissions", {
-        method: "POST",
-        headers: {
-          apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4YWNuenB1bmRnaGxvamZsZGlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NDU4NjgsImV4cCI6MjA4ODMyMTg2OH0.GXnkjYc06QjGMRVOkzpGKh9wcnG0BIxEM-GfmTbM3Tk",
-          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4YWNuenB1bmRnaGxvamZsZGlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NDU4NjgsImV4cCI6MjA4ODMyMTg2OH0.GXnkjYc06QjGMRVOkzpGKh9wcnG0BIxEM-GfmTbM3Tk",
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
-        },
-        body: JSON.stringify({ full_name: nm, country: co, phone: ph, score, total_questions: quiz.length, lang })
-      });
-    } catch (e) {}
+    supaIns("contest_submissions", { full_name: nm, country: co, phone: ph, score, total_questions: quiz.length, lang })
+      .catch(e => console.error("خطأ في حفظ نتيجة المسابقة:", e));
     setStep("result");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
