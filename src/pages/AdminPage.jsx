@@ -196,7 +196,20 @@ function VideosSection({ lang }) {
     return t?.description || "";
   };
 
-  const ytId = (url) => url?.includes("watch?v=") ? url.split("watch?v=")[1] : url;
+  const ytId = (url) => {
+    if (!url) return url;
+    // Full URL: https://www.youtube.com/watch?v=VIDEO_ID
+    const watchMatch = url.match(/[?&]v=([^&]+)/);
+    if (watchMatch) return watchMatch[1];
+    // Short URL: https://youtu.be/VIDEO_ID
+    const shortMatch = url.match(/youtu\.be\/([^?&]+)/);
+    if (shortMatch) return shortMatch[1];
+    // Embed URL: https://www.youtube.com/embed/VIDEO_ID
+    const embedMatch = url.match(/youtube\.com\/embed\/([^?&]+)/);
+    if (embedMatch) return embedMatch[1];
+    // Already an ID (no slashes)
+    return url;
+  };
 
   const openAdd = () => {
     setForm({ video_url:"", is_featured:false, category_id: cats[0]?.id||"", title:"", description:"", sort_order: videos.length+1 });
@@ -295,8 +308,8 @@ function VideosSection({ lang }) {
             </div>
             <div className="modal-body">
               <div className="form-group">
-                <label className="form-label">معرف يوتيوب (YouTube ID)</label>
-                <input className="form-input" placeholder="مثال: https://www.youtube.com/watch?v=JLEnhiqiOqo" value={ytId(form.video_url)||""} onChange={e=>setForm({...form,video_url:`https://www.youtube.com/watch?v=${e.target.value}`})} />
+                <label className="form-label">معرف يوتيوب (YouTube ID) أو رابط الفيديو</label>
+                <input className="form-input" dir="ltr" placeholder="مثال: https://www.youtube.com/watch?v=JLEnhiqiOqo أو VIDEO_ID" value={form.video_url||""} onChange={e=>{const val=e.target.value.trim();const id=ytId(val);setForm({...form,video_url:id?`https://www.youtube.com/watch?v=${id}`:val});}} />
                 {form.video_url && <img src={`https://img.youtube.com/vi/${ytId(form.video_url)}/mqdefault.jpg`} style={{marginTop:8,borderRadius:8,width:"100%",maxHeight:160,objectFit:"cover"}} />}
               </div>
               <div className="form-group">
