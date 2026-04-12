@@ -113,20 +113,26 @@ function Login({ onLogin }) {
 
   const submit = async () => {
     setLoading(true); setErr("");
-    // Simple check against admins table
-    const { data: verified } = await sb.rpc("verify_admin", { p_username: user, p_password: pass });
-    if (verified === true) {
-      // Create admin session token
-      const token = crypto.randomUUID();
-      const { data: admin } = await sb.from("admins").select("id").eq("username", user).single();
-      await sb.from("admin_sessions").insert({ token, admin_id: admin.id });
-      sessionStorage.setItem("admin_ok", "1");
-      sessionStorage.setItem("admin_token", token);
-      onLogin();
-    } else if (verified === false) {
-      setErr("كلمة المرور غير صحيحة");
-    } else {
-      setErr("المستخدم غير موجود");
+    try {
+      const { data: verified, error: rpcErr } = await sb.rpc("verify_admin", { p_username: user, p_password: pass });
+      if (rpcErr) { setErr("خطأ في الاتصال: " + rpcErr.message); setLoading(false); return; }
+      if (verified === true) {
+        const token = crypto.randomUUID();
+        const { data: admin, error: adminErr } = await sb.from("admins").select("id").eq("username", user).single();
+        if (adminErr || !admin) { setErr("خطأ في جلب بيانات الأدمن"); setLoading(false); return; }
+        const { error: sessErr } = await sb.from("admin_sessions").insert({ token, admin_id: admin.id });
+        if (sessErr) { setErr("خطأ في إنشاء الجلسة: " + sessErr.message); setLoading(false); return; }
+        sessionStorage.setItem("admin_ok", "1");
+        sessionStorage.setItem("admin_token", token);
+        onLogin();
+      } else if (verified === false) {
+        setErr("كلمة المرور غير صحيحة");
+      } else {
+        setErr("المستخدم غير موجود");
+      }
+    } catch (e) {
+      console.error("خطأ في تسجيل الدخول:", e);
+      setErr("حدث خطأ غير متوقع — حاول مرة أخرى");
     }
     setLoading(false);
   };
@@ -459,7 +465,7 @@ function BooksSection({ lang }) {
                     <td><strong>{t.title||"—"}</strong></td>
                     <td style={{color:"var(--tl)"}}>{t.author||"—"}</td>
                     <td>{b.pages||0} صفحة</td>
-                    <td><a href={b.pdf_url} target="_blank" style={{color:"var(--g)",fontSize:".78rem"}}>فتح PDF ↗</a></td>
+                    <td><a href={b.pdf_url} target="_blank" rel="noopener noreferrer" style={{color:"var(--g)",fontSize:".78rem"}}>فتح PDF ↗</a></td>
                     <td>{b.sort_order}</td>
                     <td style={{display:"flex",gap:6}}>
                       <button className="btn btn-primary btn-sm" onClick={()=>openEdit(b)}>تعديل</button>
@@ -1132,7 +1138,7 @@ function AnalyticsSection() {
       {/* Umami note */}
       <div style={{marginTop:16,padding:"12px 16px",background:"rgba(200,169,81,0.08)",borderRadius:10,border:"1px solid rgba(200,169,81,0.2)",fontSize:"0.8rem",color:"#888"}}>
         💡 لإحصائيات أعمق مع خرائط جغرافية وتتبع حركة الزوار، أضف{" "}
-        <a href="https://umami.is" target="_blank" style={{color:"var(--g)"}}>Umami Analytics</a> (مجاني)
+        <a href="https://umami.is" target="_blank" rel="noopener noreferrer" style={{color:"var(--g)"}}>Umami Analytics</a> (مجاني)
       </div>
     </div>
   );
@@ -1156,7 +1162,9 @@ export default function AdminPage() {
 
   const logout = () => {
     const token = sessionStorage.getItem("admin_token");
-    if (token) sb.from("admin_sessions").delete().eq("token", token).then(() => {});
+    if (token) sb.from("admin_sessions").delete().eq("token", token)
+      .then(({ error }) => { if (error) console.error("خطأ في تسجيل الخروج:", error.message); })
+      .catch(e => console.error("خطأ في تسجيل الخروج:", e.message));
     sessionStorage.removeItem("admin_ok");
     sessionStorage.removeItem("admin_token");
     setAuthed(false);

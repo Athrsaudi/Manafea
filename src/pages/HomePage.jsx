@@ -111,7 +111,8 @@ export default function ManafaaHomepage() {
       .eq("is_featured", true)
       .order("sort_order")
       .limit(4)
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) { console.error("خطأ في جلب الفيديوهات:", error.message); return; }
         if (data?.length) {
           setDbVids(data.map(v => {
             const trans = v.video_translations?.find(t => t.lang === lang) || v.video_translations?.[0] || {};
@@ -120,7 +121,8 @@ export default function ManafaaHomepage() {
             return { t: trans.title || "", c: catTrans.name || "", ytId };
           }));
         } else { setDbVids([]); }
-      });
+      })
+      .catch(e => console.error("خطأ في جلب الفيديوهات:", e.message));
     // كتب
     supabase
       .from("books")
@@ -128,26 +130,31 @@ export default function ManafaaHomepage() {
       .eq("lang", lang)
       .order("sort_order")
       .limit(4)
-      .then(({ data }) => {
+      .then(({ data, error }) => {
+        if (error) { console.error("خطأ في جلب الكتب:", error.message); return; }
         if (data?.length) {
           setDbBooks(data.map(b => {
             const trans = b.book_translations?.find(t => t.lang === lang) || b.book_translations?.[0] || {};
             return { t: trans.title || "", a: trans.author || "", cover: b.cover_url || "" };
           }));
         } else { setDbBooks([]); }
-      });
+      })
+      .catch(e => console.error("خطأ في جلب الكتب:", e.message));
   }, [lang]);
 
   // جلب الإحصائيات الحقيقية
   useEffect(() => {
-    supabase.rpc("get_site_stats").then(({ data }) => {
-      if (data) setStats({
-        videos:   data.videos_count  || 0,
-        books:    data.books_count   || 0,
-        visitors: data.monthly_visitors || 0,
-        langs:    9,
-      });
-    });
+    supabase.rpc("get_site_stats")
+      .then(({ data, error }) => {
+        if (error) { console.error("خطأ في جلب الإحصائيات:", error.message); return; }
+        if (data) setStats({
+          videos:   data.videos_count  || 0,
+          books:    data.books_count   || 0,
+          visitors: data.monthly_visitors || 0,
+          langs:    9,
+        });
+      })
+      .catch(e => console.error("خطأ في جلب الإحصائيات:", e.message));
   }, []);
 
   const lo = langs.find(l => l.code === lang) || langs[0];
