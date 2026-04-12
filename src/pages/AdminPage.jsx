@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase as sb } from "../lib/supabase";
+import { supabase as sb, supaDelete } from "../lib/supabase";
 import * as pdfjsLib from "pdfjs-dist";
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
 
@@ -255,8 +255,9 @@ function VideosSection({ lang }) {
 
   const del = async (id) => {
     if (!confirm("هل تريد حذف هذا الفيديو؟")) return;
-    await sb.from("video_translations").delete().eq("video_id", id);
-    await sb.from("videos").delete().eq("id", id);
+    await supaDelete("video_translations", "video_id", id);
+    const { success, error } = await supaDelete("videos", "id", id);
+    if (!success) { alert("⚠️ فشل الحذف: " + error); return; }
     loadData();
   };
 
@@ -420,8 +421,9 @@ function BooksSection({ lang }) {
 
   const del = async (id) => {
     if(!confirm("هل تريد حذف هذا الكتاب؟")) return;
-    await sb.from("book_translations").delete().eq("book_id",id);
-    await sb.from("books").delete().eq("id",id);
+    await supaDelete("book_translations", "book_id", id);
+    const { success, error } = await supaDelete("books", "id", id);
+    if (!success) { alert("⚠️ فشل الحذف: " + error); return; }
     loadData();
   };
 
@@ -635,8 +637,9 @@ function HeroSection({ lang }) {
 
   const del = async (id) => {
     if(!confirm("حذف هذه الشريحة؟")) return;
-    await sb.from("hero_slide_translations").delete().eq("slide_id",id);
-    await sb.from("hero_slides").delete().eq("id",id);
+    await supaDelete("hero_slide_translations", "slide_id", id);
+    const { success, error } = await supaDelete("hero_slides", "id", id);
+    if (!success) { alert("⚠️ فشل الحذف: " + error); return; }
     loadData();
   };
 
@@ -747,8 +750,9 @@ function StepsSection({ lang, type }) {
 
   const del = async (id) => {
     if(!confirm("حذف هذه الخطوة؟")) return;
-    await sb.from(transTable).delete().eq("step_id",id);
-    await sb.from(table).delete().eq("id",id);
+    await supaDelete(transTable, "step_id", id);
+    const { success, error } = await supaDelete(table, "id", id);
+    if (!success) { alert("⚠️ فشل الحذف: " + error); return; }
     loadData();
   };
 
@@ -854,8 +858,9 @@ function ContestSection({ lang }) {
 
   const del = async (id) => {
     if(!confirm("حذف هذا السؤال؟")) return;
-    await sb.from("contest_question_translations").delete().eq("question_id",id);
-    await sb.from("contest_questions").delete().eq("id",id);
+    await supaDelete("contest_question_translations", "question_id", id);
+    const { success, error } = await supaDelete("contest_questions", "id", id);
+    if (!success) { alert("⚠️ فشل الحذف: " + error); return; }
     loadData();
   };
 
@@ -947,7 +952,8 @@ function FeedbackSection() {
 
   const del = async (id) => {
     if(!confirm("حذف هذا التقييم؟")) return;
-    await sb.from("feedback").delete().eq("id",id);
+    const { success, error } = await supaDelete("feedback", "id", id);
+    if (!success) { alert("⚠️ فشل الحذف: " + error); return; }
     loadData();
   };
 

@@ -16,6 +16,40 @@ export const supaInsert = async (table, data) => {
   }
 }
 
+/**
+ * حذف صف من جدول مع التحقق من نجاح الحذف فعلياً
+ * يُعيد { success, error }
+ */
+export const supaDelete = async (table, column, value) => {
+  try {
+    const { data, error, count } = await supabase
+      .from(table)
+      .delete({ count: 'exact' })
+      .eq(column, value)
+      .select()
+
+    if (error) {
+      console.error(`خطأ في حذف من ${table}:`, error.message)
+      return { success: false, error: error.message }
+    }
+
+    // التحقق من أن الحذف تم فعلياً (عدد الصفوف المحذوفة > 0)
+    const deletedCount = data?.length ?? count ?? 0
+    if (deletedCount === 0) {
+      console.warn(`لم يتم حذف أي صف من ${table} (RLS قد يمنع الحذف)`)
+      return { 
+        success: false, 
+        error: "لم يتم الحذف — تأكد من صلاحيات قاعدة البيانات (RLS)" 
+      }
+    }
+
+    return { success: true, error: null }
+  } catch (e) {
+    console.error(`خطأ غير متوقع في حذف من ${table}:`, e)
+    return { success: false, error: e.message }
+  }
+}
+
 export const supaFetch = async (table, filters = {}) => {
   try {
     let query = supabase.from(table).select('*')
