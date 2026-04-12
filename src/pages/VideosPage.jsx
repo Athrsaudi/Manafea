@@ -133,7 +133,14 @@ export default function ManafaaVideosPage() {
       data.forEach(v => {
         const cat = v.video_categories?.slug;
         const trans = v.video_translations?.find(t => t.lang === lang) || v.video_translations?.[0] || {};
-        const ytId = v.video_url?.includes("watch?v=") ? v.video_url.split("watch?v=")[1] : v.video_url;
+        const ytId = (() => {
+          const u = v.video_url;
+          if (!u) return u;
+          const wm = u.match(/[?&]v=([^&]+)/); if (wm) return wm[1];
+          const sm = u.match(/youtu\.be\/([^?&]+)/); if (sm) return sm[1];
+          const em = u.match(/youtube\.com\/embed\/([^?&]+)/); if (em) return em[1];
+          return u;
+        })();
         if (!grouped[cat]) grouped[cat] = [];
         grouped[cat].push({
           t: trans.title || "",
