@@ -296,7 +296,7 @@ function VideosSection({ lang }) {
             <div className="modal-body">
               <div className="form-group">
                 <label className="form-label">معرف يوتيوب (YouTube ID)</label>
-                <input className="form-input" placeholder="مثال: JLEnhiqiOqo" value={ytId(form.video_url)||""} onChange={e=>setForm({...form,video_url:`https://www.youtube.com/watch?v=${e.target.value}`})} />
+                <input className="form-input" placeholder="مثال: https://www.youtube.com/watch?v=JLEnhiqiOqo" value={ytId(form.video_url)||""} onChange={e=>setForm({...form,video_url:`https://www.youtube.com/watch?v=${e.target.value}`})} />
                 {form.video_url && <img src={`https://img.youtube.com/vi/${ytId(form.video_url)}/mqdefault.jpg`} style={{marginTop:8,borderRadius:8,width:"100%",maxHeight:160,objectFit:"cover"}} />}
               </div>
               <div className="form-group">
@@ -1106,6 +1106,14 @@ function AnalyticsSection() {
 }
 
 // ── MAIN ADMIN ──
+
+function extractYoutubeId(input){
+  if(!input)return '';
+  const t=input.trim();
+  if(/^[a-zA-Z0-9_-]{11}$/.test(t))return t;
+  const m=t.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+  return m?m[1]:t;
+}
 export default function AdminPage() {
   const [authed, setAuthed] = useState(!!sessionStorage.getItem("admin_ok"));
   const [section, setSection] = useState("videos");
