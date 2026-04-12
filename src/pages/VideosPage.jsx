@@ -134,11 +134,28 @@ export default function ManafaaVideosPage() {
         const cat = v.video_categories?.slug;
         const trans = v.video_translations?.find(t => t.lang === lang) || v.video_translations?.[0] || {};
         const ytId = (() => {
-          const u = v.video_url;
+          let u = v.video_url;
           if (!u) return u;
-          const wm = u.match(/[?&]v=([^&]+)/); if (wm) return wm[1];
+          // Handle double-URL case: youtube.com/watch?v=https://youtu.be/ID
+          const vParam = u.match(/[?&]v=([^&]+)/);
+          if (vParam) {
+            const val = decodeURIComponent(vParam[1]);
+            // Check if the v= value is itself a URL
+            const innerShort = val.match(/youtu\.be\/([^?&]+)/);
+            if (innerShort) return innerShort[1];
+            const innerWatch = val.match(/[?&]v=([^&]+)/);
+            if (innerWatch) return innerWatch[1];
+            // If it looks like a plain ID (no slashes/dots), use it
+            if (/^[A-Za-z0-9_-]{8,15}$/.test(val)) return val;
+            // Fallback: try to extract ID-like pattern from the value
+            const idMatch = val.match(/([A-Za-z0-9_-]{11})/);
+            if (idMatch) return idMatch[1];
+            return val;
+          }
           const sm = u.match(/youtu\.be\/([^?&]+)/); if (sm) return sm[1];
           const em = u.match(/youtube\.com\/embed\/([^?&]+)/); if (em) return em[1];
+          // Already an ID
+          if (/^[A-Za-z0-9_-]{8,15}$/.test(u)) return u;
           return u;
         })();
         if (!grouped[cat]) grouped[cat] = [];
@@ -440,9 +457,15 @@ export default function ManafaaVideosPage() {
             <div className="p-6 sm:p-8">
               <h2 className="text-xl sm:text-2xl font-black mb-3" style={{ color: 'var(--primary)' }}>{activeVideo.t}</h2>
               <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-light)' }}>{activeVideo.d}</p>
-              <button className="btn-primary w-full py-3.5 rounded-xl text-white font-bold text-sm">
+              <a
+                href={activeVideo.ytId ? `https://www.youtube.com/watch?v=${activeVideo.ytId}` : '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary w-full py-3.5 rounded-xl text-white font-bold text-sm block text-center"
+                style={{ textDecoration: 'none' }}
+              >
                 {t("watch_now")} {arr}
-              </button>
+              </a>
             </div>
           </div>
         </div>

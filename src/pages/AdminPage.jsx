@@ -198,9 +198,22 @@ function VideosSection({ lang }) {
 
   const ytId = (url) => {
     if (!url) return url;
-    // Full URL: https://www.youtube.com/watch?v=VIDEO_ID
+    // Handle double-URL case: youtube.com/watch?v=https://youtu.be/ID
     const watchMatch = url.match(/[?&]v=([^&]+)/);
-    if (watchMatch) return watchMatch[1];
+    if (watchMatch) {
+      const val = decodeURIComponent(watchMatch[1]);
+      // Check if the v= value is itself a URL (double-URL)
+      const innerShort = val.match(/youtu\.be\/([^?&]+)/);
+      if (innerShort) return innerShort[1];
+      const innerWatch = val.match(/[?&]v=([^&]+)/);
+      if (innerWatch) return innerWatch[1];
+      // Plain video ID
+      if (/^[A-Za-z0-9_-]{8,15}$/.test(val)) return val;
+      // Fallback: extract 11-char ID pattern
+      const idMatch = val.match(/([A-Za-z0-9_-]{11})/);
+      if (idMatch) return idMatch[1];
+      return val;
+    }
     // Short URL: https://youtu.be/VIDEO_ID
     const shortMatch = url.match(/youtu\.be\/([^?&]+)/);
     if (shortMatch) return shortMatch[1];
@@ -208,6 +221,7 @@ function VideosSection({ lang }) {
     const embedMatch = url.match(/youtube\.com\/embed\/([^?&]+)/);
     if (embedMatch) return embedMatch[1];
     // Already an ID (no slashes)
+    if (/^[A-Za-z0-9_-]{8,15}$/.test(url)) return url;
     return url;
   };
 
