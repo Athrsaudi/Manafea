@@ -174,7 +174,7 @@ export default function Navbar() {
 
           {/* Mobile Menu */}
           {mob && (
-            <div className="lg:hidden pb-3" style={{borderTop:'1px solid rgba(255,255,255,.08)'}}>
+            <div className="lg:hidden pb-3" style={{position:"relative",zIndex:60,borderTop:'1px solid rgba(255,255,255,.08)'}}>
               <div className="pt-2 space-y-1">
                 {NAV_LINKS.map((n, i) => (
                   <Link key={i} to={n.h} onClick={() => setMob(false)}
@@ -203,8 +203,8 @@ export default function Navbar() {
           )}
         </div>
 
-        {(showLM || mob) && (
-          <div className="fixed inset-0 z-40" onClick={() => { setShowLM(false); setMob(false); }}/>
+        {showLM && (
+          <div className="fixed inset-0 z-40" onClick={() => { setShowLM(false); }}/>
         )}
       </nav>
     </div>
