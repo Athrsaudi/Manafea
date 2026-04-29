@@ -89,7 +89,7 @@ const QHI = [
 ];
 
 const QBY = { ar: QAR, en: QEN, tr: QTR, ur: QUR, ms: QMS, fr: QFR, fa: QFA, bn: QBN, hi: QHI };
-const QCOUNT = 5;
+const QCOUNT = 3;
 
 function shuffleArr(arr) {
   const a = [...arr];
@@ -100,6 +100,113 @@ function shuffleArr(arr) {
   return a;
 }
 
+
+// Countries per language
+const COUNTRIES = {
+  ar: ["المملكة العربية السعودية","مصر","الإمارات","الكويت","قطر","البحرين","عُمان","الأردن","لبنان","العراق","سوريا","اليمن","المغرب","تونس","الجزائر","ليبيا","السودان","فلسطين","باكستان","إندونيسيا","ماليزيا","تركيا","إيران","الهند","بنغلاديش","أفغانستان","نيجيريا","السنغال","مالي","النيجر","فرنسا","ألمانيا","المملكة المتحدة","الولايات المتحدة","كندا","أستراليا","دول أخرى"],
+  en: ["Saudi Arabia","Egypt","UAE","Kuwait","Qatar","Bahrain","Oman","Jordan","Lebanon","Iraq","Syria","Yemen","Morocco","Tunisia","Algeria","Libya","Sudan","Palestine","Pakistan","Indonesia","Malaysia","Turkey","Iran","India","Bangladesh","Afghanistan","Nigeria","Senegal","Mali","Niger","France","Germany","UK","USA","Canada","Australia","Other"],
+  tr: ["Suudi Arabistan","Mısır","BAE","Kuveyt","Katar","Bahreyn","Umman","Ürdün","Lübnan","Irak","Suriye","Yemen","Fas","Tunus","Cezayir","Libya","Sudan","Pakistan","Endonezya","Malezya","Türkiye","İran","Hindistan","Bangladeş","Afganistan","Nijerya","Fransa","Almanya","İngiltere","ABD","Kanada","Avustralya","Diğer"],
+  ur: ["سعودی عرب","مصر","متحدہ عرب امارات","کویت","قطر","بحرین","عمان","اردن","لبنان","عراق","شام","یمن","مراکش","تیونس","الجزائر","لیبیا","سوڈان","فلسطین","پاکستان","انڈونیشیا","ملائیشیا","ترکیہ","ایران","ہندوستان","بنگلادیش","افغانستان","نائجیریا","فرانس","جرمن","برطانیہ","امریکہ","کینیڈا","آسٹریلیا","دیگر"],
+  ms: ["Arab Saudi","Mesir","UAE","Kuwait","Qatar","Bahrain","Oman","Jordan","Lubnan","Iraq","Syria","Yaman","Maghribi","Tunisia","Algeria","Libya","Sudan","Palestin","Pakistan","Indonesia","Malaysia","Turki","Iran","India","Bangladesh","Afghanistan","Nigeria","Perancis","Jerman","UK","USA","Kanada","Australia","Lain-lain"],
+  fr: ["Arabie Saoudite","Egypte","EAU","Koweït","Qatar","Bahreïn","Oman","Jordanie","Liban","Irak","Syrie","Yémen","Maroc","Tunisie","Algérie","Libye","Soudan","Palestine","Pakistan","Indonésie","Malaisie","Turquie","Iran","Inde","Bangladesh","Afghanistan","Nigeria","France","Allemagne","Royaume-Uni","USA","Canada","Australie","Autre"],
+  fa: ["عربستان سعودی","مصر","امارات","کویت","قطر","بحرین","عمان","اردن","لبنان","عراق","سوریه","یمن","مراکش","تونس","الجزایر","لیبی","سودان","فلسطین","پاکستان","اندونزی","مالزی","ترکیه","ایران","هند","بنگلادش","افغانستان","نیجریه","فرانسه","آلمان","بریتانیا","آمریکا","کانادا","استرالیا","سایر"],
+  bn: ["সৌদি আরব","মিশর","ইউএই","কুয়েত","কাতার","বাহরাইন","ওমান","জর্ডান","লেবানন","ইরাক","সিরিয়া","ইয়েমেন","মরক্কো","তিউনিসিয়া","আলজেরিয়া","লিবিয়া","সুদান","ফিলিস্তিন","পাকিস্তান","ইন্দোনেশিয়া","মালয়েশিয়া","তুরস্ক","ইরান","ভারত","বাংলাদেশ","আফগানিস্তান","নাইজেরিয়া","ফ্রান্স","জার্মানি","যুক্তরাজ্য","যুক্তরাষ্ট্র","কানাডা","অস্ট্রেলিয়া","অন্যান্য"],
+  hi: ["सऊदी अरब","मिस्र","यूएई","कुवैत","क़तर","बहरीन","ओमान","जॉर्डन","लेबनान","इराक़","सीरिया","यमन","मोरक्को","ट्यूनीशिया","अल्जीरिया","लीबिया","सूडान","फ़िलिस्तीन","पाकिस्तान","इंडोनेशिया","मलेशिया","तुर्की","ईरान","भारत","बांग्लादेश","अफ़ग़ानिस्तान","नाइजीरिया","फ़्रांस","जर्मनी","यूके","यूएसए","कनाडा","ऑस्ट्रेलिया","अन्य"],
+};
+
+const MOTIV = {
+  ar: [
+    "وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا — سورة الطلاق",
+    "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ — حديث شريف",
+    "مَن سَلَكَ طَرِيقًا يَلتَمِسُ فيهِ عِلمًا سَهَّلَ اللهُ لهُ طَرِيقًا إلى الجَنَّةِ — مسلم",
+    "خَيرُكُمْ مَنْ تَعلَّمَ القُرآنَ وعَلَّمَهُ — البخاري",
+    "إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ — متفق عليه"
+  ],
+  en: [
+    "Whoever fears Allah, He will make a way out for him — Surah At-Talaq",
+    "Seeking knowledge is an obligation upon every Muslim — Hadith",
+    "Whoever takes a path seeking knowledge, Allah eases a path to Paradise — Muslim",
+    "The best of you are those who learn the Quran and teach it — Bukhari",
+    "Actions are by intentions — Agreed upon"
+  ],
+  tr: [
+    "Kim Allah'tan korkarsa Allah ona bir çıkış yolu açar — Talak Suresi",
+    "İlim öğrenmek her Müslümana farzdır — Hadis",
+    "Kim ilim yoluna girerse Allah ona cennete giden yolu kolaylaştırır — Müslim",
+    "En hayırlınız Kur'an'ı öğrenen ve öğretendir — Buhari",
+    "Ameller niyetlere göredir — Müttefekun aleyh"
+  ],
+  ur: [
+    "جو اللہ سے ڈرے اللہ اسے راستہ نکال دیتا ہے — سورة الطلاق",
+    "علم حاصل کرنا ہر مسلمان پر فرض ہے — حدیث",
+    "جو علم کی راہ چلے اللہ اسے جنت کا راستہ آسان کر دیتا ہے — مسلم",
+    "تم میں بہترین وہ ہے جو قرآن سیکھے اور سکھائے — بخاری",
+    "اعمال کا دارومدار نیتوں پر ہے — متفق علیہ"
+  ],
+  ms: [
+    "Sesiapa yang bertakwa kepada Allah, Dia akan memberikan jalan keluar — Surah At-Talaq",
+    "Menuntut ilmu adalah fardhu kepada setiap Muslim — Hadis",
+    "Sesiapa yang melalui jalan mencari ilmu, Allah mudahkan jalan ke syurga — Muslim",
+    "Sebaik-baik kamu ialah yang mempelajari Al-Quran dan mengajarnya — Bukhari",
+    "Sesungguhnya amalan itu dengan niat — Muttafaqun alaih"
+  ],
+  fr: [
+    "Quiconque craint Allah, Il lui ouvre une issue — Sourate At-Talaq",
+    "Chercher le savoir est une obligation pour tout Musulman — Hadith",
+    "Quiconque emprunte un chemin vers le savoir, Allah lui facilite le paradis — Muslim",
+    "Le meilleur d'entre vous est celui qui apprend le Coran et l'enseigne — Bukhari",
+    "Les actes ne valent que par les intentions — Hadith convenu"
+  ],
+  fa: [
+    "هر کس از خدا بترسد خداوند راهی برای او می‌گشاید — سوره طلاق",
+    "طلب علم بر هر مسلمانی فریضه است — حدیث",
+    "هر کس در راه علم گام بردارد خداوند راه بهشت را آسان می‌کند — مسلم",
+    "بهترین شما کسی است که قرآن بیاموزد و بیاموزاند — بخاری",
+    "همانا اعمال بر اساس نیت‌هاست — متفق علیه"
+  ],
+  bn: [
+    "যে আল্লাহকে ভয় করে আল্লাহ তার জন্য পথ বের করে দেন — সূরা আত-তালাক",
+    "জ্ঞান অর্জন করা প্রতিটি মুসলিমের উপর ফরজ — হাদীস",
+    "যে জ্ঞানের পথে চলে আল্লাহ তার জান্নাতের পথ সহজ করেন — মুসলিম",
+    "তোমাদের মধ্যে সর্বোত্তম সে যে কুরআন শেখে ও শেখায় — বুখারী",
+    "নিশ্চয়ই কাজ নিয়তের উপর নির্ভরশীল — মুত্তাফাকুন আলাইহি"
+  ],
+  hi: [
+    "जो अल्लाह से डरे अल्लाह उसके लिए राह निकाल देता है — सूरह अत-तलाक़",
+    "इल्म हासिल करना हर मुसलमान पर फ़र्ज़ है — हदीस",
+    "जो इल्म की राह चले अल्लाह उसके लिए जन्नत का रास्ता आसान कर देता है — मुस्लिम",
+    "तुम में बेहतरीन वो है जो क़ुरआन सीखे और सिखाए — बुख़ारी",
+    "आमाल का दारोमदार नीयतों पर है — मुत्तफ़क़ अलैह"
+  ]
+};
+
+function CountryDropdown({ value, onChange, lang, dir, placeholder, hasError }) {
+  const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+  const countries = COUNTRIES[lang] || COUNTRIES.en;
+  const filtered = countries.filter(c => c.toLowerCase().includes(search.toLowerCase()));
+  return (
+    <div style={{ position: "relative", marginBottom: "12px" }}>
+      <div onClick={() => setOpen(!open)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", borderRadius: "12px", border: `2px solid ${hasError && !value ? "#ef4444" : open ? "#C8A951" : "#E5E7EB"}`, background: "white", cursor: "pointer", fontSize: "14px", color: value ? "#1a1a2e" : "#9CA3AF", fontFamily: "Tajawal" }}>
+        <span>{value || placeholder}</span>
+        <span style={{ transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform .2s", fontSize: "10px", color: "#9CA3AF" }}>▼</span>
+      </div>
+      {open && (
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: "white", borderRadius: "12px", border: "2px solid #E5E7EB", boxShadow: "0 8px 30px rgba(0,0,0,.12)", zIndex: 999, maxHeight: "220px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <div style={{ padding: "10px" }}>
+            <input autoFocus value={search} onChange={e => setSearch(e.target.value)} placeholder="🔍" style={{ width: "100%", padding: "8px 12px", borderRadius: "8px", border: "1px solid #E5E7EB", fontSize: "13px", fontFamily: "Tajawal", direction: dir, outline: "none" }} />
+          </div>
+          <div style={{ overflowY: "auto", flex: 1 }}>
+            {filtered.map((c, i) => (
+              <div key={i} onClick={() => { onChange(c); setOpen(false); setSearch(""); }} style={{ padding: "10px 16px", fontSize: "13px", cursor: "pointer", background: c === value ? "rgba(200,169,81,.1)" : "white", color: c === value ? "#9E832E" : "#1a1a2e", fontFamily: "Tajawal" }}>{c}</div>
+            ))}
+            {filtered.length === 0 && <div style={{ padding: "16px", textAlign: "center", color: "#9CA3AF", fontSize: "13px" }}>—</div>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 /* ═══ Main Component ═══ */
 export default function ManafaaContestPage() {
   const { lang, setLang } = useLang();
@@ -269,14 +376,9 @@ export default function ManafaaContestPage() {
               <div style={{ fontSize: "40px", marginBottom: "8px" }}>📝</div>
               <h2 style={{ fontWeight: 900, color: "#1B3A4B" }}>{u.reg}</h2>
             </div>
-            {[
-              [nm, setNm, u.nm, "text"],
-              [co, setCo, u.co, "text"],
-              [ph, setPh, u.ph, "tel"]
-            ].map(([val, set, placeholder, type], i) => (
-              <input key={i} value={val} onChange={e => set(e.target.value)} placeholder={placeholder} type={type}
-                style={{ display: "block", width: "100%", padding: "14px 16px", marginBottom: "12px", borderRadius: "12px", border: `2px solid ${err && !val.trim() ? "#ef4444" : "#E5E7EB"}`, fontSize: "14px", fontFamily: "Tajawal", direction: type === "tel" ? "ltr" : dir, textAlign: type === "tel" ? "left" : dir === "rtl" ? "right" : "left", outline: "none" }} />
-            ))}
+            <input value={nm} onChange={e => setNm(e.target.value)} placeholder={u.nm} type="text" style={{ display: "block", width: "100%", padding: "14px 16px", marginBottom: "12px", borderRadius: "12px", border: `2px solid ${err && !nm.trim() ? "#ef4444" : "#E5E7EB"}`, fontSize: "14px", fontFamily: "Tajawal", direction: dir, outline: "none" }} />
+            <CountryDropdown value={co} onChange={setCo} lang={lang} dir={dir} placeholder={u.co} hasError={err} />
+            <input value={ph} onChange={e => setPh(e.target.value)} placeholder={u.ph} type="tel" style={{ display: "block", width: "100%", padding: "14px 16px", marginBottom: "12px", borderRadius: "12px", border: `2px solid ${err && !ph.trim() ? "#ef4444" : "#E5E7EB"}`, fontSize: "14px", fontFamily: "Tajawal", direction: "ltr", textAlign: "left", outline: "none" }} />
             {err && <p style={{ textAlign: "center", color: "#ef4444", fontSize: "12px", marginBottom: "8px" }}>{u.req}</p>}
             <button onClick={submitForm} style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg,#9E832E,#C8A951)", color: "white", fontWeight: "bold", fontSize: "14px", cursor: "pointer", fontFamily: "Tajawal" }}>{u.sub}</button>
           </div>
@@ -292,7 +394,10 @@ export default function ManafaaContestPage() {
               <div style={{ height: "100%", borderRadius: "5px", width: `${pct}%`, background: grade.c }}></div>
             </div>
             <p style={{ fontSize: "24px", fontWeight: "bold", color: grade.c }}>{pct}%</p>
-            <p style={{ fontSize: "16px", color: "#6B7280", marginBottom: "24px" }}>{grade.t}</p>
+            <p style={{ fontSize: "16px", color: "#6B7280", marginBottom: "16px" }}>{grade.t}</p>
+            <div style={{ background: "rgba(200,169,81,.06)", border: "1px solid rgba(200,169,81,.25)", borderRadius: "14px", padding: "16px 20px", marginBottom: "24px" }}>
+              <p style={{ fontSize: "13px", fontFamily: "Amiri,serif", color: "#1B3A4B", lineHeight: 2, textAlign: "center" }}>{(MOTIV[lang] || MOTIV.ar)[Math.floor(Math.random() * 5)]}</p>
+            </div>
             <button onClick={() => { buildQuiz(); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg,#9E832E,#C8A951)", color: "white", fontWeight: "bold", fontSize: "14px", cursor: "pointer", fontFamily: "Tajawal" }}>{u.nq}</button>
           </div>
         ) : null}
