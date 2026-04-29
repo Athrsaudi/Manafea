@@ -235,10 +235,8 @@ export default function ManafaaHomepage() {
         <IP/>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center" style={{minHeight:'85vh'}}>
           <div className="mb-8 afu" style={{animationDelay:'.2s'}}>
-            <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full flex items-center justify-center relative" style={{background:'rgba(200,169,81,.1)',border:'2px solid rgba(200,169,81,.3)'}}>
-              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full flex items-center justify-center" style={{background:'rgba(200,169,81,.15)'}}>
-                <span className="text-4xl sm:text-5xl font-black qf" style={{color:'var(--g)'}}>{t("hero_title")}</span>
-              </div>
+            <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden" style={{border:'3px solid rgba(200,169,81,.5)',boxShadow:'0 0 40px rgba(200,169,81,.2)'}}>
+              <img src="/logo.jpg" alt="منافع" className="w-full h-full object-cover" />
             </div>
           </div>
 
