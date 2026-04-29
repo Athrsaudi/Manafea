@@ -142,7 +142,7 @@ const StepView=({stations,cur,setCur,t,dir,onBack})=>{
         </div></div>
       </div>
       <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-10 mb-6" style={{border:'1px solid rgba(200,169,81,0.1)'}}><p className="text-base sm:text-lg leading-[2] quran-font" style={{color:'#1a1a2e'}}>{s.d}</p></div>
-      {s.du&&<div className="rounded-3xl p-6 sm:p-8 mb-8" style={{background:'rgba(200,169,81,0.06)',border:'1px solid rgba(200,169,81,0.2)'}}><div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background:'rgba(200,169,81,0.15)'}}><span>🤲</span></div><h3 className="text-sm font-bold" style={{color:'#9E832E'}}>{t("dua")}</h3></div><p className="text-lg sm:text-xl leading-[2] quran-font text-center" style={{color:'#1B3A4B',direction:'rtl'}}>{s.du}</p></div>}
+      
       <div className="flex gap-3"><button disabled={cur===0} onClick={()=>go(cur-1)} className="flex-1 py-4 rounded-xl font-bold text-sm" style={{background:cur===0?'#E5E7EB':'#1B3A4B',color:cur===0?'#9CA3AF':'white',opacity:cur===0?.5:1}}>{dir==="rtl"?"→":"←"} {t("prev")}</button><button disabled={cur===total-1} onClick={()=>go(cur+1)} className="flex-1 py-4 rounded-xl font-bold text-sm text-white" style={{background:'linear-gradient(135deg,#9E832E,#C8A951)'}}>{cur===total-1?"✓":t("next")} {cur<total-1?(dir==="rtl"?"←":"→"):""}</button></div>
       <div className="flex justify-center gap-2 mt-6">{stations.map((_,i)=><button key={i} onClick={()=>go(i)} className="h-2 rounded-full transition-all" style={{width:i===cur?'24px':'8px',background:i===cur?'#C8A951':i<cur?'#1B3A4B':'#D1D5DB'}}/>)}</div>
     </div>
