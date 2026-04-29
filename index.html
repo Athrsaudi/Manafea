@@ -16,9 +16,31 @@
         font-family: 'Tajawal', 'Segoe UI', sans-serif !important;
       }
     </style>
+  
+    <style id="splash-style">
+      #splash{
+        position:fixed;inset:0;background:#1B3A4B;
+        display:flex;align-items:center;justify-content:center;
+        z-index:9999;transition:opacity .5s ease;
+      }
+      #splash img{width:180px;height:180px;border-radius:50%;object-fit:cover;box-shadow:0 8px 40px rgba(0,0,0,.4);}
+      #splash.hide{opacity:0;pointer-events:none;}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    
+  <div id="splash">
+    <img src="/logo.jpg" alt="منافع" />
+  </div>
+  <div id="root"></div>
+  <script>
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        var s = document.getElementById('splash');
+        if(s){ s.classList.add('hide'); setTimeout(function(){ s.remove(); }, 600); }
+      }, 800);
+    });
+  </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
