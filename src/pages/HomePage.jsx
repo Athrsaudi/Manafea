@@ -87,6 +87,49 @@ const IP = () => (
   </svg>
 );
 
+
+// Contest Banner translations
+const CB = {
+  ar: { pre: "جديد!", title: "سارع وادخل مسابقة منافع", sub: "اختبر معلوماتك الإسلامية واكسب جوائز قيمة", btn: "ابدأ الآن »" },
+  en: { pre: "New!", title: "Join the Manafea Contest", sub: "Test your Islamic knowledge and win prizes", btn: "Start Now »" },
+  tr: { pre: "Yeni!", title: "Menafi Yarışmasına Katıl", sub: "İslam bilginizi test edin ve ödüller kazanın", btn: "Hemen Başla »" },
+  ur: { pre: "نیا!", title: "منافع مقابلے میں شامل ہوں", sub: "اپنا اسلامی علم جانچیں", btn: "ابھی شروع کریں »" },
+  ms: { pre: "Baru!", title: "Sertai Pertandingan Manafea", sub: "Uji pengetahuan Islam anda dan menang hadiah", btn: "Mula Sekarang »" },
+  fr: { pre: "Nouveau!", title: "Participez au Concours Manafea", sub: "Testez vos connaissances islamiques", btn: "Commencer »" },
+  fa: { pre: "جدید!", title: "در مسابقه منافع شرکت کنید", sub: "دانش اسلامی خود را بیازمایید", btn: "همین الان »" },
+  bn: { pre: "নতুন!", title: "মানাফেয়া প্রতিযোগিতায় যোগ দিন", sub: "ইসলামি জ্ঞান যাচাই করুন", btn: "এখনই শুরু »" },
+  hi: { pre: "नया!", title: "मनाफ़ेआ प्रतियोगिता में शामिल हों", sub: "अपना इस्लामी ज्ञान जाँचें", btn: "अभी शुरु करें »" },
+};
+
+function ContestBanner({ lang, dir }) {
+  const c = CB[lang] || CB.ar;
+  const [visible, setVisible] = useState(true);
+  if (!visible) return null;
+  return (
+    <div style={{ background: 'linear-gradient(135deg,#0F2530,#1B3A4B)', borderBottom: '2px solid rgba(200,169,81,.4)', padding: '0', overflow: 'hidden', position: 'relative' }}>
+      {/* Animated shimmer line */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg,transparent,#C8A951,transparent)', animation: 'shimmer 2s linear infinite', backgroundSize: '200% 100%' }} />
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+          <span style={{ fontSize: '24px', flexShrink: 0 }}>🏆</span>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <span style={{ background: '#C8A951', color: '#0F2530', fontSize: '10px', fontWeight: 900, padding: '2px 8px', borderRadius: '20px', flexShrink: 0 }}>{c.pre}</span>
+              <span style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>{c.title}</span>
+            </div>
+            <p style={{ color: 'rgba(255,255,255,.6)', fontSize: '12px', margin: '2px 0 0 0' }}>{c.sub}</p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <a href="/contest" style={{ background: 'linear-gradient(135deg,#C8A951,#B8942E)', color: '#0F2530', fontWeight: 900, fontSize: '13px', padding: '8px 20px', borderRadius: '20px', textDecoration: 'none', whiteSpace: 'nowrap', display: 'inline-block', transition: 'transform .2s', boxShadow: '0 4px 15px rgba(200,169,81,.3)' }}>
+            {c.btn}
+          </a>
+          <button onClick={() => setVisible(false)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,.4)', fontSize: '18px', cursor: 'pointer', padding: '4px 8px', lineHeight: 1 }}>×</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 export default function ManafaaHomepage() {
   const navigate = useNavigate();
   const { lang, setLang } = useLang();
@@ -228,6 +271,7 @@ export default function ManafaaHomepage() {
       <style>{CSS}</style>
 
       <Navbar />
+      <ContestBanner lang={lang} dir={dir} />
 
 
       {/* Hero */}
