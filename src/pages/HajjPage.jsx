@@ -113,7 +113,9 @@ const CircleMap=({stations,onSelect,t})=>{
           return <g key={i} style={{cursor:'pointer'}} onClick={()=>onSelect(i)}>
             <circle cx={cx} cy={cy} r="3.5" fill="#E5E7EB" stroke="white" strokeWidth="0.8"/>
             <text x={cx} y={cy+0.5} textAnchor="middle" dominantBaseline="middle" fontSize="2.2" fill="#1B3A4B">{s.s}</text>
-            <text x={lx} y={ly} textAnchor={isR?"start":"end"} dominantBaseline="middle" fontSize="1.6" fill="#6B7280" fontWeight="600" fontFamily="Tajawal">{s.t.length>14?s.t.slice(0,14)+'…':s.t}</text>
+            <foreignObject x={isR?lx-0.5:lx-14} y={ly-4} width="14" height="10" style={{overflow:'visible'}}>
+              <div xmlns="http://www.w3.org/1999/xhtml" style={{fontSize:'9px',color:'#4B5563',fontWeight:'600',fontFamily:'Tajawal,sans-serif',lineHeight:1.3,textAlign:isR?'left':'right',wordBreak:'break-word',width:'50px'}}>{s.t}</div>
+            </foreignObject>
           </g>;
         })}
       </svg>
