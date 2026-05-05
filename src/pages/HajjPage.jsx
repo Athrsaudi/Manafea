@@ -119,7 +119,7 @@ const CircleMap=({stations,onSelect,t})=>{
       </svg>
       <div className="absolute rounded-full flex flex-col items-center justify-center" style={{top:'50%',left:'50%',transform:'translate(-50%,-50%)',width:'38%',height:'38%',background:'var(--primary)',boxShadow:'0 0 40px rgba(27,58,75,0.3)'}}>
         <h3 className="text-sm sm:text-lg font-black text-white text-center quran-font px-2">{t("journey_title")}</h3>
-        <button onClick={()=>onSelect(0)} className="mt-2 px-3 sm:px-5 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{background:'var(--gold)',fontSize:'10px'}}>{t("start_journey")}</button>
+        <button onClick={()=>onSelect(0)} className="mt-2 px-3 sm:px-5 py-1.5 rounded-lg text-xs font-bold text-white transition-all hover:scale-105" style={{background:'var(--gold)',fontSize:"12px"}}>{t("start_journey")}</button>
       </div>
     </div>
   );
@@ -221,7 +221,7 @@ const[showLM,setShowLM]=useState(false);const[scrolled,setScrolled]=useState(fal
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3 mt-12">{stations.map((s,i)=>(
           <button key={i} onClick={()=>{setActiveStep(i);window.scrollTo({top:0,behavior:'smooth'})}} className="ch bg-white rounded-xl shadow-sm p-3 text-center" style={{border:'1px solid rgba(200,169,81,0.08)'}}>
             <span className="text-2xl block mb-1">{s.s}</span>
-            <p className="text-xs font-bold truncate" style={{color:'#1B3A4B'}}>{s.t.length>12?s.t.slice(0,12)+'…':s.t}</p>
+            <p className="text-xs font-bold" style={{color:'#1B3A4B'}}>{s.t.length>12?s.t.slice(0,12)+'…':s.t}</p>
             <p className="text-xs mt-0.5" style={{color:'#6B7280'}}>{s.day}</p>
           </button>
         ))}</div>
