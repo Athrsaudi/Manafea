@@ -167,7 +167,7 @@ const Div=()=><div className="max-w-xs mx-auto" style={{height:'1px',background:
 const CircleMap=({stations,onSelect,t})=>{
   const n=stations.length;const R=34;
   return(<div className="relative mx-auto" style={{width:'min(420px,85vw)',height:'min(420px,85vw)'}}>
-    <svg viewBox="0 0 100 100" className="w-full h-full">
+    <svg viewBox="-30 -30 160 160" className="w-full h-full">
       <circle cx="50" cy="50" r={R} fill="none" stroke="rgba(200,169,81,0.25)" strokeWidth="0.5" strokeDasharray="2 1"/>
       {stations.map((s,i)=>{const a=(i/n)*2*Math.PI-Math.PI/2;const cx=50+R*Math.cos(a);const cy=50+R*Math.sin(a);const lx=50+(R+9)*Math.cos(a);const ly=50+(R+9)*Math.sin(a);const isR=lx>50;
         return <g key={i} style={{cursor:'pointer'}} onClick={()=>onSelect(i)}><circle cx={cx} cy={cy} r="4.5" fill="#E5E7EB" stroke="white" strokeWidth="0.8"/><text x={cx} y={cy+0.5} textAnchor="middle" dominantBaseline="middle" fontSize="3" fill="#1B3A4B">{s.s}</text><text x={lx} y={ly} textAnchor={isR?"start":"end"} dominantBaseline="middle" fontSize="2" fill="#4B5563" fontWeight="600" fontFamily="Tajawal">

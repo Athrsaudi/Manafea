@@ -107,7 +107,7 @@ const CircleMap=({stations,onSelect,t})=>{
   const n=stations.length;const R=38;
   return(
     <div className="relative mx-auto" style={{width:'min(520px,90vw)',height:'min(520px,90vw)'}}>
-      <svg viewBox="0 0 100 100" className="w-full h-full">
+      <svg viewBox="-30 -30 160 160" className="w-full h-full">
         <circle cx="50" cy="50" r={R} fill="none" stroke="rgba(200,169,81,0.25)" strokeWidth="0.5" strokeDasharray="2 1"/>
         {stations.map((s,i)=>{const a=(i/n)*2*Math.PI-Math.PI/2;const cx=50+R*Math.cos(a);const cy=50+R*Math.sin(a);const lx=50+(R+8)*Math.cos(a);const ly=50+(R+8)*Math.sin(a);const isR=lx>50;
           return <g key={i} style={{cursor:'pointer'}} onClick={()=>onSelect(i)}>
