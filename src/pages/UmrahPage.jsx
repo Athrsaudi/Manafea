@@ -170,9 +170,9 @@ const CircleMap=({stations,onSelect,t})=>{
     <svg viewBox="0 0 100 100" className="w-full h-full">
       <circle cx="50" cy="50" r={R} fill="none" stroke="rgba(200,169,81,0.25)" strokeWidth="0.5" strokeDasharray="2 1"/>
       {stations.map((s,i)=>{const a=(i/n)*2*Math.PI-Math.PI/2;const cx=50+R*Math.cos(a);const cy=50+R*Math.sin(a);const lx=50+(R+9)*Math.cos(a);const ly=50+(R+9)*Math.sin(a);const isR=lx>50;
-        return <g key={i} style={{cursor:'pointer'}} onClick={()=>onSelect(i)}><circle cx={cx} cy={cy} r="4.5" fill="#E5E7EB" stroke="white" strokeWidth="0.8"/><text x={cx} y={cy+0.5} textAnchor="middle" dominantBaseline="middle" fontSize="3" fill="#1B3A4B">{s.s}</text><foreignObject x={isR?lx-0.5:lx-14} y={ly-5} width="14" height="12" style={{overflow:'visible'}}>
-              <div xmlns="http://www.w3.org/1999/xhtml" style={{fontSize:'9px',color:'#4B5563',fontWeight:'600',fontFamily:'Tajawal,sans-serif',lineHeight:1.3,textAlign:isR?'left':'right',wordBreak:'break-word',width:'52px'}}>{s.t}</div>
-            </foreignObject></g>})}
+        return <g key={i} style={{cursor:'pointer'}} onClick={()=>onSelect(i)}><circle cx={cx} cy={cy} r="4.5" fill="#E5E7EB" stroke="white" strokeWidth="0.8"/><text x={cx} y={cy+0.5} textAnchor="middle" dominantBaseline="middle" fontSize="3" fill="#1B3A4B">{s.s}</text><text x={lx} y={ly} textAnchor={isR?"start":"end"} dominantBaseline="middle" fontSize="2" fill="#4B5563" fontWeight="600" fontFamily="Tajawal">
+              {s.t.length > 6 ? <><tspan x={lx} dy="-1.2">{s.t.split(' ').slice(0, Math.ceil(s.t.split(' ').length/2)).join(' ')}</tspan><tspan x={lx} dy="2.6">{s.t.split(' ').slice(Math.ceil(s.t.split(' ').length/2)).join(' ')}</tspan></> : s.t}
+            </text></g>})}
     </svg>
     <div className="absolute rounded-full flex flex-col items-center justify-center" style={{top:'50%',left:'50%',transform:'translate(-50%,-50%)',width:'42%',height:'42%',background:'#1B3A4B',boxShadow:'0 0 40px rgba(27,58,75,0.3)'}}>
       <span className="text-2xl sm:text-3xl block mb-1">🕌</span>

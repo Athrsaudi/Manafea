@@ -113,9 +113,9 @@ const CircleMap=({stations,onSelect,t})=>{
           return <g key={i} style={{cursor:'pointer'}} onClick={()=>onSelect(i)}>
             <circle cx={cx} cy={cy} r="3.5" fill="#E5E7EB" stroke="white" strokeWidth="0.8"/>
             <text x={cx} y={cy+0.5} textAnchor="middle" dominantBaseline="middle" fontSize="2.2" fill="#1B3A4B">{s.s}</text>
-            <foreignObject x={isR?lx-0.5:lx-14} y={ly-4} width="14" height="10" style={{overflow:'visible'}}>
-              <div xmlns="http://www.w3.org/1999/xhtml" style={{fontSize:'9px',color:'#4B5563',fontWeight:'600',fontFamily:'Tajawal,sans-serif',lineHeight:1.3,textAlign:isR?'left':'right',wordBreak:'break-word',width:'50px'}}>{s.t}</div>
-            </foreignObject>
+            <text x={lx} y={ly} textAnchor={isR?"start":"end"} dominantBaseline="middle" fontSize="1.6" fill="#4B5563" fontWeight="600" fontFamily="Tajawal">
+              {s.t.length > 8 ? <><tspan x={lx} dy="-1">{s.t.split(' ').slice(0, Math.ceil(s.t.split(' ').length/2)).join(' ')}</tspan><tspan x={lx} dy="2.2">{s.t.split(' ').slice(Math.ceil(s.t.split(' ').length/2)).join(' ')}</tspan></> : s.t}
+            </text>
           </g>;
         })}
       </svg>
