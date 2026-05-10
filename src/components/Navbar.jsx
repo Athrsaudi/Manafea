@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { h: "/hajj" },
   { h: "/umrah" },
   { h: "/contest" },
+  { h: "/sites" },
 ];
 
 const BISMILLAH = {
