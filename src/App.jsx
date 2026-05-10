@@ -3,6 +3,7 @@ import { Suspense, lazy } from 'react'
 import { LangProvider } from './lib/LangContext'
 import HomePage from './pages/HomePage'
 import NotFoundPage from './pages/NotFoundPage'
+import IslamicSitesPage from './pages/IslamicSitesPage'
 
 /* ─── Code Splitting: تحميل الصفحات الثقيلة عند الحاجة فقط ─── */
 const VideosPage  = lazy(() => import('./pages/VideosPage'))
@@ -40,7 +41,8 @@ export default function App() {
           <Route path="/umrah" element={<UmrahPage />} />
           <Route path="/contest" element={<ContestPage />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/sites" element={<IslamicSitesPage />} />
+        <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </LangProvider>
