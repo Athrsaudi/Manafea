@@ -31,14 +31,14 @@ const LOGIN_TEXT = {
 };
 
 const NAV_TEXT = {
-  ar:["الرئيسية","الفيديوهات","القرآن الكريم","المكتبة","الحج","العمرة","المسابقة"],
-  en:["Home","Videos","Holy Quran","Library","Hajj","Umrah","Contest"],
-  tr:["Ana Sayfa","Videolar","Kur'an","Kütüphane","Hac","Umre","Yarışma"],
-  ur:["ہوم","ویڈیوز","قرآن","لائبریری","حج","عمرہ","مقابلہ"],
-  ms:["Utama","Video","Al-Quran","Perpustakaan","Haji","Umrah","Pertandingan"],
-  fr:["Accueil","Vidéos","Coran","Bibliothèque","Hajj","Omra","Concours"],
-  fa:["خانه","ویدیوها","قرآن","کتابخانه","حج","عمره","مسابقه"],
-  bn:["হোম","ভিডিও","কুরআন","লাইব্রেরি","হজ্জ","উমরাহ","প্রতিযোগিতা"],
+  ar:["الرئيسية","الفيديوهات","القرآن الكريم","المكتبة","الحج","العمرة","المسابقة", "مواقع إسلامية"],
+  en:["Home","Videos","Holy Quran","Library","Hajj","Umrah","Contest", "Islamic Sites"],
+  tr:["Ana Sayfa","Videolar","Kur'an","Kütüphane","Hac","Umre","Yarışma", "İslam Siteleri"],
+  ur:["ہوم","ویڈیوز","قرآن","لائبریری","حج","عمرہ","مقابلہ", "اسلامی سائٹس"],
+  ms:["Utama","Video","Al-Quran","Perpustakaan","Haji","Umrah","Pertandingan", "Laman Islam"],
+  fr:["Accueil","Vidéos","Coran","Bibliothèque","Hajj","Omra","Concours", "Sites Islamiques"],
+  fa:["خانه","ویدیوها","قرآن","کتابخانه","حج","عمره","مسابقه", "سایت‌های اسلامی"],
+  bn:["হোম","ভিডিও","কুরআন","লাইব্রেরি","হজ্জ","উমরাহ","প্রতিযোগিতা", "ইসলামিক সাইট"],
   hi:["होम","वीडियो","कुरान","पुस्तकालय","हज","उमरा","प्रतियोगिता"],
 };
 
