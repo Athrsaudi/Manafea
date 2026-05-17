@@ -92,6 +92,7 @@ export default function ManafaaVideosPage() {
   const [showLM, setShowLM] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);
+  const [search, setSearch] = useState("");
   const [activeCat, setActiveCat] = useState("all");
   const [activeVideo, setActiveVideo] = useState(null);
   const [dbVids, setDbVids] = useState({});
@@ -338,7 +339,7 @@ export default function ManafaaVideosPage() {
       {activeCat === "all" ? (
         // Show all categories with their videos
         cats.map((cat, ci) => {
-          const catVids = vids[cat.id] || [];
+          const catVids = (vids[cat.id] || []).filter(v => !search || (v.title||'').toLowerCase().includes(search.toLowerCase()) || (v.description||'').toLowerCase().includes(search.toLowerCase()));
           if (catVids.length === 0) return null;
           return (
             <section key={cat.id} className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6">
