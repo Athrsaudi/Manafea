@@ -216,19 +216,49 @@ export default function ManafaaVideosPage() {
         .nav-item { position: relative; transition: all 0.3s ease; }
         .nav-item::after { content: ''; position: absolute; bottom: -4px; ${dir === "rtl" ? "right" : "left"}: 0; width: 0; height: 2px; background: var(--gold); transition: width 0.3s ease; }
         .nav-item:hover::after { width: 100%; }
-        .<div style={{maxWidth:'640px',margin:'0 auto 32px',padding:'0 16px'}}>
-          <div style={{position:'relative',display:'flex',alignItems:'center'}}>
-            <span style={{position:'absolute',right:'16px',fontSize:'20px',color:'#9CA3AF',pointerEvents:'none'}}>🔍</span>
-            <input
-              type="text"
-              value={search||''}
-              onChange={e=>setSearch(e.target.value)}
-              placeholder={lang==='ar'?'ابحث عن فيديو...':lang==='en'?'Search videos...':lang==='tr'?'Video ara...':lang==='ur'?'ویڈیو تلاش...':lang==='ms'?'Cari video...':lang==='fr'?'Rechercher...':lang==='fa'?'جستجو...':lang==='bn'?'ভিডিও খুঁজুন...':'वিडियो...'}
-              style={{width:'100%',padding:'14px 52px 14px 20px',borderRadius:'14px',border:'2px solid rgba(200,169,81,.3)',fontSize:'16px',fontFamily:"'Tajawal',sans-serif",background:'white',color:'#1B3A4B',outline:'none',boxShadow:'0 4px 20px rgba(0,0,0,.08)',direction:'rtl',textAlign:'right',transition:'border-color .2s'}}
-              onFocus={e=>(e.target.style.borderColor='#C8A951')}
-              onBlur={e=>(e.target.style.borderColor='rgba(200,169,81,.3)')}
-            />
-            {search&&<button onClick={()=>setSearch('')} style={{position:'absolute',left:'16px',background:'none',border:'none',fontSize:'22px',color:'#9CA3AF',cursor:'pointer',lineHeight:'1',padding:'0'}}>×</button>}
+        .cat-pill { transition: all 0.3s ease; }
+        .cat-pill:hover { transform: translateY(-2px); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
+
+      <Navbar />
+
+
+      {/* ===== HERO SECTION ===== */}
+      <section className="hero-gradient relative overflow-hidden" style={{ minHeight: '50vh' }}>
+        <IslamicPattern />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center" style={{ minHeight: '50vh' }}>
+          <div className="text-center animate-fadeInUp">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="h-px w-16 sm:w-24" style={{ background: 'var(--gold)' }}></div>
+              <span className="text-sm font-medium tracking-widest" style={{ color: 'var(--gold)' }}>{t("page_tag")}</span>
+              <div className="h-px w-16 sm:w-24" style={{ background: 'var(--gold)' }}></div>
+            </div>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black gold-shimmer mb-4" style={{ fontFamily: 'Amiri, serif' }}>
+              {t("page_title")}
+            </h1>
+            <p className="text-base sm:text-lg text-white/60 font-light max-w-2xl mx-auto">
+              {t("page_desc")}
+            </p>
+            {/* Stats strip */}
+            <div className="flex items-center justify-center gap-6 sm:gap-10 mt-8">
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-black" style={{ color: 'var(--gold)' }}>{hasVideos ? Object.keys(vids).length : 0}</div>
+                <div className="text-xs text-white/40">{t("all_cats")}</div>
+              </div>
+              <div className="w-px h-10" style={{ background: 'rgba(255,255,255,0.1)' }}></div>
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-black" style={{ color: 'var(--gold)' }}>{visibleVideos.length}</div>
+                <div className="text-xs text-white/40">{t("videos_count")}</div>
+              </div>
+              <div className="w-px h-10" style={{ background: 'rgba(255,255,255,0.1)' }}></div>
+              <div className="text-center">
+                <div className="text-2xl sm:text-3xl font-black" style={{ color: 'var(--gold)' }}>9</div>
+                <div className="text-xs text-white/40">🌍</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
