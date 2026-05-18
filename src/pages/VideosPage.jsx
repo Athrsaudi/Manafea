@@ -266,37 +266,16 @@ export default function ManafaaVideosPage() {
       {/* ===== CATEGORY TABS ===== */}
       {hasVideos ? (
         <>
-        <section className="relative -mt-8 z-20 max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6">
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-            {/* "All" tab */}
-            <button
-              onClick={() => setActiveCat("all")}
-              className="cat-pill flex-shrink-0 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-bold transition-all"
-              style={{
-                background: activeCat === "all" ? 'var(--primary)' : 'transparent',
-                color: activeCat === "all" ? 'white' : 'var(--text-light)',
-                border: activeCat === "all" ? 'none' : '1px solid #E5E7EB',
-              }}
-            >
-              {t("all_cats")}
-            </button>
-            {cats.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCat(cat.id)}
-                className="cat-pill flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-bold transition-all"
-                style={{
-                  background: activeCat === cat.id ? 'var(--gold)' : 'transparent',
-                  color: activeCat === cat.id ? 'var(--primary-dark)' : 'var(--text-light)',
-                  border: activeCat === cat.id ? 'none' : '1px solid #E5E7EB',
-                }}
-              >
-                <span>{cat.icon}</span>
-                <span>{cat.name}</span>
-              </button>
-            ))}
-          </div>
+        <section className="relative -mt-8 z-20 max-w-3xl mx-auto px-4 sm:px-6" style={{marginBottom:'16px'}}>
+        <div style={{position:'relative',display:'flex',alignItems:'center'}}>
+          <span style={{position:'absolute',right:'16px',fontSize:'20px',color:'#9CA3AF',pointerEvents:'none'}}>🔍</span>
+          <input type="text" value={search} onChange={e=>setSearch(e.target.value)}
+            placeholder={lang==='ar'?'ابحث عن فيديو...':lang==='en'?'Search videos...':lang==='tr'?'Video ara...':lang==='ur'?'ویڈیو تلاش...':lang==='ms'?'Cari video...':lang==='fr'?'Rechercher...':lang==='fa'?'جستجو...':lang==='bn'?'ভিডিও খুঁজুন...':'वিडियो...'}
+            style={{width:'100%',padding:'16px 52px 16px 20px',borderRadius:'16px',border:'2px solid rgba(200,169,81,.3)',fontSize:'16px',fontFamily:"'Tajawal',sans-serif",background:'white',color:'#1B3A4B',outline:'none',boxShadow:'0 8px 30px rgba(0,0,0,.1)',direction:'rtl',textAlign:'right',transition:'border-color .2s'}}
+            onFocus={e=>(e.target.style.borderColor='#C8A951')}
+            onBlur={e=>(e.target.style.borderColor='rgba(200,169,81,.3)')}
+          />
+          {search&&<button onClick={()=>setSearch('')} style={{position:'absolute',left:'16px',background:'none',border:'none',fontSize:'22px',color:'#9CA3AF',cursor:'pointer',lineHeight:'1'}}>×</button>}
         </div>
       </section>
 
