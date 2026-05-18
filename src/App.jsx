@@ -38,90 +38,87 @@ import React from "react";
 
 function TakbeerPlayer() {
   const [gone, setGone] = React.useState(false);
-  const [status, setStatus] = React.useState('waiting'); // waiting | playing | done
-  const audioRef = React.useRef(null);
-  const startedRef = React.useRef(false);
+  const [playing, setPlaying] = React.useState(false);
+  const doneRef = React.useRef(false);
+
+  const playTakbeer = React.useCallback(() => {
+    if (doneRef.current) return;
+    doneRef.current = true;
+    // Multiple audio sources as fallback
+    const sources = [
+      'https://download.quranicaudio.com/quran/abdurrahmaan_as-sudays/takbeer.mp3',
+      'https://audio.islamway.net/lessons/57082/Takbeer-Eid.mp3',
+      'https://ia800203.us.archive.org/14/items/TakbirateEidMakkah/takbir.mp3'
+    ];
+    let idx = 0;
+    const tryNext = () => {
+      if (idx >= sources.length) return;
+      const audio = new Audio(sources[idx++]);
+      audio.volume = 0.8;
+      audio.play()
+        .then(() => {
+          setPlaying(true);
+          setTimeout(() => { audio.pause(); setGone(true); }, 30000);
+        })
+        .catch(tryNext);
+    };
+    tryNext();
+  }, []);
 
   React.useEffect(() => {
     if (gone) return;
-
-    const tryPlay = () => {
-      if (startedRef.current) return;
-      startedRef.current = true;
-
-      if (!audioRef.current) return;
-      audioRef.current.muted = false;
-      audioRef.current.volume = 0.8;
-      audioRef.current.play()
-        .then(() => {
-          setStatus('playing');
-          // Stop after 35 seconds
-          setTimeout(() => {
-            if (audioRef.current) {
-              audioRef.current.pause();
-              audioRef.current.currentTime = 0;
-            }
-            setStatus('done');
-            setTimeout(() => setGone(true), 4000);
-          }, 35000);
-        })
-        .catch(() => { startedRef.current = false; });
-
-      ['click','touchstart','scroll','keydown'].forEach(e =>
-        document.removeEventListener(e, tryPlay, true)
-      );
-    };
-
-    // Try immediately (works if page has prior interaction like refresh)
-    setTimeout(tryPlay, 800);
-
-    // Fallback: on first user interaction
-    ['click','touchstart','scroll','keydown'].forEach(e =>
-      document.addEventListener(e, tryPlay, true)
-    );
-
+    // Try auto-play after 1 second
+    const t = setTimeout(playTakbeer, 1000);
+    // Also listen for first interaction as fallback
+    const onInteract = () => { clearTimeout(t); playTakbeer(); };
+    window.addEventListener('click', onInteract, {once: true, capture: true});
+    window.addEventListener('touchstart', onInteract, {once: true, capture: true});
     return () => {
-      ['click','touchstart','scroll','keydown'].forEach(e =>
-        document.removeEventListener(e, tryPlay, true)
-      );
+      clearTimeout(t);
+      window.removeEventListener('click', onInteract, true);
+      window.removeEventListener('touchstart', onInteract, true);
     };
-  }, [gone]);
+  }, [gone, playTakbeer]);
 
   if (gone) return null;
 
   return (
-    <div style={{position:'fixed',bottom:'20px',left:'50%',transform:'translateX(-50%)',zIndex:9999,
-      display:'flex',alignItems:'center',gap:'10px',
-      background:'linear-gradient(135deg,rgba(15,37,48,.97),rgba(27,58,75,.97))',
-      border:'1px solid rgba(200,169,81,.5)',borderRadius:'50px',
-      padding:'10px 18px',boxShadow:'0 8px 32px rgba(0,0,0,.5)',
-      backdropFilter:'blur(12px)',direction:'rtl',fontFamily:"'Tajawal',sans-serif",
-      whiteSpace:'nowrap'}}>
-      <audio ref={audioRef} src="https://ia800203.us.archive.org/14/items/TakbirateEidMakkah/takbir.mp3" muted />
-      <span style={{fontSize:'24px',animation:status==='playing'?'pulse 1s infinite':''}}>
-        {status==='playing'?'👏':status==='done'?'✅':'🏕️'}
+    <div onClick={playTakbeer} style={{
+      position:'fixed', bottom:'24px', left:'50%', transform:'translateX(-50%)',
+      zIndex:99999, cursor: playing ? 'default' : 'pointer',
+      display:'flex', alignItems:'center', gap:'12px',
+      background:'linear-gradient(135deg,#0F2530,#1B3A4B)',
+      border:'2px solid #C8A951', borderRadius:'50px',
+      padding:'12px 20px', boxShadow:'0 8px 40px rgba(200,169,81,.3)',
+      direction:'rtl', fontFamily:"'Tajawal',sans-serif", whiteSpace:'nowrap'
+    }}>
+      <span style={{fontSize:'26px', animation: playing ? 'tk-pulse 0.8s infinite' : ''}}>
+        {playing ? '👏' : '🕋'}
       </span>
       <div>
-        <div style={{color:'#C8A951',fontSize:'13px',fontWeight:700,lineHeight:1.3}}>
+        <div style={{color:'#C8A951', fontSize:'14px', fontWeight:800, lineHeight:1.3}}>
           تكبيرات ذي الحجة 🎉
         </div>
-        <div style={{color:'rgba(255,255,255,.6)',fontSize:'11px'}}>
-          {status==='playing'?
-            'الله أكبر الله أكبر لا إله إلا الله':
-           status==='done'?
-            'جزاك الله خيراً ❤️':
-            'اضغط أي مكان لسماع التكبيرات'
+        <div style={{color:'rgba(255,255,255,.7)', fontSize:'12px'}}>
+          {playing
+            ? 'الله أكبر الله أكبر لا إله إلا الله'
+            : 'اضغط هنا لتشغيل التكبيرات'
           }
         </div>
       </div>
-      <button onClick={() => { if(audioRef.current) audioRef.current.pause(); setGone(true); }}
-        style={{background:'none',border:'none',color:'rgba(255,255,255,.35)',fontSize:'20px',cursor:'pointer',padding:'0 2px',lineHeight:1}}>
-        ×
-      </button>
-      <style>{`@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}`}</style>
+      <button
+        onClick={e => { e.stopPropagation(); setGone(true); }}
+        style={{background:'rgba(255,255,255,.1)', border:'none', color:'white',
+          fontSize:'16px', cursor:'pointer', borderRadius:'50%',
+          width:'28px', height:'28px', display:'flex', alignItems:'center', justifyContent:'center'}}
+      >×</button>
+      <style>{`
+        @keyframes tk-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+      `}</style>
     </div>
   );
 }
+
 
 
 export default function App() {
