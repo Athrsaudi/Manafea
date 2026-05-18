@@ -32,74 +32,36 @@ const Loading = () => (
 import React from "react";
 
 // ===== Takbeer Dhul-Hijja Component =====
+
+
 function TakbeerPlayer() {
   const [playing, setPlaying] = React.useState(false);
-  const [visible, setVisible] = React.useState(true);
-  const [dismissed, setDismissed] = React.useState(false);
-  const audioRef = React.useRef(null);
-
-  React.useEffect(() => {
-    // Auto-play on mount after short delay
-    const timer = setTimeout(() => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.7;
-        audioRef.current.play().then(() => setPlaying(true)).catch(() => {});
-      }
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
+  const [gone, setGone] = React.useState(false);
+  const audio = React.useRef(null);
+  if (gone) return null;
   const toggle = () => {
-    if (!audioRef.current) return;
-    if (playing) { audioRef.current.pause(); setPlaying(false); }
-    else { audioRef.current.play(); setPlaying(true); }
+    if (!audio.current) {
+      audio.current = new Audio('https://ia800203.us.archive.org/14/items/TakbirateEidMakkah/takbir.mp3');
+      audio.current.loop = true;
+      audio.current.volume = 0.7;
+    }
+    if (playing) { audio.current.pause(); setPlaying(false); }
+    else { audio.current.play().then(()=>setPlaying(true)).catch(()=>{}); }
   };
-
-  const dismiss = () => {
-    if (audioRef.current) { audioRef.current.pause(); }
-    setDismissed(true);
-  };
-
-  if (dismissed) return null;
-
+  const close = () => { if (audio.current) audio.current.pause(); setGone(true); };
   return (
-    <div style={{
-      position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
-      zIndex: 9999, display: 'flex', alignItems: 'center', gap: '10px',
-      background: 'linear-gradient(135deg, rgba(15,37,48,.95), rgba(27,58,75,.95))',
-      border: '1px solid rgba(200,169,81,.4)', borderRadius: '50px',
-      padding: '10px 18px 10px 14px', boxShadow: '0 8px 32px rgba(0,0,0,.4)',
-      backdropFilter: 'blur(12px)', direction: 'rtl', fontFamily: "'Tajawal',sans-serif",
-      animation: 'slideUp .5s ease'
-    }}>
-      <audio ref={audioRef} loop src="https://download.quranicaudio.com/quran/abdurrahmaan_as-sudays/takbeer.mp3" />
-      <button onClick={toggle} style={{
-        background: 'linear-gradient(135deg,#C8A951,#B8942E)', border: 'none',
-        borderRadius: '50%', width: '38px', height: '38px', cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '18px', color: '#0F2530', flexShrink: 0
-      }}>
-        {playing ? '⏸' : '▶'}
+    <div style={{position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%)',zIndex:9999,display:'flex',alignItems:'center',gap:'10px',background:'linear-gradient(135deg,rgba(15,37,48,.97),rgba(27,58,75,.97))',border:'1px solid rgba(200,169,81,.5)',borderRadius:'50px',padding:'10px 16px',boxShadow:'0 8px 32px rgba(0,0,0,.5)',backdropFilter:'blur(12px)',direction:'rtl',fontFamily:"'Tajawal',sans-serif",whiteSpace:'nowrap'}}>
+      <button onClick={toggle} style={{background:'linear-gradient(135deg,#C8A951,#B8942E)',border:'none',borderRadius:'50%',width:'40px',height:'40px',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',color:'#0F2530',flexShrink:0,boxShadow:'0 2px 8px rgba(200,169,81,.4)'}}>
+        {playing ? '⏸️' : '▶️'}
       </button>
-      <div style={{ flex: 1 }}>
-        <div style={{ color: '#C8A951', fontSize: '13px', fontWeight: 700, lineHeight: 1.3 }}>
-          👏 تكبيرات العيد - ذو الحجة
-        </div>
-        <div style={{ color: 'rgba(255,255,255,.5)', fontSize: '11px' }}>
-          الله أكبر الله أكبر لا إله إلا الله
-        </div>
+      <div>
+        <div style={{color:'#C8A951',fontSize:'13px',fontWeight:700,lineHeight:1.3}}>👏 تكبيرات ذي الحجة</div>
+        <div style={{color:'rgba(255,255,255,.55)',fontSize:'11px'}}>{playing ? 'الله أكبر الله أكبر لا إله إلا الله' : 'اضغط لتشغيل التكبيرات'}</div>
       </div>
-      <button onClick={dismiss} style={{
-        background: 'none', border: 'none', color: 'rgba(255,255,255,.4)',
-        fontSize: '18px', cursor: 'pointer', padding: '0 4px', lineHeight: 1
-      }}>×</button>
-      <style>{`
-        @keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(20px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
-      `}</style>
+      <button onClick={close} style={{background:'none',border:'none',color:'rgba(255,255,255,.35)',fontSize:'20px',cursor:'pointer',padding:'0 2px',lineHeight:1,marginRight:'2px'}}>×</button>
     </div>
   );
 }
-// ===== End Takbeer Component =====
 
 export default function App() {
   return (
